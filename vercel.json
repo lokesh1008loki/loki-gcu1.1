@@ -1,5 +1,9 @@
 {
   "buildCommand": "pnpm install && pnpm prisma generate && pnpm build",
   "installCommand": "pnpm install",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "env": {
+    "NODE_ENV": "production"
+  }
 }

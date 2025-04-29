@@ -5,8 +5,12 @@ const globalForPrisma = globalThis as unknown as {
 }
 
 const prismaClientSingleton = () => {
+  if (!process.env.DATABASE_URL) {
+    throw new Error('DATABASE_URL environment variable is not set')
+  }
+
   return new PrismaClient({
-    log: ['query', 'error', 'warn'],
+    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
     datasources: {
       db: {
         url: process.env.DATABASE_URL
@@ -20,7 +24,7 @@ export const prisma = globalForPrisma.prisma ?? prismaClientSingleton()
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
 // Add error handling middleware
-prisma.$use(async (params, next) => {
+prisma.$use(async (params: any, next: any) => {
   try {
     return await next(params)
   } catch (error) {
@@ -39,7 +43,7 @@ prisma.$use(async (params, next) => {
 })
 
 // Add connection error handling
-prisma.$connect().catch((error) => {
+prisma.$connect().catch((error: Error) => {
   console.error('Failed to connect to database:', error)
   process.exit(1)
 }) 
