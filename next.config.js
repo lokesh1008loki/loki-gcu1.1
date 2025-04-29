@@ -10,7 +10,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  output: 'standalone',
   poweredByHeader: false,
   reactStrictMode: true,
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
