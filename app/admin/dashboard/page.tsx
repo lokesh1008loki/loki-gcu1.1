@@ -1,13 +1,39 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Activity, Users, DollarSign, Package } from "lucide-react"
+import { Activity, Users, DollarSign, Package, LogOut, Key } from "lucide-react"
 import { VisitorStats } from "@/components/admin/visitor-stats"
+import { Button } from "@/components/ui/button"
+import { signOut } from "next-auth/react"
+import { useRouter } from "next/navigation"
 
 export default function DashboardPage() {
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    await signOut({ redirect: false })
+    router.push("/")
+  }
+
+  const handleChangePassword = () => {
+    router.push("/admin/change-password")
+  }
+
   return (
     <div className="space-y-4">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={handleChangePassword}>
+            <Key className="mr-2 h-4 w-4" />
+            Change Password
+          </Button>
+          <Button variant="destructive" onClick={handleLogout}>
+            <LogOut className="mr-2 h-4 w-4" />
+            Logout
+          </Button>
+        </div>
+      </div>
       <VisitorStats />
       <div className="space-y-6">
         <div>

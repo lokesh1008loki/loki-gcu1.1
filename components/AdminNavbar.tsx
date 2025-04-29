@@ -10,8 +10,9 @@ export function AdminNavbar() {
   const navItems = [
     { href: "/admin/dashboard", label: "Dashboard" },
     { href: "/admin/dashboard/marquee", label: "Marquee" },
-    { href: "/admin/dashboard/popup", label: "Popup" },
+    { href: "/admin/dashboard/popups", label: "Popup" },
     { href: "/admin/dashboard/seo", label: "SEO" },
+    { href: "/admin/dashboard/blog", label: "Blog" },
     { href: "/admin/dashboard/settings", label: "Settings" },
   ]
 
