@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  blogs     Blog[]
+}
+
+model VisitorCount {
+  id    Int    @id @default(sequence())
+  date  String @unique
+  count Int    @default(0)
+}
+
+model Blog {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title           String
+  slug            String   @unique
+  content         String
+  excerpt         String?
+  image           String?
+  metaTitle       String?
+  metaDescription String?
+  keywords        String?
+  seoContent      String?
+  canonicalUrl    String?
+  published       Boolean  @default(false)
+  authorId        String   @db.Uuid
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  author          User     @relation(fields: [authorId], references: [id])
+}
+
+model PopupNotification {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String
+  message     String
+  type        String    @default("info")
+  isActive    Boolean   @default(true)
+  startDate   DateTime?
+  endDate     DateTime?
+  showOnPages String[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model MarqueeMessage {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  message       String
+  isActive      Boolean  @default(true)
+  backgroundColor String  @default("primary")
+  textColor     String   @default("white")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model SiteSettings {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  whatsappLink  String   @default("https://whatsapp.com")
+  facebookLink  String   @default("https://facebook.com")
+  instagramLink String   @default("https://instagram.com")
+  twitterLink   String   @default("https://twitter.com")
+  phoneNumber   String   @default("+1 437 849 7841")
+  email         String   @default("support@gocomfortusa.com")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model SeoSettings {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  siteTitle     String   @default("GocomfortUSA - Best Deals on Tickets and Bill Payments")
+  siteDescription String @default("GocomfortUSA offers amazing deals on ticket bookings and bill payments, flight ticket bookings, House rent payment and many more services, ensuring you get the best discounts and a hassle-free experience. Save on everything from travel to living.")
+  keywords      String   @default("tickets, bill payments, flight tickets, house rent, travel deals, discounts")
+  ogTitle       String   @default("GocomfortUSA - Best Deals on Tickets and Bill Payments")
+  ogDescription String   @default("Your one-stop solution for tickets and bill payments")
+  ogImage       String   @default("/ass/logo-round.png")
+  twitterTitle  String   @default("GocomfortUSA - Best Deals on Tickets and Bill Payments")
+  twitterDescription String @default("Your one-stop solution for tickets and bill payments")
+  twitterImage  String   @default("/ass/logo-round.png")
+  canonicalUrl  String   @default("https://gocomfortusa.com")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+
