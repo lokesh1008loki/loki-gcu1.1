@@ -22,7 +22,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
+      <h1 className="text-3xl font-bold">Dashboard</h1>
         <div className="flex gap-2">
           <Button variant="outline" onClick={handleChangePassword}>
             <Key className="mr-2 h-4 w-4" />

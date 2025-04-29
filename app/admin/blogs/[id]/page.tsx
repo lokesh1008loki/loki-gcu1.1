@@ -27,20 +27,20 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     async function fetchBlog() {
-      try {
-        const response = await fetch(`/api/admin/blogs/${params.id}`)
+    try {
+      const response = await fetch(`/api/admin/blogs/${params.id}`)
         if (!response.ok) {
           throw new Error("Blog not found")
         }
-        const data = await response.json()
-        setBlog(data)
-      } catch (error) {
+      const data = await response.json()
+      setBlog(data)
+    } catch (error) {
         console.error("Error fetching blog:", error)
         toast.error("Failed to fetch blog")
       } finally {
-        setLoading(false)
-      }
+      setLoading(false)
     }
+  }
 
     fetchBlog()
   }, [params.id])
@@ -116,10 +116,10 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
 
         <div className="space-y-2">
           <Label>Featured Image</Label>
-          <ImageUpload
+            <ImageUpload
             onImageUploadAction={(url) => setBlog({ ...blog, image: url })}
-            currentImage={blog.image}
-          />
+              currentImage={blog.image}
+            />
         </div>
 
         <div className="flex items-center space-x-2">
