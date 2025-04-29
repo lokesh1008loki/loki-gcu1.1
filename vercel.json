@@ -13,5 +13,6 @@
       "NEXTAUTH_SECRET": "ILQDN7jfqm0t54fNQn4QgErsfF7NyBfi5eay/s6ji0I=",
       "NODE_ENV": "production"
     }
-  }
+  },
+  "ignoreCommand": "git diff --quiet $VERCEL_GIT_PREVIOUS_SHA $VERCEL_GIT_COMMIT_SHA ./pnpm-lock.yaml"
 }

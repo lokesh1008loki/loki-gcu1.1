@@ -13,7 +13,6 @@ const nextConfig = {
   output: 'standalone',
   poweredByHeader: false,
   reactStrictMode: true,
-  swcMinify: true,
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
   webpack: (config) => {
     config.module.rules.push({
