@@ -154,7 +154,7 @@ export default function Home() {
                   <p className="text-sm text-muted-foreground">
                     Order food and groceries online and get them delivered to your doorstep.
                   </p>
-                  <Link href="/food-grocery" className="inline-flex items-center text-primary text-sm font-medium">
+                  <Link href="/others/food-grocery" className="inline-flex items-center text-primary text-sm font-medium">
                     Order Now <ArrowRight className="ml-1 h-4 w-4" />
                   </Link>
                 </div>
