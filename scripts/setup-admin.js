@@ -6,9 +6,13 @@ const prisma = new PrismaClient();
 
 async function setupAdmin() {
   try {
-    const email = 'admin@gocomfortusa.com';
-    const password = 'Admin@123'; // You should change this to a secure password
-    const name = 'Admin User';
+    if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
+      throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD environment variables must be set');
+    }
+
+    const email = process.env.ADMIN_EMAIL;
+    const password = process.env.ADMIN_PASSWORD;
+    const name = process.env.ADMIN_NAME || 'Admin User';
 
     // Check if admin user already exists
     const existingAdmin = await prisma.user.findUnique({
@@ -41,6 +45,7 @@ async function setupAdmin() {
     }
   } catch (error) {
     console.error('Error setting up admin user:', error);
+    process.exit(1);
   } finally {
     await prisma.$disconnect();
   }

@@ -3,9 +3,11 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { ArrowRight, Ticket, CreditCard, Plane, ShoppingBag, Star } from "lucide-react"
+import { ArrowRight, Ticket, CreditCard, Plane, ShoppingBag, Star, ChevronRight } from "lucide-react"
 import { AutoSlider } from "@/components/ui/auto-slider"
 import HowWeWork from "@/components/how-we-work"
+import ReviewSlider from "@/components/review-slider"
+import { AnimatedCounter } from "@/components/animated-counter"
 
 export default function Home() {
   return (
@@ -41,7 +43,74 @@ export default function Home() {
         </div>
       </section>
 
-  
+      {/* Trusted By Section */}
+      <section className="py-12 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Trusted by Thousands</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Over <AnimatedCounter target={10000} /> happy U.S. customers trust GoComfortUSA for savings up to 50%.
+            </p>
+          </div>
+          
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/Trustpilot Stars.png"
+                alt="Trustpilot"
+                width={120}
+                height={40}
+                className="opacity-80 hover:opacity-100 transition-opacity"
+              />
+              <span className="text-sm font-medium">4.8/5</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Image
+                src="/google reviews.png"
+                alt="Google Reviews"
+                width={120}
+                height={40}
+                className="opacity-80 hover:opacity-100 transition-opacity"
+              />
+              <span className="text-sm font-medium">4.9/5</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Image
+                src="/site jabber.png"
+                alt="SiteJabber"
+                width={120}
+                height={40}
+                className="opacity-80 hover:opacity-100 transition-opacity"
+              />
+              <span className="text-sm font-medium">4.7/5</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Image
+                src="/bbb.png"
+                alt="Better Business Bureau"
+                width={120}
+                height={40}
+                className="opacity-80 hover:opacity-100 transition-opacity"
+              />
+              <span className="text-sm font-medium">A+ Rating</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Customer Reviews Section */}
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">What Our Customers Say</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Real experiences from our satisfied customers across the United States
+            </p>
+          </div>
+
+          <ReviewSlider />
+        </div>
+      </section>
 
       {/* Services Section */}
       <section className="py-16 md:py-24 bg-muted/50">
@@ -140,22 +209,23 @@ export default function Home() {
               <CardContent className="p-0">
                 <div className="relative h-48 w-full">
                   <Image
-                    src="/ass/food order.jpg?height=200&width=300"
-                    alt="Food & Grocery"
+                    src="/ass/ikea.jpg"
+                    alt="IKEA"
                     fill
                     className="object-cover rounded-t-xl"
+                    priority
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-t-xl"></div>
                   <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className="text-white text-xl font-bold">Food & Grocery</h3>
+                    <h3 className="text-white text-xl font-bold">IKEA</h3>
                   </div>
                 </div>
                 <div className="p-4 space-y-2">
                   <p className="text-sm text-muted-foreground">
-                    Order food and groceries online and get them delivered to your doorstep.
+                    Get exclusive discounts and special offers on IKEA furniture and home accessories.
                   </p>
-                  <Link href="/others/food-grocery" className="inline-flex items-center text-primary text-sm font-medium">
-                    Order Now <ArrowRight className="ml-1 h-4 w-4" />
+                  <Link href="/others/ikea" className="inline-flex items-center text-primary text-sm font-medium">
+                    Shop Now <ArrowRight className="ml-1 h-4 w-4" />
                   </Link>
                 </div>
               </CardContent>
@@ -249,84 +319,13 @@ export default function Home() {
               Don't just take our word for it. See what our customers have to say about our services.
             </p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Testimonial 1 */}
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} className="h-5 w-5 fill-primary text-primary" />
-                  ))}
-                </div>
-                <p className="mb-4 italic">
-                  "I've been using GocomfortUSA for all my bill payments and it has made my life so much easier. The
-                  process is simple and secure."
-                </p>
-                <div className="flex items-center">
-                  <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center mr-3">
-                    <span className="font-bold text-primary">JD</span>
-                  </div>
-                  <div>
-                    <h4 className="font-bold">John Dicosta</h4>
-                    <p className="text-sm text-muted-foreground">Regular Customer</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Testimonial 2 */}
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} className="h-5 w-5 fill-primary text-primary" />
-                  ))}
-                </div>
-                <p className="mb-4 italic">
-                  "The ticket deals on GocomfortUSA are amazing! I saved so much on my family's trip to the water park.
-                  Highly recommended!"
-                </p>
-                <div className="flex items-center">
-                  <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center mr-3">
-                    <span className="font-bold text-primary">JS</span>
-                  </div>
-                  <div>
-                    <h4 className="font-bold">Jane Smith</h4>
-                    <p className="text-sm text-muted-foreground">Happy Customer</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Testimonial 3 */}
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} className="h-5 w-5 fill-primary text-primary" />
-                  ))}
-                </div>
-                <p className="mb-4 italic">
-                  "I booked my flight and hotel through GocomfortUSA and got an amazing deal. The process was smooth and
-                  the customer service was excellent."
-                </p>
-                <div className="flex items-center">
-                  <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center mr-3">
-                    <span className="font-bold text-primary">RJ</span>
-                  </div>
-                  <div>
-                    <h4 className="font-bold">Robert Johnson</h4>
-                    <p className="text-sm text-muted-foreground">Frequent Traveler</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <ReviewSlider />
         </div>
       </section>
-     {/* How We Work Section */}
-        <HowWeWork />
+
+      {/* How We Work Section */}
+      <HowWeWork />
+
       {/* CTA Section */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">

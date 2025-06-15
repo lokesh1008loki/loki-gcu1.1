@@ -1,23 +1,31 @@
 import { getServerSession } from "next-auth"
-import { NextResponse } from "next/server"
 import { authOptions } from "@/lib/auth"
+import { NextResponse } from "next/server"
 
 export async function GET() {
   try {
     const session = await getServerSession(authOptions)
-    
-    if (!session?.user) {
-      return new NextResponse(
-        JSON.stringify({ error: "Unauthorized" }),
+
+    if (!session) {
+      return NextResponse.json(
+        { error: "Not authenticated" },
         { status: 401 }
       )
     }
 
-    return NextResponse.json({ user: session.user })
+    return NextResponse.json({
+      user: {
+        id: session.user.id,
+        name: session.user.name,
+        email: session.user.email,
+        image: session.user.image,
+        role: session.user.role,
+      },
+    })
   } catch (error) {
-    console.error("Error in /api/auth/me:", error)
-    return new NextResponse(
-      JSON.stringify({ error: "Internal Server Error" }),
+    console.error("Auth API Error:", error)
+    return NextResponse.json(
+      { error: "Internal server error" },
       { status: 500 }
     )
   }

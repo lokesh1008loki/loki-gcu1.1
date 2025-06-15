@@ -1,17 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+  <!-- Main Pages -->
   <url>
     <loc>https://gocomfortusa.com/</loc>
     <lastmod>2024-03-21</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://gocomfortusa.com/ass/logo-round.png</image:loc>
+      <image:title>GoComfortUSA Logo</image:title>
+    </image:image>
+  </url>
+
+  <!-- Travel Section -->
+  <url>
+    <loc>https://gocomfortusa.com/travel/flight</loc>
+    <lastmod>2024-03-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://gocomfortusa.com/ass/flight united.jpg</image:loc>
+      <image:title>Flight Booking Services</image:title>
+    </image:image>
   </url>
   <url>
-    <loc>https://gocomfortusa.com/flights</loc>
+    <loc>https://gocomfortusa.com/travel/bus</loc>
     <lastmod>2024-03-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://gocomfortusa.com/ass/bus ticket.jpg</image:loc>
+      <image:title>Bus Booking Services</image:title>
+    </image:image>
   </url>
+  <url>
+    <loc>https://gocomfortusa.com/travel/car-rental</loc>
+    <lastmod>2024-03-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://gocomfortusa.com/ass/car rent 5.jpg</image:loc>
+      <image:title>Car Rental Services</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gocomfortusa.com/travel/train</loc>
+    <lastmod>2024-03-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://gocomfortusa.com/ass/train ticket 3.jpg</image:loc>
+      <image:title>Train Booking Services</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gocomfortusa.com/travel/cruise</loc>
+    <lastmod>2024-03-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://gocomfortusa.com/ass/cruise.jpg</image:loc>
+      <image:title>Cruise Booking Services</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gocomfortusa.com/travel/hotel</loc>
+    <lastmod>2024-03-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://gocomfortusa.com/ass/hotel 3.jpg</image:loc>
+      <image:title>Hotel Booking Services</image:title>
+    </image:image>
+  </url>
+
+  <!-- Theme Parks -->
+  <url>
+    <loc>https://gocomfortusa.com/disney-park-tickets</loc>
+    <lastmod>2024-03-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://gocomfortusa.com/ass/disneyland-01.jpg</image:loc>
+      <image:title>Disney Park Tickets</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gocomfortusa.com/universal-studio-tickets</loc>
+    <lastmod>2024-03-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://gocomfortusa.com/ass/universal-studio-01.jpg</image:loc>
+      <image:title>Universal Studio Tickets</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://gocomfortusa.com/seaworld-tickets</loc>
+    <lastmod>2024-03-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://gocomfortusa.com/ass/seaworld-01.jpg</image:loc>
+      <image:title>SeaWorld Tickets</image:title>
+    </image:image>
+  </url>
+
+  <!-- Utility Services -->
   <url>
     <loc>https://gocomfortusa.com/rent-payment</loc>
     <lastmod>2024-03-21</lastmod>
@@ -19,57 +116,67 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://gocomfortusa.com/hotels</loc>
+    <loc>https://gocomfortusa.com/utility-bill-payment</loc>
     <lastmod>2024-03-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://gocomfortusa.com/train-tickets</loc>
+    <loc>https://gocomfortusa.com/gas-bill-payment</loc>
     <lastmod>2024-03-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://gocomfortusa.com/disney-park-tickets</loc>
+    <loc>https://gocomfortusa.com/electric-bill-payment</loc>
     <lastmod>2024-03-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  <url>
-    <loc>https://gocomfortusa.com/ikea-orders</loc>
-    <lastmod>2024-03-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
+
+  <!-- Blog Section -->
   <url>
     <loc>https://gocomfortusa.com/blog</loc>
     <lastmod>2024-03-21</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://gocomfortusa.com/blog/pay-house-rent-online</loc>
     <lastmod>2024-03-21</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gocomfortusa.com/blog/book-cheap-flights-online</loc>
     <lastmod>2024-03-21</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
+
+  <!-- Other Important Pages -->
   <url>
     <loc>https://gocomfortusa.com/about</loc>
     <lastmod>2024-03-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://gocomfortusa.com/contact</loc>
     <lastmod>2024-03-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gocomfortusa.com/privacy-policy</loc>
+    <lastmod>2024-03-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gocomfortusa.com/terms-of-service</loc>
+    <lastmod>2024-03-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset> 

@@ -9,6 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle, AlertCircle, Ship } from "lucide-react"
 import { Toaster } from "@/components/ui/sonner"
 import Link from "next/link"
+import Image from "next/image"
+import { LegalCheckboxes } from "@/components/legal-checkboxes"
 
 export default function CruiseBookingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -81,358 +83,361 @@ export default function CruiseBookingPage() {
     <>
       <Toaster />
       <div className="container mx-auto px-4 py-8">
+        {/* Hero Section */}
+        <div className="relative mb-12 rounded-lg overflow-hidden shadow-xl">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/25 to-primary/50 z-10" />
+          <Image
+            src="/ass/cruise.jpg"
+            alt="Cruise Booking"
+            width={1920}
+            height={600}
+            className="w-full h-[500px] object-cover brightness-110"
+            priority
+          />
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4">
+            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Book Your Dream Cruise with GoComfort USA</h1>
+            <p className="text-2xl text-white/95 mb-8 max-w-2xl drop-shadow-md">
+              Experience luxury at sea with our exclusive cruise deals and premium service.
+            </p>
+            <Button 
+              size="lg" 
+              className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-6 shadow-lg"
+              onClick={() => document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              Book Your Cruise
+            </Button>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">Cruise Booking</h1>
-              <p className="text-muted-foreground">Book your dream cruise with GoComfort USA — offering the best rates and a wide selection of cruise lines.</p>
-            </div>
+            <div id="booking-section">
+              <div>
+                <h1 className="text-3xl font-bold mb-2">Cruise Booking</h1>
+                <p className="text-muted-foreground">Book your dream cruise with GoComfort USA — offering the best rates and a wide selection of cruise lines.</p>
+              </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Ship className="h-5 w-5 mr-2 text-primary" />
-                  Booking Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <form className="space-y-6" onSubmit={handleSubmit}>
-                  {/* Personal Information Section */}
-                  <div className="space-y-4">
-                    <h2 className="text-xl font-semibold">Personal Information</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="first-name">First Name *</Label>
-                        <Input 
-                          id="first-name" 
-                          name="first-name" 
-                          placeholder="Enter your first name" 
-                          required 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="last-name">Last Name *</Label>
-                        <Input 
-                          id="last-name" 
-                          name="last-name" 
-                          placeholder="Enter your last name" 
-                          required 
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email Address *</Label>
-                      <Input 
-                        id="email" 
-                        name="email" 
-                        type="email"
-                        placeholder="Enter your email address" 
-                        required 
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="phone-number">Phone Number *</Label>
-                      <Input 
-                        id="phone-number" 
-                        name="phone-number" 
-                        type="tel"
-                        placeholder="Enter your phone number" 
-                        required 
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="contact-info">Telegram ID or WhatsApp Number * (For ASAP Support)</Label>
-                      <Input 
-                        id="contact-info" 
-                        name="contact-info" 
-                        placeholder="Enter your Telegram ID or WhatsApp number" 
-                        required
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="date-of-birth">Date of Birth *</Label>
-                        <Input 
-                          id="date-of-birth" 
-                          name="date-of-birth" 
-                          type="date" 
-                          required 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="nationality">Nationality *</Label>
-                        <Input 
-                          id="nationality" 
-                          name="nationality" 
-                          placeholder="Enter your nationality" 
-                          required 
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="passport-number">Passport Number *</Label>
-                      <Input 
-                        id="passport-number" 
-                        name="passport-number" 
-                        placeholder="Enter your passport number" 
-                        required 
-                      />
-                    </div>
-                  </div>
-
-                  {/* Cruise Details Section */}
-                  <div className="space-y-4">
-                    <h2 className="text-xl font-semibold">Cruise Details</h2>
-                    <div className="space-y-2">
-                      <Label htmlFor="cruise-line">Cruise Line *</Label>
-                      <select 
-                        id="cruise-line" 
-                        name="cruise-line" 
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        required
-                      >
-                        <option value="">Select cruise line</option>
-                        <option value="royal-caribbean">Royal Caribbean</option>
-                        <option value="carnival">Carnival Cruise Line</option>
-                        <option value="norwegian">Norwegian Cruise Line</option>
-                        <option value="msc">MSC Cruises</option>
-                        <option value="disney">Disney Cruise Line</option>
-                      </select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="ship-name">Ship Name *</Label>
-                      <Input 
-                        id="ship-name" 
-                        name="ship-name" 
-                        placeholder="Enter ship name" 
-                        required 
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="departure-port">Departure Port *</Label>
-                      <select 
-                        id="departure-port" 
-                        name="departure-port" 
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        required
-                      >
-                        <option value="">Select departure port</option>
-                        <option value="miami">Miami, Florida</option>
-                        <option value="fort-lauderdale">Fort Lauderdale, Florida</option>
-                        <option value="port-canaveral">Port Canaveral, Florida</option>
-                        <option value="tampa">Tampa, Florida</option>
-                        <option value="galveston">Galveston, Texas</option>
-                        <option value="los-angeles">Los Angeles, California</option>
-                        <option value="seattle">Seattle, Washington</option>
-                      </select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="destinations">Destinations *</Label>
-                      <select 
-                        id="destinations" 
-                        name="destinations" 
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        required
-                      >
-                        <option value="">Select destinations</option>
-                        <option value="caribbean">Caribbean</option>
-                        <option value="bahamas">Bahamas</option>
-                        <option value="mexico">Mexico</option>
-                        <option value="alaska">Alaska</option>
-                        <option value="europe">Europe</option>
-                        <option value="asia">Asia</option>
-                      </select>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="departure-date">Departure Date *</Label>
-                        <Input 
-                          id="departure-date" 
-                          name="departure-date" 
-                          type="date" 
-                          required 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="return-date">Return Date *</Label>
-                        <Input 
-                          id="return-date" 
-                          name="return-date" 
-                          type="date" 
-                          required 
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="number-of-adults">Number of Adults *</Label>
-                        <Input 
-                          id="number-of-adults" 
-                          name="number-of-adults" 
-                          type="number" 
-                          min="1" 
-                          required 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="number-of-children">Number of Children</Label>
-                        <Input 
-                          id="number-of-children" 
-                          name="number-of-children" 
-                          type="number" 
-                          min="0" 
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="cabin-type">Cabin Type *</Label>
-                      <select 
-                        id="cabin-type" 
-                        name="cabin-type" 
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        required
-                      >
-                        <option value="">Select cabin type</option>
-                        <option value="interior">Interior</option>
-                        <option value="oceanview">Oceanview</option>
-                        <option value="balcony">Balcony</option>
-                        <option value="suite">Suite</option>
-                      </select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label>Dining Preference *</Label>
-                      <div className="space-y-2">
-                        <div className="flex items-center space-x-2">
-                          <input type="radio" id="early" name="dining-preference" value="early" required className="h-4 w-4" />
-                          <Label htmlFor="early">Early Seating</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <input type="radio" id="late" name="dining-preference" value="late" className="h-4 w-4" />
-                          <Label htmlFor="late">Late Seating</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <input type="radio" id="anytime" name="dining-preference" value="anytime" className="h-4 w-4" />
-                          <Label htmlFor="anytime">Anytime Dining</Label>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="special-requests">Special Requests</Label>
-                      <textarea
-                        id="special-requests"
-                        name="special-requests"
-                        placeholder="Any special requests or requirements"
-                        className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Travel Insurance Section */}
-                  <div className="space-y-4">
-                    <h2 className="text-xl font-semibold">Travel Insurance</h2>
-                    <div className="space-y-2">
-                      <Label>Add Travel Insurance?</Label>
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <input 
-                            type="radio" 
-                            id="insurance-yes" 
-                            name="has-insurance" 
-                            value="yes" 
-                            className="h-4 w-4"
-                            onChange={() => setHasInsurance(true)}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Ship className="h-5 w-5 mr-2 text-primary" />
+                    Booking Details
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <form className="space-y-6" onSubmit={handleSubmit}>
+                    {/* Personal Information Section */}
+                    <div className="space-y-4">
+                      <h2 className="text-xl font-semibold">Personal Information</h2>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="first-name">First Name *</Label>
+                          <Input 
+                            id="first-name" 
+                            name="first-name" 
+                            placeholder="Enter your first name" 
+                            required 
                           />
-                          <Label htmlFor="insurance-yes">Yes</Label>
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <input 
-                            type="radio" 
-                            id="insurance-no" 
-                            name="has-insurance" 
-                            value="no" 
-                            className="h-4 w-4"
-                            onChange={() => setHasInsurance(false)}
+                        <div className="space-y-2">
+                          <Label htmlFor="last-name">Last Name *</Label>
+                          <Input 
+                            id="last-name" 
+                            name="last-name" 
+                            placeholder="Enter your last name" 
+                            required 
                           />
-                          <Label htmlFor="insurance-no">No</Label>
                         </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email Address *</Label>
+                        <Input 
+                          id="email" 
+                          name="email" 
+                          type="email"
+                          placeholder="Enter your email address" 
+                          required 
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="phone-number">Phone Number *</Label>
+                        <Input 
+                          id="phone-number" 
+                          name="phone-number" 
+                          type="tel"
+                          placeholder="Enter your phone number" 
+                          required 
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="contact-info">Telegram ID or WhatsApp Number * (For ASAP Support)</Label>
+                        <Input 
+                          id="contact-info" 
+                          name="contact-info" 
+                          placeholder="Enter your Telegram ID or WhatsApp number" 
+                          required
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="date-of-birth">Date of Birth *</Label>
+                          <Input 
+                            id="date-of-birth" 
+                            name="date-of-birth" 
+                            type="date" 
+                            required 
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="nationality">Nationality *</Label>
+                          <Input 
+                            id="nationality" 
+                            name="nationality" 
+                            placeholder="Enter your nationality" 
+                            required 
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="passport-number">Passport Number *</Label>
+                        <Input 
+                          id="passport-number" 
+                          name="passport-number" 
+                          placeholder="Enter your passport number" 
+                          required 
+                        />
                       </div>
                     </div>
 
-                    {hasInsurance && (
+                    {/* Cruise Details Section */}
+                    <div className="space-y-4">
+                      <h2 className="text-xl font-semibold">Cruise Details</h2>
                       <div className="space-y-2">
-                        <Label htmlFor="insurance-plan">Insurance Plan *</Label>
+                        <Label htmlFor="cruise-line">Cruise Line *</Label>
                         <select 
-                          id="insurance-plan" 
-                          name="insurance-plan" 
+                          id="cruise-line" 
+                          name="cruise-line" 
                           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          required
                         >
-                          <option value="">Select insurance plan</option>
-                          <option value="basic">Basic Coverage</option>
-                          <option value="premium">Premium Coverage</option>
-                          <option value="deluxe">Deluxe Coverage</option>
+                          <option value="">Select cruise line</option>
+                          <option value="royal-caribbean">Royal Caribbean</option>
+                          <option value="carnival">Carnival Cruise Line</option>
+                          <option value="norwegian">Norwegian Cruise Line</option>
+                          <option value="msc">MSC Cruises</option>
+                          <option value="disney">Disney Cruise Line</option>
                         </select>
                       </div>
-                    )}
-                  </div>
 
-                  {/* Agreements Section */}
-                  <div className="space-y-4">
-                    <h2 className="text-xl font-semibold">Agreements</h2>
+                      <div className="space-y-2">
+                        <Label htmlFor="ship-name">Ship Name *</Label>
+                        <Input 
+                          id="ship-name" 
+                          name="ship-name" 
+                          placeholder="Enter ship name" 
+                          required 
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="departure-port">Departure Port *</Label>
+                        <select 
+                          id="departure-port" 
+                          name="departure-port" 
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          required
+                        >
+                          <option value="">Select departure port</option>
+                          <option value="miami">Miami, Florida</option>
+                          <option value="fort-lauderdale">Fort Lauderdale, Florida</option>
+                          <option value="port-canaveral">Port Canaveral, Florida</option>
+                          <option value="tampa">Tampa, Florida</option>
+                          <option value="galveston">Galveston, Texas</option>
+                          <option value="los-angeles">Los Angeles, California</option>
+                          <option value="seattle">Seattle, Washington</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="destinations">Destinations *</Label>
+                        <select 
+                          id="destinations" 
+                          name="destinations" 
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          required
+                        >
+                          <option value="">Select destinations</option>
+                          <option value="caribbean">Caribbean</option>
+                          <option value="bahamas">Bahamas</option>
+                          <option value="mexico">Mexico</option>
+                          <option value="alaska">Alaska</option>
+                          <option value="europe">Europe</option>
+                          <option value="asia">Asia</option>
+                        </select>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="departure-date">Departure Date *</Label>
+                          <Input 
+                            id="departure-date" 
+                            name="departure-date" 
+                            type="date" 
+                            required 
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="return-date">Return Date *</Label>
+                          <Input 
+                            id="return-date" 
+                            name="return-date" 
+                            type="date" 
+                            required 
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="number-of-adults">Number of Adults *</Label>
+                          <Input 
+                            id="number-of-adults" 
+                            name="number-of-adults" 
+                            type="number" 
+                            min="1" 
+                            required 
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="number-of-children">Number of Children</Label>
+                          <Input 
+                            id="number-of-children" 
+                            name="number-of-children" 
+                            type="number" 
+                            min="0" 
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="cabin-type">Cabin Type *</Label>
+                        <select 
+                          id="cabin-type" 
+                          name="cabin-type" 
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          required
+                        >
+                          <option value="">Select cabin type</option>
+                          <option value="interior">Interior</option>
+                          <option value="oceanview">Oceanview</option>
+                          <option value="balcony">Balcony</option>
+                          <option value="suite">Suite</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label>Dining Preference *</Label>
+                        <div className="space-y-2">
+                          <div className="flex items-center space-x-2">
+                            <input type="radio" id="early" name="dining-preference" value="early" required className="h-4 w-4" />
+                            <Label htmlFor="early">Early Seating</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <input type="radio" id="late" name="dining-preference" value="late" className="h-4 w-4" />
+                            <Label htmlFor="late">Late Seating</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <input type="radio" id="anytime" name="dining-preference" value="anytime" className="h-4 w-4" />
+                            <Label htmlFor="anytime">Anytime Dining</Label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="special-requests">Special Requests</Label>
+                        <textarea
+                          id="special-requests"
+                          name="special-requests"
+                          placeholder="Any special requests or requirements"
+                          className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Travel Insurance Section */}
                     <div className="space-y-4">
-                      <div className="flex items-start space-x-2">
-                        <input 
-                          type="checkbox" 
-                          id="terms" 
-                          name="terms" 
-                          required 
-                          className="mt-1 h-4 w-4"
-                        />
-                        <Label htmlFor="terms" className="text-sm">
-                          I accept the Terms & Conditions *
-                        </Label>
+                      <h2 className="text-xl font-semibold">Travel Insurance</h2>
+                      <div className="space-y-2">
+                        <Label>Add Travel Insurance?</Label>
+                        <div className="flex items-center space-x-4">
+                          <div className="flex items-center space-x-2">
+                            <input 
+                              type="radio" 
+                              id="insurance-yes" 
+                              name="has-insurance" 
+                              value="yes" 
+                              className="h-4 w-4"
+                              onChange={() => setHasInsurance(true)}
+                            />
+                            <Label htmlFor="insurance-yes">Yes</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <input 
+                              type="radio" 
+                              id="insurance-no" 
+                              name="has-insurance" 
+                              value="no" 
+                              className="h-4 w-4"
+                              onChange={() => setHasInsurance(false)}
+                            />
+                            <Label htmlFor="insurance-no">No</Label>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-start space-x-2">
-                        <input 
-                          type="checkbox" 
-                          id="privacy" 
-                          name="privacy" 
-                          required 
-                          className="mt-1 h-4 w-4"
-                        />
-                        <Label htmlFor="privacy" className="text-sm">
-                          I agree to the Privacy Policy *
-                        </Label>
+
+                      {hasInsurance && (
+                        <div className="space-y-2">
+                          <Label htmlFor="insurance-plan">Insurance Plan *</Label>
+                          <select 
+                            id="insurance-plan" 
+                            name="insurance-plan" 
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            <option value="">Select insurance plan</option>
+                            <option value="basic">Basic Coverage</option>
+                            <option value="premium">Premium Coverage</option>
+                            <option value="deluxe">Deluxe Coverage</option>
+                          </select>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Agreements Section */}
+                    <div className="space-y-4">
+                      <h2 className="text-xl font-semibold">Agreements</h2>
+                      <LegalCheckboxes />
+                    </div>
+
+                    <Button className="w-full" type="submit" disabled={isSubmitting}>
+                      {isSubmitting ? "Submitting..." : "Submit Request"}
+                    </Button>
+
+                    {showConfirmation && (
+                      <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <p className="text-green-700 text-center">
+                          Your cruise booking request has been submitted successfully. Our team will contact you via WhatsApp or Telegram shortly.
+                        </p>
                       </div>
-                    </div>
-                  </div>
-
-                  <Button className="w-full" type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? "Submitting..." : "Submit Request"}
-                  </Button>
-
-                  {showConfirmation && (
-                    <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-                      <p className="text-green-700 text-center">
-                        Your cruise booking request has been submitted successfully. Our team will contact you via WhatsApp or Telegram shortly.
-                      </p>
-                    </div>
-                  )}
-                </form>
-              </CardContent>
-            </Card>
+                    )}
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
           <div className="space-y-6">

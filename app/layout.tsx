@@ -17,7 +17,8 @@ const inter = Inter({
   display: "swap",
   variable: "--font-inter",
   preload: true,
-  fallback: ["system-ui", "arial"]
+  fallback: ["system-ui", "arial"],
+  adjustFontFallback: true,
 })
 
 export { viewport }
@@ -132,24 +133,15 @@ export default async function RootLayout({
           href="https://fonts.gstatic.com" 
         />
         <Script 
-          id="service-worker" 
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                  navigator.serviceWorker.register('/sw.js')
-                    .then(registration => {
-                      console.log('ServiceWorker registration successful');
-                    })
-                    .catch(err => {
-                      console.log('ServiceWorker registration failed: ', err);
-                    });
-                });
-              }
-            `
-          }}
+          id="service-worker"
+          strategy="worker"
+          src="/service-worker-registration.js"
         />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </head>
       <body className="font-sans antialiased" suppressHydrationWarning>
         <ClientRoot session={session}>
@@ -160,6 +152,12 @@ export default async function RootLayout({
             <Footer />
             <PopupNotification />
           </div>
+          <Toaster 
+            position="top-center"
+            expand={true}
+            richColors
+            closeButton
+          />
         </ClientRoot>
       </body>
     </html>

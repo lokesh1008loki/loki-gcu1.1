@@ -110,7 +110,7 @@ function Footer() {
   return (
     <footer className="bg-muted">
       <div className="container mx-auto px-4 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           <FooterSection title="GocomfortUSA">
             <p className="text-muted-foreground text-sm">
               GocomfortUSA offers amazing deals on ticket bookings and bill payments, ensuring you get the best
@@ -121,11 +121,34 @@ function Footer() {
           <FooterSection title="Quick Links">
             <ul className="space-y-2">
               <FooterLink href="/" text="Home" />
+              <FooterLink href="/about" text="About Us" />
               <FooterLink href="/tickets/water-park" text="Tickets & Parks" />
               <FooterLink href="/bills/utility" text="Bill & Payments" />
               <FooterLink href="/travel/flight" text="Travel" />
-              <FooterLink href="/food-grocery" text="Food & Grocery" />
+              <FooterLink href="/others/ikea" text="IKEA" />
             </ul>
+          </FooterSection>
+
+          <FooterSection title="Legal">
+            <ul className="space-y-2">
+              <FooterLink href="/terms-of-service" text="Terms of Service" />
+              <FooterLink href="/privacy-policy" text="Privacy Policy" />
+            </ul>
+          </FooterSection>
+
+          <FooterSection title="Contact Us">
+            <div className="space-y-4">
+              <div className="flex items-center space-x-4">
+                <SocialLink href={settings.whatsappLink} icon={Phone} label="WhatsApp" />
+                <SocialLink href={settings.facebookLink} icon={Facebook} label="Facebook" />
+                <SocialLink href={settings.instagramLink} icon={Instagram} label="Instagram" />
+                <SocialLink href={settings.twitterLink} icon={Twitter} label="Twitter" />
+              </div>
+              <div className="space-y-2">
+                <ContactInfo icon={Mail} text={settings.email} />
+                <ContactInfo icon={Phone} text={settings.phoneNumber} />
+              </div>
+            </div>
           </FooterSection>
 
           <FooterSection title="Services">
@@ -136,19 +159,6 @@ function Footer() {
               <FooterLink href="/travel/flight" text="Flight Tickets" />
               <FooterLink href="/travel/apartment-rental" text="Apartment Rentals" />
             </ul>
-          </FooterSection>
-
-          <FooterSection title="Contact Us">
-            <div className="flex items-center space-x-4">
-              <SocialLink href={settings.whatsappLink} icon={Phone} label="WhatsApp" />
-              <SocialLink href={settings.facebookLink} icon={Facebook} label="Facebook" />
-              <SocialLink href={settings.instagramLink} icon={Instagram} label="Instagram" />
-              <SocialLink href={settings.twitterLink} icon={Twitter} label="Twitter" />
-            </div>
-            <div className="space-y-2">
-              <ContactInfo icon={Mail} text={settings.email} />
-              <ContactInfo icon={Phone} text={settings.phoneNumber} />
-            </div>
           </FooterSection>
         </div>
 

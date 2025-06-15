@@ -74,7 +74,6 @@ const navLinks = [
       { name: "City Pass", href: "/tickets/city-pass" },
       { name: "Universal Studios", href: "/tickets/universal-studios" },
       { name: "Sea World", href: "/tickets/sea-world" },
-      
       { name: "Other Parks", href: "/tickets/other-parks" },
     ],
   },
@@ -98,12 +97,12 @@ const navLinks = [
       { name: "Cruise", href: "/travel/cruise" },
     ],
   },
+  { name: "IKEA", href: "/others/ikea" },
   {
     name: "Others",
     href: "#",
     submenu: [
       { name: "Food & Grocery", href: "/others/food-grocery" },
-      { name: "Ikea", href: "/others/ikea" },
     ],
   },
   {
@@ -210,7 +209,7 @@ function Navbar() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-6">
             {navLinks.map((link) => (
               <NavLink
                 key={link.name}
@@ -222,7 +221,7 @@ function Navbar() {
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-4">
             <ModeToggle />
             <Link href="/contact">
               <Button variant="outline" size="sm">
@@ -234,6 +233,32 @@ function Navbar() {
                 Login
               </Button>
             </Link>
+          </div>
+
+          {/* Tablet Navigation */}
+          <div className="hidden md:flex lg:hidden items-center space-x-4">
+            <ModeToggle />
+            <Link href="/contact">
+              <Button variant="outline" size="sm">
+                Contact
+              </Button>
+            </Link>
+            <Link href="/admin/login">
+              <Button variant="outline" size="sm">
+                Login
+              </Button>
+            </Link>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+            >
+              <span className="sr-only">Open main menu</span>
+              {isOpen ? (
+                <X className="block h-6 w-6" aria-hidden="true" />
+              ) : (
+                <Menu className="block h-6 w-6" aria-hidden="true" />
+              )}
+            </button>
           </div>
 
           {/* Mobile Navigation Toggle */}
@@ -254,10 +279,10 @@ function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation Menu */}
+      {/* Mobile and Tablet Navigation Menu */}
       {isOpen && (
-        <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 bg-background border-t">
+        <div className="md:absolute md:top-16 md:left-0 md:right-0 md:bg-background md:border-t md:border-b md:shadow-lg">
+          <div className="px-2 pt-2 pb-3 space-y-1">
             {navLinks.map((link) => (
               <MobileMenuItem
                 key={link.name}
@@ -268,7 +293,7 @@ function Navbar() {
                 setIsOpen={setIsOpen}
               />
             ))}
-            <div className="pt-4 pb-3 border-t border-muted">
+            <div className="pt-4 pb-3 border-t border-muted md:hidden">
               <Link href="/contact" onClick={() => setIsOpen(false)}>
                 <Button variant="outline" className="w-full mb-2">
                   Contact Support

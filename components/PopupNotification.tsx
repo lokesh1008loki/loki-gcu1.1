@@ -4,8 +4,9 @@ import { useEffect, useState, useCallback, memo, useMemo } from "react"
 import { usePathname } from "next/navigation"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
-import { X, Copy, Check } from "lucide-react"
+import { X, Copy, Check, Bell } from "lucide-react"
 import { useSafeToast } from "@/lib/hooks/use-safe-toast"
+import { motion, AnimatePresence } from "framer-motion"
 
 interface Popup {
   id: string
@@ -32,12 +33,12 @@ const PromoCode = memo(({ code }: { code: string }) => {
 
   return (
     <span className="inline-flex items-center gap-1">
-      <code className="bg-gray-100 px-2 py-1 rounded">{code}</code>
+      <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded font-mono text-sm">{code}</code>
       <Button
         variant="ghost"
         size="sm"
         onClick={handleCopy}
-        className="h-6 w-6 p-0"
+        className="h-6 w-6 p-0 hover:bg-gray-100 dark:hover:bg-gray-800"
       >
         {copied ? (
           <Check className="h-3 w-3 text-green-500" />
@@ -61,24 +62,34 @@ const PopupAlert = memo(({
   onDismiss: (id: string) => void, 
   alertVariant: "default" | "destructive" | null | undefined 
 }) => (
-  <Alert
-    variant={alertVariant}
-    className="relative w-[92vw] sm:w-[400px] shadow-lg mx-4 sm:mx-0"
+  <motion.div
+    initial={{ opacity: 0, y: 50, scale: 0.95 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    exit={{ opacity: 0, y: 50, scale: 0.95 }}
+    transition={{ type: "spring", damping: 20, stiffness: 300 }}
   >
-    <button
-      onClick={() => onDismiss(popup.id)}
-      className="absolute right-2 top-2 p-1 hover:bg-gray-100 rounded-full"
+    <Alert
+      variant={alertVariant}
+      className="relative w-[92vw] sm:w-[400px] shadow-xl mx-4 sm:mx-0 border-2 bg-white dark:bg-gray-900 backdrop-blur-sm"
     >
-      <X className="h-4 w-4" />
-    </button>
-    <AlertTitle className="text-lg font-bold mb-2">{popup.title}</AlertTitle>
-    <AlertDescription className="space-y-2">
-      {formatMessage(popup.message)}
-    </AlertDescription>
-  </Alert>
+      <div className="absolute -top-3 -left-3 bg-primary text-white p-2 rounded-full shadow-lg">
+        <Bell className="h-4 w-4" />
+      </div>
+      <button
+        onClick={() => onDismiss(popup.id)}
+        className="absolute right-2 top-2 p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+      >
+        <X className="h-4 w-4" />
+      </button>
+      <AlertTitle className="text-lg font-bold mb-2 mt-1">{popup.title}</AlertTitle>
+      <AlertDescription className="space-y-2 text-gray-700 dark:text-gray-300">
+        {formatMessage(popup.message)}
+      </AlertDescription>
+    </Alert>
+  </motion.div>
 ))
 
-PopupAlert.displayName = 'PopupAlert'
+PopupAlert.displayName = 'PopAlert'
 
 // Helper function to format message with promo codes
 const formatMessage = (message: string) => {
@@ -112,6 +123,7 @@ const formatMessage = (message: string) => {
 export function PopupNotification() {
   const [popups, setPopups] = useState<Popup[]>([])
   const [dismissedPopups, setDismissedPopups] = useState<string[]>([])
+  const [showPopups, setShowPopups] = useState(false)
   const pathname = usePathname()
   const { showToast } = useSafeToast()
 
@@ -150,6 +162,16 @@ export function PopupNotification() {
     return () => clearInterval(intervalId)
   }, [fetchPopups])
 
+  // Add delay effect
+  useEffect(() => {
+    const randomDelay = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000; // Random delay between 5-10 seconds
+    const timer = setTimeout(() => {
+      setShowPopups(true)
+    }, randomDelay)
+
+    return () => clearTimeout(timer)
+  }, [])
+
   const handleDismiss = useCallback((popupId: string) => {
     setDismissedPopups(prev => [...prev, popupId])
   }, [])
@@ -157,6 +179,7 @@ export function PopupNotification() {
   const isPopupVisible = useCallback((popup: Popup) => {
     if (!popup.isActive) return false
     if (dismissedPopups.includes(popup.id)) return false
+    if (!showPopups) return false // Don't show if delay hasn't passed
 
     const now = new Date()
     if (popup.startDate && new Date(popup.startDate) > now) return false
@@ -166,7 +189,7 @@ export function PopupNotification() {
       if (page === "/") return pathname === "/"
       return pathname.startsWith(page)
     })
-  }, [dismissedPopups, pathname])
+  }, [dismissedPopups, pathname, showPopups])
 
   const getAlertVariant = useCallback((type: string) => {
     switch (type) {
@@ -191,15 +214,19 @@ export function PopupNotification() {
   }
 
   return (
-    <div className="fixed bottom-4 right-0 sm:right-4 z-50 space-y-4">
-      {visiblePopups.map(popup => (
-        <PopupAlert
-          key={popup.id}
-          popup={popup}
-          onDismiss={handleDismiss}
-          alertVariant={getAlertVariant(popup.type)}
-        />
-      ))}
+    <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+      <div className="space-y-4 pointer-events-auto">
+        <AnimatePresence>
+          {visiblePopups.map(popup => (
+            <PopupAlert
+              key={popup.id}
+              popup={popup}
+              onDismiss={handleDismiss}
+              alertVariant={getAlertVariant(popup.type)}
+            />
+          ))}
+        </AnimatePresence>
+      </div>
     </div>
   )
 } 
