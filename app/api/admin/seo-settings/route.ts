@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
+import { headers } from "next/headers"
 
 export async function GET() {
   try {
@@ -10,6 +11,13 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
+    // Set cache control headers
+    const headersList = headers()
+    const response = NextResponse.json({})
+    response.headers.set("Cache-Control", "no-store, must-revalidate")
+    response.headers.set("Pragma", "no-cache")
+    response.headers.set("Expires", "0")
+
     const settings = await prisma.seoSettings.findFirst()
     
     if (!settings) {
@@ -17,10 +25,22 @@ export async function GET() {
       const defaultSettings = await prisma.seoSettings.create({
         data: {}
       })
-      return NextResponse.json(defaultSettings)
+      return NextResponse.json(defaultSettings, {
+        headers: {
+          "Cache-Control": "no-store, must-revalidate",
+          "Pragma": "no-cache",
+          "Expires": "0"
+        }
+      })
     }
 
-    return NextResponse.json(settings)
+    return NextResponse.json(settings, {
+      headers: {
+        "Cache-Control": "no-store, must-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0"
+      }
+    })
   } catch (error) {
     console.error("Error fetching SEO settings:", error)
     return NextResponse.json(

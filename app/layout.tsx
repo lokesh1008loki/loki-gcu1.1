@@ -10,6 +10,7 @@ import { authOptions } from "@/lib/auth"
 import { ClientRoot } from "./client-root"
 import { prisma } from "@/lib/prisma"
 import { ClientComponents } from "@/components/client-components"
+import { headers } from "next/headers"
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -66,39 +67,37 @@ export async function generateMetadata() {
   }
 
   try {
-    const seoSettings = await prisma.$queryRaw<SeoSettings[]>`SELECT * FROM "SeoSettings" LIMIT 1`
-    const defaultMetadata = {
-      title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
-      description: "GocomfortUSA offers amazing deals on ticket bookings and bill payments...",
-      openGraph: {
-        title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
-        description: "Your one-stop solution for tickets and bill payments",
-      }
-    }
+    // Use Prisma's type-safe query builder instead of raw SQL
+    const seoSettings = await prisma.seoSettings.findFirst()
     
+    if (!seoSettings) {
+      console.warn('No SEO settings found in database, using defaults')
+      throw new Error('No SEO settings found')
+    }
+
     return {
-      title: seoSettings?.[0]?.siteTitle || defaultMetadata.title,
-      description: seoSettings?.[0]?.siteDescription || defaultMetadata.description,
-      metadataBase: new URL(seoSettings?.[0]?.canonicalUrl || "https://gocomfortusa.com"),
+      title: seoSettings.siteTitle,
+      description: seoSettings.siteDescription,
+      metadataBase: new URL(seoSettings.canonicalUrl),
       icons: {
         icon: "/ass/logo-round.png",
         shortcut: "/ass/logo-round.png",
         apple: "/ass/logo-round.png",
       },
       openGraph: {
-        title: seoSettings?.[0]?.ogTitle || defaultMetadata.openGraph.title,
-        description: seoSettings?.[0]?.ogDescription || defaultMetadata.openGraph.description,
-        images: [{ url: seoSettings?.[0]?.ogImage || "/ass/logo-round.png" }],
+        title: seoSettings.ogTitle,
+        description: seoSettings.ogDescription,
+        images: [{ url: seoSettings.ogImage }],
         type: "website",
       },
       twitter: {
         card: "summary_large_image",
-        title: seoSettings?.[0]?.twitterTitle || defaultMetadata.openGraph.title,
-        description: seoSettings?.[0]?.twitterDescription || defaultMetadata.openGraph.description,
-        images: [seoSettings?.[0]?.twitterImage || "/ass/logo-round.png"],
+        title: seoSettings.twitterTitle,
+        description: seoSettings.twitterDescription,
+        images: [seoSettings.twitterImage],
       },
       alternates: {
-        canonical: seoSettings?.[0]?.canonicalUrl || "https://gocomfortusa.com"
+        canonical: seoSettings.canonicalUrl
       }
     }
   } catch (error) {
@@ -132,15 +131,39 @@ export async function generateMetadata() {
   }
 }
 
+// Add revalidation configuration
+export const revalidate = 0
+
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   const session = await getServerSession(authOptions)
+  const headersList = headers()
+  const pathname = headersList.get("x-pathname") || ""
+  const isAdminPage = pathname.startsWith("/admin")
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {!isAdminPage && (
+          <>
+            <Script
+              src="https://www.googletagmanager.com/gtag/js?id=G-0DNMREQP2X"
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-0DNMREQP2X');
+              `}
+            </Script>
+          </>
+        )}
+      </head>
       <body className={inter.className} suppressHydrationWarning>
         <ClientRoot session={session}>
           <Navbar />
