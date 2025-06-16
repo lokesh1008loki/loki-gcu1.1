@@ -50,10 +50,31 @@ export async function GET() {
       })
 
       if (!popup) {
-        return NextResponse.json({ 
-          message: "No active popup found",
-          popup: null 
-        }, { headers: response.headers })
+        // Create a test popup if none exists
+        try {
+          const testPopup = await prisma.popupNotification.create({
+            data: {
+              title: "Welcome to GCU!",
+              message: "Thank you for visiting our website. We're here to help you with all your needs!",
+              isActive: true,
+              type: "info"
+            }
+          })
+          
+          return NextResponse.json({ 
+            message: "Test popup created",
+            popup: {
+              ...testPopup,
+              content: testPopup.message
+            }
+          }, { headers: response.headers })
+        } catch (createError) {
+          console.error("Error creating test popup:", createError)
+          return NextResponse.json({ 
+            message: "No active popup found",
+            popup: null 
+          }, { headers: response.headers })
+        }
       }
 
       // Ensure content is not null or undefined

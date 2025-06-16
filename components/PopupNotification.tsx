@@ -146,10 +146,12 @@ export function PopupNotification() {
 
       setIsLoading(true)
       setError(null)
+      console.log("Fetching popup...")
       const response = await fetch("/api/popup")
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => null)
+        console.error("Popup API error:", errorData)
         throw new Error(errorData?.message || "Failed to fetch popup")
       }
 
@@ -157,6 +159,7 @@ export function PopupNotification() {
       console.log("Popup API response:", data)
 
       if (data.popup) {
+        console.log("Setting popup:", data.popup)
         setPopup(data.popup)
         setTimeout(() => setIsVisible(true), 500)
       } else {
