@@ -1,55 +1,66 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { headers } from "next/headers"
 
 // Cache duration in seconds (5 minutes)
 const CACHE_DURATION = 300
 
 export async function GET() {
   try {
-    // Add cache control headers
-    const headersList = headers()
-    const response = new NextResponse()
-    
-    // Set cache control headers
-    response.headers.set('Cache-Control', `public, s-maxage=${CACHE_DURATION}, stale-while-revalidate=${CACHE_DURATION * 2}`)
-    
-    // Check if the table exists first
+    // First check if the table exists
     try {
-      const popups = await (prisma as any).PopupNotification.findMany({
+      const popup = await prisma.popupNotification.findFirst({
         where: {
           isActive: true,
-          startDate: {
-            lte: new Date()
-          },
-          endDate: {
-            gte: new Date()
-          }
         },
         orderBy: {
-          priority: 'desc'
+          createdAt: 'desc',
         },
-        // Limit the number of popups to improve performance
-        take: 5
+        select: {
+          id: true,
+          title: true,
+          message: true,
+          isActive: true,
+          startDate: true,
+          endDate: true,
+          createdAt: true,
+          updatedAt: true,
+        }
       })
 
-      if (!popups || popups.length === 0) {
-        return NextResponse.json([], { headers: response.headers })
+      if (!popup) {
+        return NextResponse.json({ 
+          message: "No active popup found",
+          popup: null 
+        }, { status: 200 })
       }
 
-      return NextResponse.json(popups, { headers: response.headers })
-    } catch (tableError) {
-      // If the table doesn't exist yet, return an empty array
-      if (tableError instanceof Error && tableError.message.includes("does not exist")) {
-        return NextResponse.json([], { headers: response.headers })
+      // Ensure content is not null or undefined
+      const formattedPopup = {
+        ...popup,
+        content: popup.message || "No content available",
+        title: popup.title || "Notification"
       }
-      throw tableError; // Re-throw other errors
+
+      return NextResponse.json({ 
+        message: "Popup retrieved successfully",
+        popup: formattedPopup
+      }, { status: 200 })
+    } catch (dbError) {
+      // If the table doesn't exist yet, return null
+      if (dbError instanceof Error && dbError.message.includes("does not exist")) {
+        console.log("PopupNotification table does not exist yet")
+        return NextResponse.json({ 
+          message: "No popup table found",
+          popup: null 
+        }, { status: 200 })
+      }
+      throw dbError
     }
   } catch (error) {
-    console.error("Error fetching popups:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch popups", details: error instanceof Error ? error.message : "Unknown error" },
-      { status: 500 }
-    )
+    console.error('Error fetching popup:', error)
+    return NextResponse.json({ 
+      error: "Failed to fetch popup",
+      message: error instanceof Error ? error.message : "An error occurred while fetching the popup"
+    }, { status: 500 })
   }
 } 
