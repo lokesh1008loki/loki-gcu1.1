@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { google } from "googleapis"
-import prisma from "@/lib/db"
+import { prisma } from "@/lib/prisma"
 
 // Google Sheets API credentials
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]

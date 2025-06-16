@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BlogSearch } from "@/components/blog-search"
-import { prisma } from "@/lib/db"
+import { prisma } from "@/lib/prisma"
 
 export const metadata: Metadata = {
   title: "Travel Blog | GoComfort USA",

@@ -5,7 +5,7 @@ import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Calendar, User, ArrowLeft, Facebook, Twitter, Linkedin, Share2 } from "lucide-react"
-import { prisma } from "@/lib/db"
+import { prisma } from "@/lib/prisma"
 
 type Blog = {
   id: string;

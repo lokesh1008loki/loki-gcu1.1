@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { prisma } from "@/lib/db"
+import { prisma } from "@/lib/prisma"
 import { headers } from "next/headers"
 
 const CACHE_DURATION = 300 // 5 minutes
