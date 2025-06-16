@@ -107,134 +107,11 @@ export default function Home() {
               Real experiences from our satisfied customers across the United States
             </p>
           </div>
-
           <ReviewSlider />
         </div>
       </section>
 
       {/* Services Section */}
-      <section className="py-16 md:py-24 bg-muted/50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Services</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Discover the wide range of services we offer to make your life easier and more enjoyable.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Service 1 */}
-            <Card className="service-card border-none">
-              <CardContent className="p-0">
-                <div className="relative h-48 w-full">
-                  <Image
-                    src="/ass/offer_1.jpg?height=200&width=300"
-                    alt="Tickets & Parks"
-                    fill
-                    className="object-cover rounded-t-xl"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-t-xl"></div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className="text-white text-xl font-bold">Tickets & Parks</h3>
-                  </div>
-                </div>
-                <div className="p-4 space-y-2">
-                  <p className="text-sm text-muted-foreground">
-                    Book tickets for Flights, water parks, adventure parks, and amusement parks at discounted rates.
-                  </p>
-                  <Link
-                    href="/tickets/water-park"
-                    className="inline-flex items-center text-primary text-sm font-medium"
-                  >
-                    Explore <ArrowRight className="ml-1 h-4 w-4" />
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Service 2 */}
-            <Card className="service-card border-none">
-              <CardContent className="p-0">
-                <div className="relative h-48 w-full">
-                  <Image
-                    src="/ass/offer_2.jpg?height=200&width=300"
-                    alt="Bill & Payments"
-                    fill
-                    className="object-cover rounded-t-xl"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-t-xl"></div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className="text-white text-xl font-bold">Bill & Payments</h3>
-                  </div>
-                </div>
-                <div className="p-4 space-y-2">
-                  <p className="text-sm text-muted-foreground">
-                    Pay your utility bills, electricity, and gas bills conveniently and securely.
-                  </p>
-                  <Link href="/bills/utility" className="inline-flex items-center text-primary text-sm font-medium">
-                    Pay Now <ArrowRight className="ml-1 h-4 w-4" />
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Service 3 */}
-            <Card className="service-card border-none">
-              <CardContent className="p-0">
-                <div className="relative h-48 w-full">
-                  <Image
-                    src="/ass/offer_3.jpg?height=200&width=300"
-                    alt="Travel"
-                    fill
-                    className="object-cover rounded-t-xl"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-t-xl"></div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className="text-white text-xl font-bold">Travel</h3>
-                  </div>
-                </div>
-                <div className="p-4 space-y-2">
-                  <p className="text-sm text-muted-foreground">
-                    Book flights, hotels, trains, and apartment rentals for your next trip.
-                  </p>
-                  <Link href="/travel/flight" className="inline-flex items-center text-primary text-sm font-medium">
-                    Book Now <ArrowRight className="ml-1 h-4 w-4" />
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Service 4 */}
-            <Card className="service-card border-none">
-              <CardContent className="p-0">
-                <div className="relative h-48 w-full">
-                  <Image
-                    src="/ass/ikea.jpg"
-                    alt="IKEA"
-                    fill
-                    className="object-cover rounded-t-xl"
-                    priority
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-t-xl"></div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className="text-white text-xl font-bold">IKEA</h3>
-                  </div>
-                </div>
-                <div className="p-4 space-y-2">
-                  <p className="text-sm text-muted-foreground">
-                    Get exclusive discounts and special offers on IKEA furniture and home accessories.
-                  </p>
-                  <Link href="/others/ikea" className="inline-flex items-center text-primary text-sm font-medium">
-                    Shop Now <ArrowRight className="ml-1 h-4 w-4" />
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -270,56 +147,12 @@ export default function Home() {
             {/* Feature 3 */}
             <div className="flex flex-col items-center text-center p-6 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <Plane className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Travel Assistance</h3>
-              <p className="text-muted-foreground">
-                Get 24/7 assistance for all your travel bookings and requirements.
-              </p>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="flex flex-col items-center text-center p-6 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
-              <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <ShoppingBag className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Fast Delivery</h3>
-              <p className="text-muted-foreground">Get your food and groceries delivered quickly to your doorstep.</p>
-            </div>
-
-            {/* Feature 5 */}
-            <div className="flex flex-col items-center text-center p-6 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
-              <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <Star className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Premium Support</h3>
-              <p className="text-muted-foreground">
-                Our customer support team is always ready to help you with any issues.
-              </p>
-            </div>
-
-            {/* Feature 6 */}
-            <div className="flex flex-col items-center text-center p-6 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
-              <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                 <CreditCard className="h-6 w-6 text-primary" />
               </div>
               <h3 className="text-xl font-bold mb-2">Cashback Offers</h3>
               <p className="text-muted-foreground">Enjoy attractive cashback offers on all your bookings and payments.</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-16 md:py-24 bg-muted/50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">What Our Customers Say</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Don't just take our word for it. See what our customers have to say about our services.
-            </p>
-          </div>
-          <ReviewSlider />
         </div>
       </section>
 

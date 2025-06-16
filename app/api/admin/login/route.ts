@@ -3,12 +3,7 @@ import { cookies } from "next/headers"
 import { sign } from "jsonwebtoken"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
-
-if (!process.env.JWT_SECRET) {
-  throw new Error('JWT_SECRET environment variable is not set')
-}
-
-const JWT_SECRET = process.env.JWT_SECRET
+import { getJwtSecret } from '@/lib/env'
 
 export async function POST(request: Request) {
   try {
@@ -39,7 +34,7 @@ export async function POST(request: Request) {
         name: user.name,
         role: user.role
       },
-      JWT_SECRET,
+      getJwtSecret(),
       { expiresIn: "8h" }
     )
 

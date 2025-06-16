@@ -9,8 +9,7 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
     scrollRestoration: true,
-    optimizePackageImports: ['@heroicons/react', 'lucide-react'],
-    serverActions: true,
+    optimizePackageImports: ['@heroicons/react', 'lucide-react']
   },
   typescript: {
     ignoreBuildErrors: true,
@@ -21,7 +20,6 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
-  swcMinify: true,
   compress: true,
   async headers() {
     return [

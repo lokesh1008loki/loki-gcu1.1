@@ -5,10 +5,19 @@ const globalForPrisma = globalThis as unknown as {
 }
 
 const prismaClientSingleton = () => {
-  if (!process.env.DATABASE_URL) {
-    throw new Error('DATABASE_URL environment variable is not set')
+  // Skip database connection during build
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return new PrismaClient({
+      log: ['error'],
+      datasources: {
+        db: {
+          url: 'file:./dev.db' // Dummy URL for build
+        }
+      }
+    })
   }
 
+  // Normal initialization for runtime
   return new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
     datasources: {
@@ -42,8 +51,13 @@ prisma.$use(async (params: any, next: any) => {
   }
 })
 
-// Add connection error handling
-prisma.$connect().catch((error: Error) => {
-  console.error('Failed to connect to database:', error)
-  process.exit(1)
-}) 
+// Only attempt connection if not in build phase
+if (process.env.NEXT_PHASE !== 'phase-production-build') {
+  prisma.$connect().catch((error: Error) => {
+    console.error('Failed to connect to database:', error)
+    // Don't exit process during build
+    if (process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE !== 'phase-production-build') {
+      process.exit(1)
+    }
+  })
+} 
