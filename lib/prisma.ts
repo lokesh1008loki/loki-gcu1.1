@@ -5,19 +5,6 @@ const globalForPrisma = globalThis as unknown as {
 }
 
 const prismaClientSingleton = () => {
-  // Skip database connection during build
-  if (process.env.NEXT_PHASE === 'phase-production-build') {
-    return new PrismaClient({
-      log: ['error'],
-      datasources: {
-        db: {
-          url: 'file:./dev.db' // Dummy URL for build
-        }
-      }
-    })
-  }
-
-  // Normal initialization for runtime
   return new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
     datasources: {

@@ -36,8 +36,12 @@ export async function GET() {
 
       return NextResponse.json(filteredMessages, { headers: response.headers })
     } catch (tableError) {
+      console.error("Database error:", tableError)
       // If the table doesn't exist yet, return an empty array
-      if (tableError instanceof Error && tableError.message.includes("does not exist")) {
+      if (tableError instanceof Error && 
+          (tableError.message.includes("does not exist") || 
+           tableError.message.includes("relation") ||
+           tableError.message.includes("table"))) {
         return NextResponse.json([], { headers: response.headers })
       }
       throw tableError; // Re-throw other errors

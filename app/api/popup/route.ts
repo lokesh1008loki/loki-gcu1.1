@@ -68,8 +68,12 @@ export async function GET() {
         popup: formattedPopup
       }, { headers: response.headers })
     } catch (dbError) {
+      console.error("Database error:", dbError)
       // If the table doesn't exist yet, return null
-      if (dbError instanceof Error && dbError.message.includes("does not exist")) {
+      if (dbError instanceof Error && 
+          (dbError.message.includes("does not exist") || 
+           dbError.message.includes("relation") ||
+           dbError.message.includes("table"))) {
         console.log("PopupNotification table does not exist yet")
         return NextResponse.json({ 
           message: "No popup table found",
