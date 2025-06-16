@@ -209,7 +209,7 @@ function Navbar() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-6">
+          <nav className="hidden xl:flex items-center space-x-6">
             {navLinks.map((link) => (
               <NavLink
                 key={link.name}
@@ -221,7 +221,7 @@ function Navbar() {
             ))}
           </nav>
 
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden xl:flex items-center space-x-4">
             <ModeToggle />
             <Link href="/contact">
               <Button variant="outline" size="sm">
@@ -236,7 +236,7 @@ function Navbar() {
           </div>
 
           {/* Tablet Navigation */}
-          <div className="hidden md:flex lg:hidden items-center space-x-4">
+          <div className="hidden md:flex xl:hidden items-center space-x-4">
             <ModeToggle />
             <Link href="/contact">
               <Button variant="outline" size="sm">

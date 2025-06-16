@@ -161,17 +161,19 @@ export default function IKEAOrderPage() {
             alt="IKEA Order Placement"
             width={1920}
             height={600}
-            className="w-full h-[500px] object-cover brightness-110"
+            className="w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover brightness-110"
             priority
           />
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4">
-            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Order from IKEA USA — We'll Handle the Checkout, You Collect It!</h1>
-            <p className="text-2xl text-white/95 mb-8 max-w-2xl drop-shadow-md">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-4 drop-shadow-lg">
+              Order from IKEA USA — We'll Handle the Checkout, You Collect It!
+            </h1>
+            <p className="text-sm sm:text-base md:text-lg lg:text-2xl text-white/95 mb-4 sm:mb-6 md:mb-8 max-w-2xl drop-shadow-md">
               Fast and secure IKEA USA order placement with your selected store and time. No login, no stress — just pick up your order!
             </p>
             <Button 
               size="lg" 
-              className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-6 shadow-lg"
+              className="bg-white text-primary hover:bg-white/90 text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-2 sm:py-4 md:py-6 shadow-lg"
               onClick={() => document.getElementById('order-section')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Place My IKEA Order
