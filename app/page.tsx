@@ -8,6 +8,7 @@ import { AutoSlider } from "@/components/ui/auto-slider"
 import HowWeWork from "@/components/how-we-work"
 import ReviewSlider from "@/components/review-slider"
 import { AnimatedCounter } from "@/components/animated-counter"
+import { BookingLinks } from "@/components/BookingLinks"
 
 export default function Home() {
   return (
@@ -97,6 +98,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Booking Links Section */}
+      <BookingLinks />
 
       {/* Customer Reviews Section */}
       <section className="py-16 bg-background">

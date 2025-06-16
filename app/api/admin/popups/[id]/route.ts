@@ -17,12 +17,19 @@ export async function PUT(
     const { id } = params
     const body = await req.json()
 
+    // Convert dates to proper format
+    const data = {
+      ...body,
+      startDate: body.startDate ? new Date(body.startDate) : null,
+      endDate: body.endDate ? new Date(body.endDate) : null,
+    }
+
     // Update the popup
     const updatedPopup = await prisma.popupNotification.update({
       where: {
         id: id,
       },
-      data: body,
+      data,
     })
 
     return NextResponse.json(updatedPopup)

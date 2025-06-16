@@ -4,13 +4,12 @@ import Script from "next/script"
 import { metadata, viewport } from "./metadata"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
-import { PopupNotification } from "@/components/PopupNotification"
 import { MarqueeNews } from "@/components/MarqueeNews"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { ClientRoot } from "./client-root"
-import { Toaster } from "sonner"
 import { prisma } from "@/lib/prisma"
+import { ClientComponents } from "@/components/client-components"
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -146,10 +145,9 @@ export default async function RootLayout({
         <ClientRoot session={session}>
           <Navbar />
           <MarqueeNews />
-          <PopupNotification />
           {children}
           <Footer />
-          <Toaster />
+          <ClientComponents />
         </ClientRoot>
       </body>
     </html>

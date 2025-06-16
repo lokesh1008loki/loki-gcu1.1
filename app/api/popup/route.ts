@@ -5,25 +5,56 @@ import { headers } from "next/headers"
 // Cache duration in seconds (5 minutes)
 const CACHE_DURATION = 300
 
-export async function GET() {
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+export async function GET(request: Request) {
+  console.log("Popup API route called")
   try {
-    // Add cache control headers
-    const headersList = headers()
-    const response = new NextResponse()
-    
-    // Set cache control headers
-    response.headers.set('Cache-Control', `public, s-maxage=${CACHE_DURATION}, stale-while-revalidate=${CACHE_DURATION * 2}`)
-    
     // First check if the table exists
     try {
+      console.log("Checking for existing popup...")
+      
+      // Get the current path from the referer header
+      const referer = request.headers.get("referer") || ""
+      const path = new URL(referer).pathname || "/"
+      console.log("Current path:", path)
+      
+      // First, let's check all popups to see what's in the database
+      const allPopups = await prisma.popupNotification.findMany({
+        orderBy: {
+          createdAt: 'desc',
+        },
+      })
+      console.log("All popups in database:", allPopups)
+
       const popup = await prisma.popupNotification.findFirst({
         where: {
           isActive: true,
+          showOnPages: {
+            has: path
+          },
           OR: [
+            // Case 1: No dates set (always active)
             {
               startDate: null,
               endDate: null
             },
+            // Case 2: Only start date set (active from start date onwards)
+            {
+              startDate: {
+                lte: new Date()
+              },
+              endDate: null
+            },
+            // Case 3: Only end date set (active until end date)
+            {
+              startDate: null,
+              endDate: {
+                gte: new Date()
+              }
+            },
+            // Case 4: Both dates set (active between start and end)
             {
               startDate: {
                 lte: new Date()
@@ -49,34 +80,17 @@ export async function GET() {
         }
       })
 
+      console.log("Found popup:", popup)
+
       if (!popup) {
-        // Create a test popup if none exists
-        try {
-          const testPopup = await prisma.popupNotification.create({
-            data: {
-              title: "Welcome to GCU!",
-              message: "Thank you for visiting our website. We're here to help you with all your needs!",
-              isActive: true,
-              type: "info"
-            }
-          })
-          
-          return NextResponse.json({ 
-            message: "Test popup created",
-            popup: {
-              ...testPopup,
-              content: testPopup.message
-            }
-          }, { headers: response.headers })
-        } catch (createError) {
-          console.error("Error creating test popup:", createError)
-          return NextResponse.json({ 
-            message: "No active popup found",
-            popup: null 
-          }, { headers: response.headers })
-        }
+        console.log("No active popup found")
+        return NextResponse.json({ 
+          message: "No active popup found",
+          popup: null 
+        })
       }
 
+      console.log("Found existing popup:", popup)
       // Ensure content is not null or undefined
       const formattedPopup = {
         ...popup,
@@ -87,7 +101,7 @@ export async function GET() {
       return NextResponse.json({ 
         message: "Popup retrieved successfully",
         popup: formattedPopup
-      }, { headers: response.headers })
+      })
     } catch (dbError) {
       console.error("Database error:", dbError)
       // If the table doesn't exist yet, return null
@@ -99,7 +113,7 @@ export async function GET() {
         return NextResponse.json({ 
           message: "No popup table found",
           popup: null 
-        }, { headers: response.headers })
+        })
       }
       throw dbError
     }

@@ -48,16 +48,19 @@ export async function POST(req: Request) {
     // Ensure showOnPages is an array
     const showOnPagesArray = Array.isArray(showOnPages) ? showOnPages : []
 
+    // Convert dates to proper format
+    const data = {
+      title,
+      message,
+      type,
+      isActive,
+      startDate: startDate ? new Date(startDate) : null,
+      endDate: endDate ? new Date(endDate) : null,
+      showOnPages: showOnPagesArray,
+    }
+
     const popup = await prisma.popupNotification.create({
-      data: {
-        title,
-        message,
-        type,
-        isActive,
-        startDate: startDate ? new Date(startDate) : null,
-        endDate: endDate ? new Date(endDate) : null,
-        showOnPages: showOnPagesArray,
-      },
+      data,
     })
 
     return NextResponse.json(popup)
