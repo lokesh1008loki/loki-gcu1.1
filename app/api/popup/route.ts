@@ -1,16 +1,38 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { headers } from "next/headers"
 
 // Cache duration in seconds (5 minutes)
 const CACHE_DURATION = 300
 
 export async function GET() {
   try {
+    // Add cache control headers
+    const headersList = headers()
+    const response = new NextResponse()
+    
+    // Set cache control headers
+    response.headers.set('Cache-Control', `public, s-maxage=${CACHE_DURATION}, stale-while-revalidate=${CACHE_DURATION * 2}`)
+    
     // First check if the table exists
     try {
       const popup = await prisma.popupNotification.findFirst({
         where: {
           isActive: true,
+          OR: [
+            {
+              startDate: null,
+              endDate: null
+            },
+            {
+              startDate: {
+                lte: new Date()
+              },
+              endDate: {
+                gte: new Date()
+              }
+            }
+          ]
         },
         orderBy: {
           createdAt: 'desc',
@@ -31,7 +53,7 @@ export async function GET() {
         return NextResponse.json({ 
           message: "No active popup found",
           popup: null 
-        }, { status: 200 })
+        }, { headers: response.headers })
       }
 
       // Ensure content is not null or undefined
@@ -44,7 +66,7 @@ export async function GET() {
       return NextResponse.json({ 
         message: "Popup retrieved successfully",
         popup: formattedPopup
-      }, { status: 200 })
+      }, { headers: response.headers })
     } catch (dbError) {
       // If the table doesn't exist yet, return null
       if (dbError instanceof Error && dbError.message.includes("does not exist")) {
@@ -52,7 +74,7 @@ export async function GET() {
         return NextResponse.json({ 
           message: "No popup table found",
           popup: null 
-        }, { status: 200 })
+        }, { headers: response.headers })
       }
       throw dbError
     }

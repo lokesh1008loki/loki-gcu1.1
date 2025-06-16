@@ -16,7 +16,7 @@ export async function GET() {
     
     // Check if the table exists first
     try {
-      const messages = await (prisma as any).MarqueeMessage.findMany({
+      const messages = await prisma.marqueeMessage.findMany({
         where: {
           isActive: true
         },
