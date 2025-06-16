@@ -10,7 +10,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { ClientRoot } from "./client-root"
 import { Toaster } from "sonner"
-import { prisma } from "@/lib/db"
+import { prisma } from "@/lib/prisma"
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -37,6 +37,35 @@ interface SeoSettings {
 }
 
 export async function generateMetadata() {
+  // Skip database queries during build
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return {
+      title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
+      description: "GocomfortUSA offers amazing deals on ticket bookings and bill payments...",
+      metadataBase: new URL("https://gocomfortusa.com"),
+      icons: {
+        icon: "/ass/logo-round.png",
+        shortcut: "/ass/logo-round.png",
+        apple: "/ass/logo-round.png",
+      },
+      openGraph: {
+        title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
+        description: "Your one-stop solution for tickets and bill payments",
+        images: [{ url: "/ass/logo-round.png" }],
+        type: "website",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
+        description: "Your one-stop solution for tickets and bill payments",
+        images: ["/ass/logo-round.png"],
+      },
+      alternates: {
+        canonical: "https://gocomfortusa.com"
+      }
+    }
+  }
+
   try {
     const seoSettings = await prisma.$queryRaw<SeoSettings[]>`SELECT * FROM "SeoSettings" LIMIT 1`
     const defaultMetadata = {
@@ -74,8 +103,8 @@ export async function generateMetadata() {
       }
     }
   } catch (error) {
-    console.error("Error fetching SEO settings:", error)
-    // Return default metadata if there's an error
+    console.error('Error fetching SEO settings:', error)
+    // Return default metadata if database query fails
     return {
       title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
       description: "GocomfortUSA offers amazing deals on ticket bookings and bill payments...",
@@ -112,52 +141,15 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions)
 
   return (
-    <html lang="en" suppressHydrationWarning className={inter.variable}>
-      <head>
-        <link 
-          rel="preconnect" 
-          href="https://fonts.googleapis.com" 
-          crossOrigin="anonymous"
-        />
-        <link 
-          rel="preconnect" 
-          href="https://fonts.gstatic.com" 
-          crossOrigin="anonymous"
-        />
-        <link 
-          rel="dns-prefetch" 
-          href="https://fonts.googleapis.com" 
-        />
-        <link 
-          rel="dns-prefetch" 
-          href="https://fonts.gstatic.com" 
-        />
-        <Script 
-          id="service-worker"
-          strategy="worker"
-          src="/service-worker-registration.js"
-        />
-        <meta name="theme-color" content="#ffffff" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
-      </head>
-      <body className="font-sans antialiased" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
         <ClientRoot session={session}>
-          <div className="flex min-h-screen flex-col">
-            <MarqueeNews />
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <PopupNotification />
-          </div>
-          <Toaster 
-            position="top-center"
-            expand={true}
-            richColors
-            closeButton
-          />
+          <Navbar />
+          <MarqueeNews />
+          <PopupNotification />
+          {children}
+          <Footer />
+          <Toaster />
         </ClientRoot>
       </body>
     </html>
