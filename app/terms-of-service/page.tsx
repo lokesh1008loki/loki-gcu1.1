@@ -147,7 +147,7 @@ export default function TermsOfService() {
           </CardContent>
         </Card>
 
-        <Card>
+        {/*<Card>
           <CardHeader>
             <CardTitle>11. Contact Information</CardTitle>
           </CardHeader>
@@ -159,7 +159,7 @@ export default function TermsOfService() {
               <li>Address: [Your Company Address]</li>
             </ul>
           </CardContent>
-        </Card>
+        </Card>*/}
       </div>
     </div>
   )

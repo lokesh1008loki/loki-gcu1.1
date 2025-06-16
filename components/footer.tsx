@@ -136,6 +136,17 @@ function Footer() {
             </ul>
           </FooterSection>
 
+          <FooterSection title="Services">
+            <ul className="space-y-2">
+              <FooterLink href="/tickets/adventure-park" text="Adventure Parks" />
+              <FooterLink href="/bills/electricity" text="Electricity Bills" />
+              <FooterLink href="/travel/hotel" text="Hotel Bookings" />
+              <FooterLink href="/travel/flight" text="Flight Tickets" />
+              <FooterLink href="/travel/apartment-rental" text="Apartment Rentals" />
+            </ul>
+          </FooterSection>
+
+
           <FooterSection title="Contact Us">
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
@@ -149,16 +160,6 @@ function Footer() {
                 <ContactInfo icon={Phone} text={settings.phoneNumber} />
               </div>
             </div>
-          </FooterSection>
-
-          <FooterSection title="Services">
-            <ul className="space-y-2">
-              <FooterLink href="/tickets/adventure-park" text="Adventure Parks" />
-              <FooterLink href="/bills/electricity" text="Electricity Bills" />
-              <FooterLink href="/travel/hotel" text="Hotel Bookings" />
-              <FooterLink href="/travel/flight" text="Flight Tickets" />
-              <FooterLink href="/travel/apartment-rental" text="Apartment Rentals" />
-            </ul>
           </FooterSection>
         </div>
 

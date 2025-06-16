@@ -21,7 +21,7 @@ export default function PrivacyPolicy() {
                   <li>Email address</li>
                   <li>Phone number</li>
                   <li>Billing and shipping addresses</li>
-                  <li>Payment information</li>
+                  {/*<li>Payment information</li>*/}
                 </ul>
               </li>
               <li>Travel Information:
@@ -36,7 +36,7 @@ export default function PrivacyPolicy() {
                   <li>IP address</li>
                   <li>Browser type</li>
                   <li>Device information</li>
-                  <li>Usage data</li>
+                 {/* <li>Usage data</li>*/}
                 </ul>
               </li>
             </ul>
@@ -162,7 +162,7 @@ export default function PrivacyPolicy() {
           </CardContent>
         </Card>
 
-        <Card>
+        {/*<Card>  
           <CardHeader>
             <CardTitle>10. Contact Information</CardTitle>
           </CardHeader>
@@ -174,7 +174,7 @@ export default function PrivacyPolicy() {
               <li>Address: [Your Company Address]</li>
             </ul>
           </CardContent>
-        </Card>
+        </Card>*/}
       </div>
     </div>
   )
