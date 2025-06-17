@@ -37,6 +37,13 @@ interface SeoSettings {
 }
 
 export async function generateMetadata() {
+  // Add cache control headers
+  const headersList = headers()
+  const response = new Response()
+  response.headers.set("Cache-Control", "no-store, must-revalidate")
+  response.headers.set("Pragma", "no-cache")
+  response.headers.set("Expires", "0")
+
   // Skip database queries during build
   if (process.env.NEXT_PHASE === 'phase-production-build') {
     return {
