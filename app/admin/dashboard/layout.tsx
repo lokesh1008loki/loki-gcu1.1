@@ -4,10 +4,8 @@ import { signOut } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import type { ReactNode } from "react"
-import { Toaster } from "@/components/ui/toaster"
 import { Button } from "@/components/ui/button"
 import { USATimeZones } from "@/components/USATimeZones"
-import '@/app/globals.css'
 import { AdminNavbar } from "@/components/AdminNavbar"
 
 export default function DashboardLayout({

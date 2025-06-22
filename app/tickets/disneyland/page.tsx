@@ -10,6 +10,7 @@ import { CheckCircle, AlertCircle, Castle } from "lucide-react"
 import { Toaster } from "@/components/ui/sonner"
 import Link from "next/link"
 import Image from "next/image"
+import { Metadata } from "next"
 
 const parks = [
   {

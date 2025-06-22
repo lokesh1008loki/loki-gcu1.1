@@ -126,6 +126,7 @@ function Footer() {
               <FooterLink href="/bills/utility" text="Bill & Payments" />
               <FooterLink href="/travel/flight" text="Travel" />
               <FooterLink href="/others/ikea" text="IKEA" />
+              <FooterLink href="/faq" text="FAQ" />
             </ul>
           </FooterSection>
 

@@ -47,8 +47,8 @@ export async function generateMetadata() {
   // Skip database queries during build
   if (process.env.NEXT_PHASE === 'phase-production-build') {
     return {
-      title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
-      description: "GocomfortUSA offers amazing deals on ticket bookings and bill payments...",
+      title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks | Book Now Pay Later",
+      description: "Save up to 50% on domestic flights, hotels, IKEA furniture, Disneyland tickets & rent payments. Book now, pay later with Zelle, Venmo, PayPal. Lowest prices guaranteed - cheaper than Expedia & Booking.com. Available in all 50 states.",
       metadataBase: new URL("https://gocomfortusa.com"),
       icons: {
         icon: "/ass/logo-round.png",
@@ -56,15 +56,15 @@ export async function generateMetadata() {
         apple: "/ass/logo-round.png",
       },
       openGraph: {
-        title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
-        description: "Your one-stop solution for tickets and bill payments",
+        title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks",
+        description: "Save up to 50% on domestic flights, hotels, IKEA furniture, Disneyland tickets & rent payments. Book now, pay later with Zelle, Venmo, PayPal.",
         images: [{ url: "/ass/logo-round.png" }],
         type: "website",
       },
       twitter: {
         card: "summary_large_image",
-        title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
-        description: "Your one-stop solution for tickets and bill payments",
+        title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks",
+        description: "Save up to 50% on domestic flights, hotels, IKEA furniture, Disneyland tickets & rent payments. Book now, pay later.",
         images: ["/ass/logo-round.png"],
       },
       alternates: {
@@ -111,8 +111,8 @@ export async function generateMetadata() {
     console.error('Error fetching SEO settings:', error)
     // Return default metadata if database query fails
     return {
-      title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
-      description: "GocomfortUSA offers amazing deals on ticket bookings and bill payments...",
+      title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks | Book Now Pay Later",
+      description: "Save up to 50% on domestic flights, hotels, IKEA furniture, Disneyland tickets & rent payments. Book now, pay later with Zelle, Venmo, PayPal. Lowest prices guaranteed - cheaper than Expedia & Booking.com. Available in all 50 states.",
       metadataBase: new URL("https://gocomfortusa.com"),
       icons: {
         icon: "/ass/logo-round.png",
@@ -120,15 +120,15 @@ export async function generateMetadata() {
         apple: "/ass/logo-round.png",
       },
       openGraph: {
-        title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
-        description: "Your one-stop solution for tickets and bill payments",
+        title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks",
+        description: "Save up to 50% on domestic flights, hotels, IKEA furniture, Disneyland tickets & rent payments. Book now, pay later with Zelle, Venmo, PayPal.",
         images: [{ url: "/ass/logo-round.png" }],
         type: "website",
       },
       twitter: {
         card: "summary_large_image",
-        title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
-        description: "Your one-stop solution for tickets and bill payments",
+        title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks",
+        description: "Save up to 50% on domestic flights, hotels, IKEA furniture, Disneyland tickets & rent payments. Book now, pay later.",
         images: ["/ass/logo-round.png"],
       },
       alternates: {
@@ -177,7 +177,7 @@ export default async function RootLayout({
           <MarqueeNews />
           {children}
           <Footer />
-          <ClientComponents />
+          {!isAdminPage && <ClientComponents />}
         </ClientRoot>
       </body>
     </html>

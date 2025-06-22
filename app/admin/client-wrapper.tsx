@@ -1,6 +1,5 @@
 "use client"
 
-import { SessionProvider } from "next-auth/react"
 import { ToastProvider } from "./toast-provider"
 
 export function AdminClientWrapper({ 
@@ -11,9 +10,9 @@ export function AdminClientWrapper({
   session: any
 }) {
   return (
-    <SessionProvider session={session}>
+    <>
       <ToastProvider />
       {children}
-    </SessionProvider>
+    </>
   )
 } 

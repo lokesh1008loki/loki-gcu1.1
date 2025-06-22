@@ -11,6 +11,7 @@ import { Toaster } from "@/components/ui/sonner"
 import Link from "next/link"
 import Image from "next/image"
 import { LegalCheckboxes } from "@/components/legal-checkboxes"
+import { Metadata } from "next"
 
 export default function HotelBookingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)

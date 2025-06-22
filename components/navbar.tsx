@@ -103,6 +103,7 @@ const navLinks = [
     href: "#",
     submenu: [
       { name: "Food & Grocery", href: "/others/food-grocery" },
+      { name: "FAQ", href: "/faq" },
     ],
   },
   {

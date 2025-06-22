@@ -51,6 +51,7 @@ export function PopupNotification() {
     navigator.clipboard.writeText(code).then(() => {
       setCopiedCode(code);
       setTimeout(() => setCopiedCode(null), 2000);
+      toast.success(`Copied ${code} to clipboard!`);
     });
   };
 
@@ -67,7 +68,6 @@ export function PopupNotification() {
           const code = button.getAttribute('data-code');
           if (code) {
             copyPromoCode(code);
-            toast.success(`Copied ${code} to clipboard!`);
           }
         });
       });
@@ -85,51 +85,36 @@ export function PopupNotification() {
   }, [popup]);
 
   useEffect(() => {
-    console.log("PopupNotification component mounted")
     const fetchPopup = async () => {
       try {
-        console.log("Fetching popup...")
         if (pathname?.startsWith('/admin')) {
-          console.log("Skipping popup fetch on admin page")
           return
         }
 
         setIsLoading(true)
         setError(null)
         
-        console.log("Making API request to /api/popup")
         const response = await fetch("/api/popup", {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Referer': window.location.href
           },
-          cache: 'no-store',
-          next: { revalidate: 0 }
+          cache: 'no-store'
         })
         
-        console.log("Popup API response status:", response.status)
-        
         if (!response.ok) {
-          const errorText = await response.text()
-          console.error("API error response:", errorText)
           throw new Error(`HTTP error! status: ${response.status}`)
         }
         
         const data = await response.json()
-        console.log("Popup API response data:", data)
 
         if (data.popup) {
-          console.log("Setting popup data:", data.popup)
-          // Ensure we have all required fields
           if (!data.popup.title || !data.popup.content) {
-            console.error("Popup data missing required fields:", data.popup)
             throw new Error("Popup data missing required fields")
           }
           setPopup(data.popup)
           setIsVisible(true)
         } else {
-          console.log("No popup data received")
           setPopup(null)
           setIsVisible(false)
         }
@@ -146,31 +131,9 @@ export function PopupNotification() {
     fetchPopup()
   }, [pathname])
 
-  // Debug render
-  console.log("PopupNotification render state:", {
-    isLoading,
-    error,
-    popup,
-    isVisible,
-    pathname
-  })
-
-  if (isLoading) {
-    console.log("Loading popup...")
+  if (isLoading || error || !popup || !isVisible) {
     return null
   }
-
-  if (error) {
-    console.error("Popup error:", error)
-    return null
-  }
-
-  if (!popup || !isVisible) {
-    console.log("No popup to show:", { popup, isVisible })
-    return null
-  }
-
-  console.log("Rendering popup:", popup)
 
   // Process content to add copy buttons
   const processedContent = processContent(popup.content);
