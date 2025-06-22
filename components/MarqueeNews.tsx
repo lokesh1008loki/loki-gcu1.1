@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useMemo, useCallback, memo } from "react"
+import { useEffect, useState, useMemo, useCallback, memo, Suspense } from "react"
 import { ErrorBoundary } from "react-error-boundary"
 
 interface MarqueeMessage {
@@ -52,17 +52,23 @@ function MarqueeNewsComponent() {
   const [messages, setMessages] = useState<MarqueeMessage[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [lastFetch, setLastFetch] = useState<number>(0)
 
   // Memoize the fetch function to prevent unnecessary re-renders
   const fetchMessages = useCallback(async () => {
+    // Check if we should fetch (avoid too frequent requests)
+    const now = Date.now()
+    if (now - lastFetch < 300000) { // 5 minutes
+      return
+    }
+
     try {
       setIsLoading(true)
       setError(null)
       
       const response = await fetch("/api/marquee", {
         headers: {
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache'
+          'Cache-Control': 'max-age=300', // Cache for 5 minutes
         },
         next: { revalidate: 300 }
       })
@@ -73,20 +79,21 @@ function MarqueeNewsComponent() {
       
       const data = await response.json()
       setMessages(data.filter((msg: MarqueeMessage) => msg.isActive))
+      setLastFetch(now)
     } catch (error) {
       console.error("Error fetching marquee messages:", error)
       setError(error instanceof Error ? error.message : "Unknown error occurred")
     } finally {
       setIsLoading(false)
     }
-  }, [])
+  }, [lastFetch])
 
   useEffect(() => {
     // Fetch immediately on mount
     fetchMessages()
     
-    // Set up polling for updates every 5 minutes
-    const intervalId = setInterval(fetchMessages, 5 * 60 * 1000)
+    // Set up polling for updates every 10 minutes (reduced frequency)
+    const intervalId = setInterval(fetchMessages, 10 * 60 * 1000)
     
     return () => clearInterval(intervalId)
   }, [fetchMessages])
@@ -197,7 +204,9 @@ function MarqueeNewsComponent() {
 export const MarqueeNews = memo(function MarqueeNews() {
   return (
     <ErrorBoundary FallbackComponent={MarqueeErrorFallback}>
-      <MarqueeNewsComponent />
+      <Suspense fallback={<MarqueeSkeleton />}>
+        <MarqueeNewsComponent />
+      </Suspense>
     </ErrorBoundary>
-  );
-}); 
+  )
+}) 

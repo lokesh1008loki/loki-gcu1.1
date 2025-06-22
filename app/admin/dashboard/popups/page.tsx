@@ -34,6 +34,7 @@ export default function PopupManagement() {
   const [isLoading, setIsLoading] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingPopup, setEditingPopup] = useState<Popup | null>(null)
+  const [togglingPopupId, setTogglingPopupId] = useState<string | null>(null)
 
   // Helper function to get current date in PST
   const getCurrentDateTime = () => {
@@ -193,6 +194,18 @@ export default function PopupManagement() {
   }
 
   const handleToggleActive = async (id: string, isActive: boolean) => {
+    // Set loading state for this specific popup
+    setTogglingPopupId(id)
+    
+    // Optimistic update - update UI immediately
+    setPopups(prevPopups => 
+      prevPopups.map(popup => 
+        popup.id === id 
+          ? { ...popup, isActive: !isActive }
+          : popup
+      )
+    )
+
     try {
       const response = await fetch(`/api/admin/popups/${id}`, {
         method: "PUT",
@@ -205,6 +218,15 @@ export default function PopupManagement() {
       let errorMessage = "Failed to update popup"
       
       if (!response.ok) {
+        // Revert optimistic update on error
+        setPopups(prevPopups => 
+          prevPopups.map(popup => 
+            popup.id === id 
+              ? { ...popup, isActive: isActive } // Revert to original state
+              : popup
+          )
+        )
+        
         try {
           const errorData = await response.json()
           errorMessage = errorData.error || errorMessage
@@ -216,10 +238,15 @@ export default function PopupManagement() {
       }
 
       toast.success(`Popup ${isActive ? "deactivated" : "activated"} successfully`)
-      fetchPopups()
+      
+      // Don't fetch fresh data - optimistic update is sufficient
+      // The server state is already updated, and the optimistic update shows the correct state
     } catch (error) {
       console.error("Error updating popup:", error)
       toast.error(error instanceof Error ? error.message : "Failed to update popup")
+    } finally {
+      // Clear loading state
+      setTogglingPopupId(null)
     }
   }
 
@@ -368,6 +395,7 @@ export default function PopupManagement() {
                     <Switch
                       checked={popup.isActive}
                       onCheckedChange={() => handleToggleActive(popup.id, popup.isActive)}
+                      disabled={togglingPopupId === popup.id}
                     />
                   </TableCell>
                   <TableCell>

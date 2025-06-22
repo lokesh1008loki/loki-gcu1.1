@@ -1,15 +1,23 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['res.cloudinary.com'],
-    formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
+    formats: ['image/webp', 'image/avif'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60,
   },
   experimental: {
     optimizeCss: true,
-    scrollRestoration: true,
-    optimizePackageImports: ['@heroicons/react', 'lucide-react']
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    // Fix Windows symlink issues
+    outputFileTracingRoot: process.platform === 'win32' ? undefined : undefined,
+    outputFileTracingExcludes: {
+      '*': [
+        'node_modules/@swc/core-linux-x64-gnu',
+        'node_modules/@swc/core-linux-x64-musl',
+        'node_modules/@esbuild/linux-x64',
+      ],
+    },
   },
   typescript: {
     ignoreBuildErrors: true,
@@ -21,88 +29,69 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   compress: true,
+  // Remove standalone output to avoid symlink issues on Windows
+  // output: 'standalone',
   async headers() {
     return [
       {
-        source: '/:path*',
+        source: '/(.*)',
         headers: [
           {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on'
-          },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload'
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block'
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
+            value: 'DENY',
           },
           {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff'
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
           },
+        ],
+      },
+      {
+        source: '/api/(.*)',
+        headers: [
           {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin'
+            key: 'Cache-Control',
+            value: 'public, max-age=300, stale-while-revalidate=600',
           },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()'
-          }
-        ]
-      }
+        ],
+      },
     ]
   },
   webpack: (config, { dev, isServer }) => {
-    // Optimize font loading
-    config.module.rules.push({
-      test: /\.(woff|woff2|eot|ttf|otf)$/,
-      use: {
-        loader: 'url-loader',
-        options: {
-          limit: 8192,
-          fallback: 'file-loader',
-          publicPath: '/_next/static/fonts/',
-          outputPath: 'static/fonts/',
-          name: '[name]-[hash].[ext]',
-        },
-      },
-    })
-
-    // Production optimizations
+    // Optimize bundle splitting
     if (!dev && !isServer) {
-      config.optimization = {
-        ...config.optimization,
-        splitChunks: {
-          chunks: 'all',
-          minSize: 20000,
-          maxSize: 244000,
-          minChunks: 1,
-          maxAsyncRequests: 30,
-          maxInitialRequests: 30,
-          cacheGroups: {
-            defaultVendors: {
-              test: /[\\/]node_modules[\\/]/,
-              priority: -10,
-              reuseExistingChunk: true,
-            },
-            default: {
-              minChunks: 2,
-              priority: -20,
-              reuseExistingChunk: true,
-            },
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
           },
         },
       }
     }
-
+    
+    // Fix Windows symlink issues in webpack
+    if (process.platform === 'win32') {
+      config.resolve.symlinks = false
+    }
+    
     return config
-  }
+  },
+  async redirects() {
+    return [
+      {
+        source: '/home',
+        destination: '/',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig 

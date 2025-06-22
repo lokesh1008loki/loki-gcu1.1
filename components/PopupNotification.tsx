@@ -19,6 +19,7 @@ export function PopupNotification() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [copiedCode, setCopiedCode] = useState<string | null>(null)
+  const [lastFetch, setLastFetch] = useState<number>(0)
   const pathname = usePathname()
 
   // Function to find and replace promo codes with copy buttons
@@ -91,6 +92,12 @@ export function PopupNotification() {
           return
         }
 
+        // Check if we should fetch (avoid too frequent requests)
+        const now = Date.now()
+        if (now - lastFetch < 300000) { // 5 minutes
+          return
+        }
+
         setIsLoading(true)
         setError(null)
         
@@ -98,8 +105,9 @@ export function PopupNotification() {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            'Cache-Control': 'max-age=300', // Cache for 5 minutes
           },
-          cache: 'no-store'
+          cache: 'default'
         })
         
         if (!response.ok) {
@@ -118,6 +126,7 @@ export function PopupNotification() {
           setPopup(null)
           setIsVisible(false)
         }
+        setLastFetch(now)
       } catch (error) {
         console.error("Error fetching popup:", error)
         setError(error instanceof Error ? error.message : "Failed to fetch popup")
@@ -129,7 +138,7 @@ export function PopupNotification() {
     }
 
     fetchPopup()
-  }, [pathname])
+  }, [pathname, lastFetch])
 
   if (isLoading || error || !popup || !isVisible) {
     return null

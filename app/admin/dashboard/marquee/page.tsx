@@ -48,6 +48,7 @@ export default function MarqueeManagement() {
   const [loading, setLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingMessage, setEditingMessage] = useState<MarqueeMessage | null>(null)
+  const [togglingMessageId, setTogglingMessageId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     message: "",
     isActive: true,
@@ -173,6 +174,18 @@ export default function MarqueeManagement() {
   }
 
   const handleToggleActive = async (id: string, currentStatus: boolean) => {
+    // Set loading state for this specific message
+    setTogglingMessageId(id)
+    
+    // Optimistic update - update UI immediately
+    setMessages(prevMessages => 
+      prevMessages.map(message => 
+        message.id === id 
+          ? { ...message, isActive: !currentStatus }
+          : message
+      )
+    )
+
     try {
       const response = await fetch(`/api/admin/marquee/${id}`, {
         method: "PUT",
@@ -186,15 +199,29 @@ export default function MarqueeManagement() {
       })
 
       if (!response.ok) {
+        // Revert optimistic update on error
+        setMessages(prevMessages => 
+          prevMessages.map(message => 
+            message.id === id 
+              ? { ...message, isActive: currentStatus } // Revert to original state
+              : message
+          )
+        )
+        
         const errorData = await response.json()
         throw new Error(errorData.error || "Failed to update message status")
       }
 
       toast.success(`Message ${currentStatus ? "deactivated" : "activated"} successfully`)
-      fetchMessages()
+      
+      // Don't fetch fresh data - optimistic update is sufficient
+      // The server state is already updated, and the optimistic update shows the correct state
     } catch (error) {
       console.error("Error updating message status:", error)
       toast.error(error instanceof Error ? error.message : "Failed to update message status")
+    } finally {
+      // Clear loading state
+      setTogglingMessageId(null)
     }
   }
 
@@ -341,6 +368,7 @@ export default function MarqueeManagement() {
                         size="icon"
                         onClick={() => handleToggleActive(message.id, message.isActive)}
                         title={message.isActive ? "Deactivate" : "Activate"}
+                        disabled={togglingMessageId === message.id}
                       >
                         {message.isActive ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </Button>

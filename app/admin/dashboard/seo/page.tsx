@@ -37,7 +37,7 @@ export default function SeoSettingsPage() {
 
   const fetchSettings = async () => {
     try {
-      const response = await fetch("/api/admin/seo-settings")
+      const response = await fetch("/api/seo")
       if (!response.ok) {
         throw new Error("Failed to fetch SEO settings")
       }
@@ -57,7 +57,7 @@ export default function SeoSettingsPage() {
 
     try {
       setIsSaving(true)
-      const response = await fetch("/api/admin/seo-settings", {
+      const response = await fetch("/api/seo", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -72,6 +72,9 @@ export default function SeoSettingsPage() {
       toast.success("Your SEO settings have been saved successfully!", {
         duration: 3000,
       })
+      
+      // Refresh the page to apply new SEO settings
+      router.refresh()
     } catch (error) {
       console.error("Error updating SEO settings:", error)
       toast.error("Failed to update SEO settings. Please try again.")
@@ -110,7 +113,7 @@ export default function SeoSettingsPage() {
         <CardHeader>
           <CardTitle>SEO Settings</CardTitle>
           <CardDescription>
-            Manage your site's SEO settings and metadata
+            Manage your site's SEO settings and metadata. Changes will be applied immediately.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -233,7 +236,7 @@ export default function SeoSettingsPage() {
                   Saving...
                 </>
               ) : (
-                "Save Changes"
+                "Save SEO Settings"
               )}
             </Button>
           </CardFooter>
