@@ -28,7 +28,7 @@ export default function AboutPage() {
           </div>
           <div className="relative h-[400px] rounded-xl overflow-hidden shadow-xl">
             <Image
-              src="/about-hero.jpg"
+              src="/aboutimage.jpeg"
               alt="GoComfortUSA Team"
               fill
               className="object-cover"
