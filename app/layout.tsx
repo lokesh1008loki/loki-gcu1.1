@@ -1,7 +1,6 @@
 import { Inter } from "next/font/google"
 import "./globals.css"
 import Script from "next/script"
-import { metadata, viewport } from "./metadata"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import { getServerSession } from "next-auth"
@@ -12,59 +11,44 @@ import { PerformanceOptimizer } from "@/components/performance-optimizer"
 import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
 
-const inter = Inter({ 
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-  preload: true,
-  fallback: ["system-ui", "arial"],
-  adjustFontFallback: true,
-})
-
-export { viewport }
-
-// Static metadata for better performance (fallback)
-const staticMetadata = {
-  title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks | Book Now Pay Later",
-  description: "Save up to 50% on domestic flights, hotels, IKEA furniture, Disneyland tickets & rent payments. Book now, pay later with Zelle, Venmo, PayPal. Lowest prices guaranteed - cheaper than Expedia & Booking.com. Available in all 50 states.",
-  metadataBase: new URL("https://gocomfortusa.com"),
-  icons: {
-    icon: "/ass/logo-round.png",
-    shortcut: "/ass/logo-round.png",
-    apple: "/ass/logo-round.png",
-  },
-  openGraph: {
-    title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks",
-    description: "Save up to 50% on domestic flights, hotels, IKEA furniture, Disneyland tickets & rent payments. Book now, pay later with Zelle, Venmo, PayPal.",
-    images: [{ url: "/ass/logo-round.png" }],
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks",
-    description: "Save up to 50% on domestic flights, hotels, IKEA furniture, Disneyland tickets & rent payments. Book now, pay later.",
-    images: ["/ass/logo-round.png"],
-  },
-  alternates: {
-    canonical: "https://gocomfortusa.com"
-  }
-}
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function generateMetadata() {
-  // Skip database queries during build for better performance
-  if (process.env.NEXT_PHASE === 'phase-production-build') {
-    return staticMetadata
-  }
-
   try {
-    // Use standard Prisma query (caching handled by Next.js revalidate)
-    const seoSettings = await prisma.seoSettings.findFirst()
-    
-    if (!seoSettings) {
-      console.warn('No SEO settings found in database, using static defaults')
-      return staticMetadata
+    const seoSettings = await prisma.seoSettings.findFirst({
+      orderBy: { updatedAt: 'desc' }
+    });
+    console.log("SeoSettings record:", seoSettings, "active type:", typeof seoSettings?.active);
+    if (!seoSettings || seoSettings.active !== true) {
+      console.log("Falling back to static metadata because SEO is inactive or missing");
+      return {
+        title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks | Book Now Pay Later",
+        description: "Save up to 50% on domestic flights, hotels, IKEA furniture, Disneyland tickets & rent payments. Book now, pay later with Zelle, Venmo, PayPal. Lowest prices guaranteed - cheaper than Expedia & Booking.com. Available in all 50 states.",
+        metadataBase: new URL("https://gocomfortusa.com"),
+        icons: {
+          icon: "/ass/logo-round.png",
+          shortcut: "/ass/logo-round.png",
+          apple: "/ass/logo-round.png",
+        },
+        openGraph: {
+          title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks",
+          description: "Save up to 50% on domestic flights, hotels, IKEA furniture, Disneyland tickets & rent payments. Book now, pay later with Zelle, Venmo, PayPal.",
+          images: [{ url: "/ass/logo-round.png" }],
+          type: "website",
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks",
+          description: "Save up to 50% on domestic flights, hotels, IKEA furniture, Disneyland tickets & rent payments. Book now, pay later.",
+          images: ["/ass/logo-round.png"],
+        },
+        alternates: {
+          canonical: "https://gocomfortusa.com"
+        }
+      };
     }
-
+    console.log("SEO settings used in metadata:", seoSettings);
     return {
       title: seoSettings.siteTitle,
       description: seoSettings.siteDescription,
@@ -89,16 +73,45 @@ export async function generateMetadata() {
       alternates: {
         canonical: seoSettings.canonicalUrl
       }
-    }
+    };
   } catch (error) {
-    console.error('Error fetching SEO settings:', error)
-    // Return static metadata if database query fails
-    return staticMetadata
+    console.error("Error fetching SEO settings for metadata:", error);
+    return {
+      title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks | Book Now Pay Later",
+      description: "GocomfortUSA offers amazing deals on ticket bookings and bill payments, flight ticket bookings, House rent payment and many more services, ensuring you get the best discounts and a hassle-free experience. Save on everything from travel to living.",
+      metadataBase: new URL("https://gocomfortusa.com"),
+      icons: {
+        icon: "/ass/logo-round.png",
+        shortcut: "/ass/logo-round.png",
+        apple: "/ass/logo-round.png",
+      },
+      openGraph: {
+        title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
+        description: "Your one-stop solution for tickets and bill payments",
+        images: [{ url: "/ass/logo-round.png" }],
+        type: "website",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
+        description: "Your one-stop solution for tickets and bill payments",
+        images: ["/ass/logo-round.png"],
+      },
+      alternates: {
+        canonical: "https://gocomfortusa.com"
+      }
+    };
   }
 }
 
-// Enable caching for better performance
-export const revalidate = 3600 // Cache for 1 hour
+const inter = Inter({ 
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+  preload: true,
+  fallback: ["system-ui", "arial"],
+  adjustFontFallback: true,
+})
 
 export default async function RootLayout({
   children,
@@ -207,5 +220,3 @@ export default async function RootLayout({
     </html>
   )
 }
-
-import './globals.css'

@@ -23,6 +23,7 @@ interface SeoSettings {
   twitterDescription: string
   twitterImage: string
   canonicalUrl: string
+  active?: boolean // <-- add this
 }
 
 export default function SeoSettingsPage() {
@@ -42,7 +43,7 @@ export default function SeoSettingsPage() {
         throw new Error("Failed to fetch SEO settings")
       }
       const data = await response.json()
-      setSettings(data)
+      setSettings({ ...data, active: data.active ?? false })
     } catch (error) {
       console.error("Error fetching SEO settings:", error)
       toast.error("Failed to fetch SEO settings")
@@ -91,6 +92,33 @@ export default function SeoSettingsPage() {
     }
   }
 
+  // Add this function to handle toggle and auto-save
+  const handleToggleActive = async () => {
+    if (!settings) return;
+    const newActive = !settings.active;
+    setSettings({ ...settings, active: newActive });
+    try {
+      setIsSaving(true);
+      const response = await fetch("/api/seo", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...settings, active: newActive }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update SEO status");
+      }
+      toast.success(`SEO is now ${newActive ? "Active" : "Inactive"}`);
+      router.refresh();
+    } catch (error) {
+      console.error("Error updating SEO status:", error);
+      toast.error("Failed to update SEO status. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -118,6 +146,18 @@ export default function SeoSettingsPage() {
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-6">
+            {/* SEO Active Toggle */}
+            <div className="flex items-center space-x-4 mb-4">
+              <Label htmlFor="seo-active">SEO Status:</Label>
+              <Button
+                type="button"
+                variant={settings.active ? "default" : "outline"}
+                className={settings.active ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700 text-white"}
+                onClick={handleToggleActive}
+              >
+                {settings.active ? "Active (Site uses dashboard SEO)" : "Inactive (Site uses static SEO)"}
+              </Button>
+            </div>
             <div className="space-y-2">
               <Label htmlFor="siteTitle">Site Title</Label>
               <Input

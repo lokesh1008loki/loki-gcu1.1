@@ -90,6 +90,7 @@ model SeoSettings {
   twitterDescription String @default("Your one-stop solution for tickets and bill payments")
   twitterImage  String   @default("/ass/logo-round.png")
   canonicalUrl  String   @default("https://gocomfortusa.com")
+  active        Boolean  @default(true)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
