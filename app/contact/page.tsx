@@ -105,7 +105,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold mb-1">Phone Number</h3>
-                    <p className="text-sm text-muted-foreground">+1 437 849 7841</p>
+                    <p className="text-sm text-muted-foreground">+1 (747) 364-0198</p>
                   </div>
                 </div>
               </CardContent>
