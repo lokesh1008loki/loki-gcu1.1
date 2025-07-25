@@ -22,6 +22,10 @@ export function PopupNotification() {
   const [lastFetch, setLastFetch] = useState<number>(0)
   const pathname = usePathname()
 
+  if (pathname?.startsWith("/nurse-comfort-offer")) {
+    return null;
+  }
+
   // Function to find and replace promo codes with copy buttons
   const processContent = (content: string) => {
     // Regular expression to match 4-8 capital letters followed by numbers
