@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoComfortUSA - Save Up to 35% on Daily Expenses</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out',
+                        'slide-in-left': 'slideInLeft 0.6s ease-out',
+                        'slide-in-right': 'slideInRight 0.6s ease-out',
+                        'bounce-in': 'bounceIn 0.8s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideInLeft: {
+                            '0%': { opacity: '0', transform: 'translateX(-20px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' },
+                        },
+                        slideInRight: {
+                            '0%': { opacity: '0', transform: 'translateX(20px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' },
+                        },
+                        bounceIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.8)' },
+                            '50%': { transform: 'scale(1.05)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .form-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 50%, #f3e8ff 100%);
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-100">
+        <div class="max-w-4xl mx-auto px-4 py-6">
+            <div class="text-center animate-fade-in">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+                    Save Up to <span class="text-blue-600">35%</span> Instantly on Your Daily Expenses!
+                </h1>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Travel, Shop, and Live Comfortably with GoComfortUSA
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <div class="grid lg:grid-cols-2 gap-8 items-start">
+            <!-- Benefits Section -->
+            <div class="space-y-6 animate-slide-in-left">
+                <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                        Why Choose GoComfortUSA?
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="text-2xl">✅</div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">No Upfront Fees</h3>
+                                <p class="text-gray-600 text-sm">Start saving immediately without any hidden costs</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="text-2xl">🤝</div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Trusted by Thousands Across the USA</h3>
+                                <p class="text-gray-600 text-sm">Join our satisfied customer community</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="text-2xl">⚡</div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Fast Response Within 15 Minutes</h3>
+                                <p class="text-gray-600 text-sm">Get your discount details quickly</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl shadow-lg p-6 text-white">
+                    <h3 class="text-xl font-bold mb-3">Our Services</h3>
+                    <div class="grid grid-cols-2 gap-3 text-sm">
+                        <div class="flex items-center space-x-2">
+                            <span>🛍️</span>
+                            <span>IKEA Orders</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span>✈️</span>
+                            <span>Flight Bookings</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span>🎢</span>
+                            <span>Theme Park Tickets</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span>🏠</span>
+                            <span>Rent Payments</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Section -->
+            <div class="bg-white rounded-2xl shadow-xl p-6 border border-gray-100 animate-slide-in-right">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                        Get Your 35% Discount
+                    </h2>
+                    <p class="text-gray-600">
+                        Fill out the form below and we'll contact you within 15 minutes
+                    </p>
+                </div>
+
+                <form id="leadForm" class="space-y-4">
+                    <!-- Full Name -->
+                    <div>
+                        <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">
+                            Full Name *
+                        </label>
+                        <input
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input transition-colors"
+                            placeholder="Enter your full name"
+                        />
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+                            Email Address *
+                        </label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input transition-colors"
+                            placeholder="your.email@example.com"
+                        />
+                    </div>
+
+                    <!-- Phone Number -->
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
+                            Phone Number *
+                        </label>
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input transition-colors"
+                            placeholder="(555) 123-4567"
+                        />
+                    </div>
+
+                    <!-- WhatsApp/Telegram -->
+                    <div>
+                        <label for="whatsapp" class="block text-sm font-medium text-gray-700 mb-1">
+                            WhatsApp or Telegram Number <span class="text-blue-600">(Preferred for quick response)</span>
+                        </label>
+                        <input
+                            type="tel"
+                            id="whatsapp"
+                            name="whatsapp"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input transition-colors"
+                            placeholder="+1 (555) 123-4567"
+                        />
+                    </div>
+
+                    <!-- Interests -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">
+                            What services are you interested in? *
+                        </label>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" name="interests" value="IKEA Order" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-sm text-gray-700">🛍️ IKEA Order</span>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" name="interests" value="Flight Booking" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-sm text-gray-700">✈️ Flight Booking</span>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" name="interests" value="Disneyland/Theme Park Tickets" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-sm text-gray-700">🎢 Disneyland/Theme Park Tickets</span>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" name="interests" value="Rent Payment" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-sm text-gray-700">🏠 Rent Payment</span>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" name="interests" value="Other" id="otherCheckbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-sm text-gray-700">📝 Other</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Other Interest Text Input -->
+                    <div id="otherInterestDiv" class="hidden">
+                        <label for="otherInterest" class="block text-sm font-medium text-gray-700 mb-1">
+                            Please specify other interest
+                        </label>
+                        <input
+                            type="text"
+                            id="otherInterest"
+                            name="otherInterest"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input transition-colors"
+                            placeholder="Tell us about your specific needs"
+                        />
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button
+                        type="submit"
+                        id="submitBtn"
+                        class="w-full btn-gradient text-white font-bold py-4 px-6 rounded-lg focus:ring-4 focus:ring-blue-300 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        Submit & Get My 35% Discount
+                    </button>
+                </form>
+
+                <!-- Support Info -->
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">Need immediate assistance?</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-green-600">📱</span>
+                            <span>WhatsApp: +1-555-123-4567</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-blue-600">📧</span>
+                            <span>Email: support@gocomfortusa.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-16">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h3 class="text-xl font-bold mb-2">
+                GoComfortUSA – Travel, Shop, and Live Comfortably
+            </h3>
+            <p class="text-gray-300 text-sm">
+                Your information is 100% secure and never shared.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center animate-bounce-in">
+            <div class="text-6xl mb-4">🎉</div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Thank You!</h2>
+            <p class="text-gray-600 mb-6">
+                Your information has been submitted successfully. We'll contact you within 15 minutes with your 35% discount details!
+            </p>
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                <p class="text-green-800 font-medium">
+                    ✅ Your 35% discount is being processed
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Handle "Other" checkbox toggle
+        const otherCheckbox = document.getElementById('otherCheckbox');
+        const otherInterestDiv = document.getElementById('otherInterestDiv');
+        
+        otherCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                otherInterestDiv.classList.remove('hidden');
+            } else {
+                otherInterestDiv.classList.add('hidden');
+            }
+        });
+
+        // Handle form submission
+        const form = document.getElementById('leadForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successModal = document.getElementById('successModal');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate that at least one interest is selected
+            const interests = document.querySelectorAll('input[name="interests"]:checked');
+            if (interests.length === 0) {
+                alert('Please select at least one service you are interested in.');
+                return;
+            }
+
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <div class="flex items-center justify-center space-x-2">
+                    <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Processing...</span>
+                </div>
+            `;
+
+            // Simulate form submission
+            setTimeout(() => {
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Submit & Get My 35% Discount';
+                
+                // Show success modal
+                successModal.classList.remove('hidden');
+                
+                // Reset form
+                form.reset();
+                otherInterestDiv.classList.add('hidden');
+                
+                // Hide modal after 5 seconds
+                setTimeout(() => {
+                    successModal.classList.add('hidden');
+                }, 5000);
+            }, 2000);
+        });
+
+        // Close modal when clicking outside
+        successModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html> 
