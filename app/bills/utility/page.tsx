@@ -70,8 +70,8 @@ export default function UtilityBillPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Utility Bill Payments</h1>
-            <p className="text-muted-foreground">Pay your utility bills quickly and securely with GocomfortUSA. And get discount on every bill payment.</p>
+            <h1 className="text-3xl font-bold mb-2">Utility Bill Assistance</h1>
+            <p className="text-muted-foreground">Manage your utility bills efficiently with GoComfortUSA's professional research and payment assistance services.</p>
           </div>
 
           <ImageSlider images={sliderImages} alt="Utility Bill Payments" />
@@ -714,8 +714,8 @@ export default function UtilityBillPage() {
                 <div className="flex items-start">
                   <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2" />
                   <div>
-                    <h3 className="font-bold">Guranteed Discount</h3>
-                    <p className="text-sm text-muted-foreground">Get discount on every bill payment.</p>
+                    <h3 className="font-bold">Optimized Management</h3>
+                    <p className="text-sm text-muted-foreground">Benefit from our expert research and route optimization for all your bills.</p>
                   </div>
                 </div>
                 <div className="flex items-start">

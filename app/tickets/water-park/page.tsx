@@ -222,16 +222,16 @@ export default function WaterparkBookingPage() {
             priority
           />
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4">
-            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Make a Splash with GoComfort USA</h1>
+            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Optimized Waterpark Trip Planning with GoComfortUSA</h1>
             <p className="text-2xl text-white/95 mb-8 max-w-2xl drop-shadow-md">
-            Enjoy guaranteed lowest rates on waterpark bookings with GoComfort USA — plus exciting offers and heavy discounts to make your splash-filled day even better!.
+              Expert research and itinerary optimization for the best aquatic experiences. Our team identifies the most efficient ways to enjoy top waterparks nationwide.
             </p>
             <Button 
               size="lg" 
               className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-6 shadow-lg"
               onClick={scrollToBooking}
             >
-              Start Booking
+              Consult a Park Expert
             </Button>
           </div>
           </div>
@@ -242,7 +242,7 @@ export default function WaterparkBookingPage() {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Waves className="h-5 w-5 mr-2 text-primary" />
-                  Waterpark Booking
+                  Waterpark Research & Consultation
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -493,7 +493,7 @@ export default function WaterparkBookingPage() {
                   </div>
 
                   <Button className="w-full" type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? "Submitting..." : "Submit Booking"}
+                    {isSubmitting ? "Submitting..." : "Submit Research Request"}
                   </Button>
 
                   {showConfirmation && (
@@ -517,8 +517,8 @@ export default function WaterparkBookingPage() {
                   <div className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2" />
                     <div>
-                      <h3 className="font-bold">Best Price Guarantee</h3>
-                      <p className="text-sm text-muted-foreground">We promise the lowest ticket prices</p>
+                      <h3 className="font-bold">Expert Itinerary Planning</h3>
+                      <p className="text-sm text-muted-foreground">Strategically planned visits for maximum enjoyment</p>
                     </div>
                   </div>
                   <div className="flex items-start">

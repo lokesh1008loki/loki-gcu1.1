@@ -9,38 +9,38 @@ const reviews = [
   {
     name: "John Dicosta",
     initials: "JD",
-    role: "Regular Customer",
-    quote: "I've been using GocomfortUSA for all my bill payments and it has made my life so much easier. The process is simple and secure.",
+    role: "Regular Traveler",
+    quote: "GoComfortUSA has made my travel planning so much easier. Their research and assistance are exceptional, providing clarity and peace of mind.",
   },
   {
     name: "Jane Smith",
     initials: "JS",
-    role: "Happy Customer",
-    quote: "The ticket deals on GocomfortUSA are amazing! I saved so much on my family's trip to the water park. Highly recommended!",
+    role: "Verified Traveler",
+    quote: "The personalized options from GoComfortUSA are exactly what I needed. I found excellent stay recommendations for my family's trip. Highly recommended!",
   },
   {
     name: "Robert Johnson",
     initials: "RJ",
     role: "Frequent Traveler",
-    quote: "I booked my flight and hotel through GocomfortUSA and got an amazing deal. The process was smooth and the customer service was excellent.",
+    quote: "I used GoComfortUSA for my complex flight route and they found optimized options I hadn't considered. The professional guidance was excellent.",
   },
   {
     name: "Michael Larson",
     initials: "ML",
-    role: "IKEA Store Manager",
-    quote: "As an IKEA employee, I can confidently say that GocomfortUSA offers the best deals for our store. Their service is reliable and the discounts are substantial. A must-try for all IKEA shoppers!",
+    role: "Business Professional",
+    quote: "GoComfortUSA offers reliable research and planning assistance. Their attention to detail and professional approach are a must-try for any traveler.",
   },
   {
     name: "Emma Parker",
     initials: "EP",
     role: "Travel Nurse",
-    quote: "The apartment rental service is fantastic! I saved over 30% on my rent payments. The team is always responsive and helpful.",
+    quote: "The personalized travel options are fantastic! The team is always responsive and helpful, making my relocations smooth and stress-free.",
   },
   {
     name: "Thomas Wilson",
     initials: "TW",
-    role: "Theme Park Enthusiast",
-    quote: "I've used GocomfortUSA for both Disneyland and Universal Studios tickets. The savings were incredible, and the tickets were delivered instantly via WhatsApp. Couldn't be happier!",
+    role: "Travel Enthusiast",
+    quote: "GoComfortUSA's expert guidance has been invaluable for my trips. Their route optimization and stay recommendations are top-notch. Couldn't be happier!",
   },
 ]
 

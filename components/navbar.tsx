@@ -26,7 +26,7 @@ const NavLink = memo(({ link, pathname, openSubmenu, toggleSubmenu }: {
   toggleSubmenu: (name: string) => void
 }) => (
   <div className="relative group">
-    {link.submenu ? (
+    {link.submenu && link.submenu.length > 0 ? (
       <button
         onClick={() => toggleSubmenu(link.name)}
         className="flex items-center text-sm font-medium transition-colors hover:text-primary"
@@ -46,10 +46,14 @@ const NavLink = memo(({ link, pathname, openSubmenu, toggleSubmenu }: {
     )}
 
     {link.submenu && (
-      <div className="absolute left-0 mt-2 w-48 origin-top-left rounded-md bg-card shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-        <div className="py-1">
+      <div className="absolute left-0 mt-0 pt-4 w-56 origin-top-left rounded-md bg-card shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 ease-in-out z-50">
+        <div className="py-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-100 dark:border-slate-800">
           {link.submenu.map((sublink) => (
-            <Link key={sublink.name} href={sublink.href} className="block px-4 py-2 text-sm hover:bg-muted">
+            <Link 
+              key={sublink.name} 
+              href={sublink.href} 
+              className="block px-4 py-3 text-sm hover:bg-primary/10 hover:text-primary transition-colors border-b border-slate-50 dark:border-slate-800/50 last:border-0"
+            >
               {sublink.name}
             </Link>
           ))}
@@ -62,7 +66,8 @@ const NavLink = memo(({ link, pathname, openSubmenu, toggleSubmenu }: {
 NavLink.displayName = 'NavLink'
 
 // Memoize the navigation links to prevent unnecessary re-renders
-const navLinks = [
+// Memoize the default navigation links to prevent unnecessary re-renders and provide fallback
+const DEFAULT_LINKS: NavLink[] = [
   { name: "Home", href: "/" },
   {
     name: "Tickets & Parks",
@@ -127,7 +132,7 @@ const MobileMenuItem = memo(({
   setIsOpen: (isOpen: boolean) => void
 }) => (
   <div>
-    {link.submenu ? (
+    {link.submenu && link.submenu.length > 0 ? (
       <>
         <button
           onClick={() => toggleSubmenu(link.name)}
@@ -175,7 +180,38 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
+  const [navLinks, setNavLinks] = useState<NavLink[]>(DEFAULT_LINKS)
   const pathname = usePathname()
+
+  useEffect(() => {
+    const fetchLinks = async () => {
+      try {
+        const response = await fetch("/api/navbar-links")
+        if (response.ok) {
+          const data = await response.json()
+          if (data && Array.isArray(data) && data.length > 0) {
+            // Map the API data to the NavLink interface
+            const mappedLinks = data.map((item: any) => {
+              const submenu = item.subLinks?.map((sub: any) => ({
+                name: sub.name,
+                href: sub.href
+              })) || []
+              
+              return {
+                name: item.name,
+                href: item.href,
+                submenu: submenu.length > 0 ? submenu : undefined
+              }
+            })
+            setNavLinks(mappedLinks)
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch dynamic navbar links:", error)
+      }
+    }
+    fetchLinks()
+  }, [])
 
   const handleScroll = useCallback(() => {
     setScrolled(window.scrollY > 10)
@@ -204,8 +240,8 @@ function Navbar() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
             <Link href="/" className="flex flex-col items-start">
-              <span className="text-2xl font-bold text-primary">GocomfortUSA</span>
-              <span className="text-xs text-muted-foreground mx-auto leading-tight">Your Comfort, Our Priority</span>
+              <span className="text-2xl font-bold text-primary">GoComfortUSA</span>
+              <span className="text-[10px] text-muted-foreground leading-tight uppercase tracking-tighter">Travel Assistance & Planning</span>
             </Link>
           </div>
 

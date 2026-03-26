@@ -258,16 +258,16 @@ export default function CityPassBookingPage() {
             priority
           />
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4">
-            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Explore Top U.S. Attractions with CityPASS</h1>
+            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Optimized Multi-Attraction Research with CityPASS</h1>
             <p className="text-2xl text-white/95 mb-8 max-w-2xl drop-shadow-md">
-              Save up to 50% on admission to must-see destinations across major cities.
+              Expertly curated attraction bundles and itinerary optimization for major U.S. cities.
             </p>
             <Button 
               size="lg" 
               className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-6 shadow-lg"
               onClick={() => document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Start Your CityPASS Booking
+              Consult an Attraction Expert
             </Button>
           </div>
         </div>
@@ -278,7 +278,7 @@ export default function CityPassBookingPage() {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <MapPin className="h-5 w-5 mr-2 text-primary" />
-                  CityPASS Booking Request
+                  CityPASS Research & Consultation
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -516,7 +516,7 @@ export default function CityPassBookingPage() {
                   </div>
 
                   <Button className="w-full" type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? "Submitting..." : "Submit Booking Request"}
+                    {isSubmitting ? "Submitting..." : "Submit Research Request"}
                   </Button>
 
                   {showConfirmation && (
@@ -540,8 +540,8 @@ export default function CityPassBookingPage() {
                   <div className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2" />
                     <div>
-                      <h3 className="font-bold">Best Price Guarantee</h3>
-                      <p className="text-sm text-muted-foreground">We promise the lowest ticket prices</p>
+                      <h3 className="font-bold">Expert Route Optimization</h3>
+                      <p className="text-sm text-muted-foreground">Strategically planned visits to maximize your time</p>
                     </div>
                   </div>
                   <div className="flex items-start">

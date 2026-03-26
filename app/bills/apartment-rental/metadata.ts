@@ -1,12 +1,12 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Rent Payment Discount USA | Pay House Rent Online Cheap | Save on Utility Bills USA | GoComfortUSA",
-  description: "Get rent payment discount USA with up to 30-35% off. Pay house rent online cheap, save on utility bills USA. No hidden fees, secure payment with Zelle, Venmo, PayPal. Available nationwide.",
-  keywords: "rent payment discount USA, pay house rent online cheap, save on utility bills USA, rent assistance, utility bill discounts, online rent payment",
+  title: "Rent & Utility Payment Research & Assistance | GoComfortUSA",
+  description: "Professional research and assistance for your rent and utility payments. Expert guidance and support for housing-related expenses.",
+  keywords: "rent research, utility assistance, housing expense support, rent payment guidance, utility bill planning",
   openGraph: {
-    title: "Rent Payment Discount USA | Pay House Rent Online Cheap | Save on Utility Bills USA",
-    description: "Get rent payment discount USA with up to 30-35% off. Pay house rent online cheap, save on utility bills USA. No hidden fees, secure payment.",
+    title: "Rent & Utility Payment Research & Assistance",
+    description: "Expert assistance for your rent and utility payments. Professional research and guidance.",
     type: "website",
   },
 } 

@@ -195,9 +195,9 @@ export default function AdventureParkBookingPage() {
             priority
           />
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4">
-            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Embark on Your Next Adventure with GoComfort USA</h1>
+            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Experience Adventure with GoComfort USA</h1>
             <p className="text-2xl text-white/95 mb-8 max-w-2xl drop-shadow-md">
-              Guaranteed lowest rates, exclusive offers, and unforgettable experiences await!
+              Professional research, expert consultation, and unforgettable experiences await!
             </p>
             <Button 
               size="lg" 
@@ -453,8 +453,8 @@ export default function AdventureParkBookingPage() {
                   <div className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2" />
                     <div>
-                      <h3 className="font-bold">Best Price Guarantee</h3>
-                      <p className="text-sm text-muted-foreground">We promise the lowest ticket prices</p>
+                      <h3 className="font-bold">Expert Research Assistance</h3>
+                      <p className="text-sm text-muted-foreground">We find the most optimized options for you</p>
                     </div>
                   </div>
                   <div className="flex items-start">

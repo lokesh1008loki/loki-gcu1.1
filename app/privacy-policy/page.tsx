@@ -13,32 +13,11 @@ export default function PrivacyPolicy() {
             <CardTitle>1. Information We Collect</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p>GoComfortUSA collects the following types of information:</p>
+            <p>GoComfortUSA collects the following types of information to provide personalized consultation services:</p>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Personal Information:
-                <ul className="list-disc pl-6 mt-2">
-                  <li>Name and contact details</li>
-                  <li>Email address</li>
-                  <li>Phone number</li>
-                  <li>Billing and shipping addresses</li>
-                  {/*<li>Payment information</li>*/}
-                </ul>
-              </li>
-              <li>Travel Information:
-                <ul className="list-disc pl-6 mt-2">
-                  <li>Passport details (for international travel)</li>
-                  <li>Travel preferences</li>
-                  <li>Booking history</li>
-                </ul>
-              </li>
-              <li>Technical Information:
-                <ul className="list-disc pl-6 mt-2">
-                  <li>IP address</li>
-                  <li>Browser type</li>
-                  <li>Device information</li>
-                 {/* <li>Usage data</li>*/}
-                </ul>
-              </li>
+              <li>Personal Contact Information: Name, email address, phone number, and billing details.</li>
+              <li>Travel & Consultation Data: Preferred destinations, travel dates, passenger counts, and specific requirements for flights or accommodations.</li>
+              <li>Technical Usage Data: IP address, browser type, and device information to optimize your experience on our platform.</li>
             </ul>
           </CardContent>
         </Card>
@@ -48,34 +27,30 @@ export default function PrivacyPolicy() {
             <CardTitle>2. How We Use Your Information</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p>We use your information to:</p>
+            <p>We use your information to provide premium travel assistance:</p>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Process your bookings and payments</li>
-              <li>Communicate about your reservations</li>
-              <li>Send booking confirmations and updates</li>
-              <li>Provide customer support</li>
-              <li>Send marketing communications (with your consent)</li>
-              <li>Improve our services and website</li>
-              <li>Prevent fraud and ensure security</li>
-              <li>Comply with legal obligations</li>
+              <li>Perform expert research and provide optimized travel recommendations.</li>
+              <li>Communicate with you regarding your consultation requests.</li>
+              <li>Deliver your personalized research reports via secure channels.</li>
+              <li>Improve our research algorithms and service quality.</li>
+              <li>Ensure the security of our platform and prevent fraudulent requests.</li>
+              <li>Comply with applicable legal and financial regulations.</li>
             </ul>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>3. Data Sharing with Third Parties</CardTitle>
+            <CardTitle>3. Information Sharing</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p>We share your information with:</p>
+            <p>We handle your data with the highest level of confidentiality:</p>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Travel service providers (airlines, hotels, etc.)</li>
-              <li>Payment processors</li>
-              <li>Analytics providers</li>
-              <li>Customer service platforms</li>
-              <li>Legal authorities when required by law</li>
+              <li>We do not sell your personal data to third parties.</li>
+              <li>Information is shared with payment processors only to complete consultation fee transactions.</li>
+              <li>We may share anonymized travel requirements with verified service providers ONLY for the purpose of research and route optimization.</li>
+              <li>We may disclose information to legal authorities if required by U.S. law.</li>
             </ul>
-            <p>We ensure all third parties maintain appropriate security measures and comply with data protection laws.</p>
           </CardContent>
         </Card>
 
@@ -162,19 +137,19 @@ export default function PrivacyPolicy() {
           </CardContent>
         </Card>
 
-        {/*<Card>  
+        <Card>  
           <CardHeader>
             <CardTitle>10. Contact Information</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p>For any privacy-related questions or concerns, please contact us at:</p>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Email: privacy@gocomfortusa.com</li>
-              <li>Phone: +1 437 849 7841</li>
-              <li>Address: [Your Company Address]</li>
+              <li>Email: support@gocomfortusa.com</li>
+              <li>Phone: +1(210) 418-2745</li>
+              <li>Address: 30 N Gould St Ste R, Sheridan, WY 82801, USA</li>
             </ul>
           </CardContent>
-        </Card>*/}
+        </Card>
       </div>
     </div>
   )

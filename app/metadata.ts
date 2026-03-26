@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next"
 
 export const metadata: Metadata = {
-  title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
-  description: "GocomfortUSA offers amazing deals on ticket bookings and bill payments, flight ticket bookings, House rent payment and many more services, ensuring you get the best discounts and a hassle-free experience. Save on everything from travel to living.",
+  title: "GoComfortUSA - Professional Travel Assistance & Consultation",
+  description: "GoComfortUSA provides personalized travel assistance including flight and hotel research, planning, and expert booking support. Get optimized routes and professional guidance tailored to your needs.",
   metadataBase: new URL("https://gocomfortusa.com"),
   icons: {
     icon: "/ass/logo-round.png",

@@ -409,8 +409,8 @@ export default function CustomParkBookingPage() {
                   <div className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2" />
                     <div>
-                      <h3 className="font-bold">Best Price Guarantee</h3>
-                      <p className="text-sm text-muted-foreground">We promise the lowest ticket prices</p>
+                      <h3 className="font-bold">Expert Research Assistance</h3>
+                      <p className="text-sm text-muted-foreground">We find the most optimized options for you</p>
                     </div>
                   </div>
                   <div className="flex items-start">

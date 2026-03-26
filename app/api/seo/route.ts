@@ -2,15 +2,15 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
 const staticDefaults = {
-  siteTitle: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
-  siteDescription: "GocomfortUSA offers amazing deals on ticket bookings and bill payments, flight ticket bookings, House rent payment and many more services, ensuring you get the best discounts and a hassle-free experience. Save on everything from travel to living.",
-  keywords: "tickets, bill payments, flight tickets, house rent, travel deals, discounts",
+  siteTitle: "GoComfortUSA - Professional Travel Optimization & Consultation",
+  siteDescription: "Expert research and itinerary optimization for domestic flights, hotel stays, and lifestyle services. Smarter travel starts with professional planning.",
+  keywords: "travel optimization, flight research, hotel consultation, travel planning, concierge services",
   canonicalUrl: "https://gocomfortusa.com",
-  ogTitle: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
-  ogDescription: "Your one-stop solution for tickets and bill payments",
+  ogTitle: "GoComfortUSA - Professional Travel Optimization & Consultation",
+  ogDescription: "Expert research and itinerary optimization for domestic flights, hotel stays, and lifestyle services.",
   ogImage: "/ass/logo-round.png",
-  twitterTitle: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
-  twitterDescription: "Your one-stop solution for tickets and bill payments",
+  twitterTitle: "GoComfortUSA - Professional Travel Optimization & Consultation",
+  twitterDescription: "Expert research and itinerary optimization for domestic flights, hotel stays, and lifestyle services.",
   twitterImage: "/ass/logo-round.png",
   active: false
 }

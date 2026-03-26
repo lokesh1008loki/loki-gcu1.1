@@ -107,7 +107,7 @@ export default function BusBookingPage() {
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4">
             <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Book Your Bus Journey with GoComfort USA</h1>
             <p className="text-2xl text-white/95 mb-8 max-w-2xl drop-shadow-md">
-              Travel comfortably across the USA with our extensive bus network and competitive rates.
+              Travel comfortably across the USA with our extensive bus network and optimized routes.
             </p>
             <Button 
               size="lg" 
@@ -124,7 +124,7 @@ export default function BusBookingPage() {
             <div id="booking-section">
               <div>
                 <h1 className="text-3xl font-bold mb-2">Bus Booking</h1>
-                <p className="text-muted-foreground">Plan your comfortable journey with GoComfort USA — offering the best rates and a wide selection of bus routes across the United States.</p>
+                <p className="text-muted-foreground">Plan your comfortable journey with GoComfort USA — offering comprehensive research and a wide selection of bus routes across the United States.</p>
               </div>
 
               <Card>
@@ -500,8 +500,8 @@ export default function BusBookingPage() {
                   <div className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2" />
                     <div>
-                      <h3 className="font-bold">Best Price Guarantee</h3>
-                      <p className="text-sm text-muted-foreground">We promise the lowest bus fares</p>
+                      <h3 className="font-bold">Expert Value Optimization</h3>
+                      <p className="text-sm text-muted-foreground">We identify the most efficient bus routes</p>
                     </div>
                   </div>
                   <div className="flex items-start">

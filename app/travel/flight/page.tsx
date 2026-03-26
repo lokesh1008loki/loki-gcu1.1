@@ -89,9 +89,9 @@ export default function FlightBookingPage() {
             priority
           />
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4">
-            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Book Your Flight with GoComfort USA</h1>
+            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Expert Flight Research with GoComfort USA</h1>
             <p className="text-2xl text-white/95 mb-8 max-w-2xl drop-shadow-md">
-              Get the best deals on flights worldwide with our guaranteed lowest rates and exclusive offers.
+              Optimize your air travel with our professional research services and expert itinerary planning.
             </p>
             <Button 
               size="lg" 
@@ -107,8 +107,8 @@ export default function FlightBookingPage() {
           <div className="lg:col-span-2 space-y-8">
             <div id="booking-section">
               <div>
-                <h1 className="text-3xl font-bold mb-2">Flight Booking</h1>
-                  <p className="text-muted-foreground">Book your flights effortlessly and securely with GoComfort USA — offering the most competitive prices from destinations across the globe.</p>
+                <h1 className="text-3xl font-bold mb-2">Flight Research</h1>
+                  <p className="text-muted-foreground">Expertly plan your travel with GoComfort USA — offering professional research and optimized routes across the globe.</p>
               </div>
 
               <Card>
@@ -288,8 +288,8 @@ export default function FlightBookingPage() {
                   <div className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2" />
                     <div>
-                      <h3 className="font-bold">Best Price Guarantee</h3>
-                      <p className="text-sm text-muted-foreground">We promise the lowest airfares</p>
+                      <h3 className="font-bold">Expert Itinerary Research</h3>
+                      <p className="text-sm text-muted-foreground">We identify the most efficient routes for your trip</p>
                     </div>
                   </div>
                   <div className="flex items-start">

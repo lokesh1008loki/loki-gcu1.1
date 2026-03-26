@@ -189,9 +189,9 @@ export default function SeaWorldBookingPage() {
             priority
           />
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4">
-            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Experience the Wonders of SeaWorld with GoComfort USA</h1>
+            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Experience SeaWorld with GoComfort USA</h1>
             <p className="text-2xl text-white/95 mb-8 max-w-2xl drop-shadow-md">
-              Effortless bookings, exclusive experiences, and instant support await!
+              Professional research, expert coordination, and instant support for your marine adventure!
             </p>
             <Button 
               size="lg" 
@@ -484,8 +484,8 @@ export default function SeaWorldBookingPage() {
                   <div className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2" />
                     <div>
-                      <h3 className="font-bold">Best Price Guarantee</h3>
-                      <p className="text-sm text-muted-foreground">We promise the lowest ticket prices</p>
+                      <h3 className="font-bold">Expert Research Assistance</h3>
+                      <p className="text-sm text-muted-foreground">We find the most optimized options for you</p>
                     </div>
                   </div>
                   <div className="flex items-start">

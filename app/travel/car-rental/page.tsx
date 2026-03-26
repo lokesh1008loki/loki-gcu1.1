@@ -84,9 +84,9 @@ export default function CarRentalPage() {
             priority
           />
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4">
-            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Rent Your Perfect Car with GoComfort USA</h1>
+            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Optimized Car Rentals with GoComfort USA</h1>
             <p className="text-2xl text-white/95 mb-8 max-w-2xl drop-shadow-md">
-              Choose from our wide selection of vehicles and enjoy the best rental rates across the USA.
+              Expert research and coordination for your perfect vehicle across the USA.
             </p>
             <Button 
               size="lg" 
@@ -103,7 +103,7 @@ export default function CarRentalPage() {
             <div id="booking-section">
               <div>
                 <h1 className="text-3xl font-bold mb-2">Car Rental</h1>
-                <p className="text-muted-foreground">Experience seamless car rentals with GoComfort USA — offering the lowest rates in the market and a wide range of vehicles to suit every traveler.</p>
+                <p className="text-muted-foreground">Experience seamless car rentals with GoComfort USA — providing expert research and optimized vehicle options to suit every traveler.</p>
               </div>
 
               <Card>
@@ -413,8 +413,8 @@ export default function CarRentalPage() {
                   <div className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2" />
                     <div>
-                      <h3 className="font-bold">Best Price Guarantee</h3>
-                      <p className="text-sm text-muted-foreground">We promise the lowest rental rates</p>
+                      <h3 className="font-bold">Expert Research Assistance</h3>
+                      <p className="text-sm text-muted-foreground">We find the most optimized options for you</p>
                     </div>
                   </div>
                   <div className="flex items-start">

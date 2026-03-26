@@ -10,59 +10,47 @@ import Script from "next/script"
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions – GoComfortUSA",
-  description: "Find answers to common questions about GoComfortUSA's discounted travel, hotel bookings, rent payments, and IKEA purchases. Get up to 50% off on domestic services.",
-  keywords: "FAQ, frequently asked questions, GoComfortUSA, travel discounts, hotel bookings, rent payments, IKEA discounts",
+  description: "Find answers to common questions about GoComfortUSA's travel assistance, hotel research, and planning services.",
+  keywords: "FAQ, frequently asked questions, GoComfortUSA, travel assistance, hotel research, planning services",
   openGraph: {
     title: "Frequently Asked Questions – GoComfortUSA",
-    description: "Find answers to common questions about GoComfortUSA's discounted services.",
+    description: "Find answers to common questions about GoComfortUSA's professional travel assistance services.",
     type: "website",
   },
 }
 
 const faqData = [
   {
-    question: "How does GoComfortUSA offer up to 50% off on flights, hotels, and IKEA orders?",
-    answer: "We partner with travel and retail providers to bring exclusive deals directly to our users. You save through negotiated rates and our internal discount system. Additionally, our dedicated team actively scrapes the entire internet to find the best coupons and promotional codes available, which we automatically apply to secure the lowest final rates for you—rates that are consistently lower than what you'll find anywhere else in the market."
+    question: "Do you sell airline tickets or hotel stays directly?",
+    answer: "No. GoComfortUSA is a travel assistance and consultation platform. We perform in-depth research to find the most optimized travel options for you. All final bookings are made through official providers in your name."
   },
   {
-    question: "Is GoComfortUSA a travel agency or a discount platform?",
-    answer: "We're a smart travel and shopping assistant offering discounted services for domestic flights, hotel bookings, rent payments, and IKEA purchases in the USA. Our dedicated team handles all bookings for you and actively searches the entire internet for the latest coupons and promotional codes, which we automatically apply to ensure you get the lowest rates available in the market."
+    question: "What is the benefit of using GoComfortUSA?",
+    answer: "Our team of experts optimizes your travel routes and researches premium stay options, saving you time and ensuring you receive the best possible value for your journey. We provide personalized guidance tailored to your specific travel needs."
   },
   {
-    question: "How can I trust your discounts are real?",
-    answer: "At GoComfortUSA, we ensure that all deals listed on our platform are thoroughly verified in collaboration with our trusted partner vendors. Each offer undergoes validation to confirm authenticity, availability, and price accuracy before it is presented to you. You will be shown real-time pricing during the booking process, allowing you full transparency and the opportunity to compare our prices with other platforms. Unlike many other websites, we do not require upfront payment. Instead, you only pay once your booking has been successfully confirmed. Additionally, for your convenience and peace of mind, you will receive a confirmation message through the communication method you provide while filling out the booking form—whether it's via email, SMS, telegram or another preferred channel."
+    question: "How can I trust your research and optimization?",
+    answer: "At GoComfortUSA, we ensure that all travel and stay options are thoroughly verified by our team of experts. Each recommendation undergoes validation for availability and quality before it is presented to you. We provide full transparency, allowing you to review all details before proceeding. Unlike many other platforms, we prioritize personalized service and secure coordination. Additionally, you will receive a strategy summary through your preferred communication method—whether it's email, SMS, Telegram, or WhatsApp—to ensure you are fully informed throughout the process."
   },
   {
-    question: "Can I book last-minute flights or hotels?",
-    answer: "Yes, GoComfortUSA is designed to accommodate both planned and last-minute bookings with ease. Whether you're booking a spontaneous weekend getaway or need urgent travel arrangements, our platform is equipped to help you find deeply discounted flights and hotels—even just hours before departure or check-in. We work with a wide network of domestic travel providers and hotel partners across the U.S. who update their availability in real time. This ensures that you always have access to the latest offers, regardless of how close you are to your travel date. Moreover, you'll receive a confirmation message via the contact method you provide—such as email, phone, or WhatsApp—before any payment is made. We believe in giving you full control, so you'll only be asked to pay once your booking is confirmed and secured. With GoComfortUSA, last-minute travel doesn't mean sacrificing quality or affordability. Our system is designed to make urgent bookings smooth, reliable, and budget-friendly."
+    question: "Can I request research for last-minute flights or hotels?",
+    answer: "Yes, GoComfortUSA is designed to accommodate both planned and last-minute travel needs. Whether you're booking a spontaneous weekend getaway or need urgent arrangements, our team of experts is equipped to help you find optimized flight and hotel options—even just hours before departure or check-in. We work with a wide network of domestic travel providers and partners across the U.S. to ensure you always have access to the latest coordinate availability. You'll receive a detailed options report via your preferred contact method—such as email or WhatsApp—giving you full control over your final travel choices. With GoComfortUSA, last-minute travel doesn't mean sacrificing quality or organization."
   },
   {
     question: "Do I need an account to use GoComfortUSA?",
-    answer: "No account is required. Just search, find your deal, and proceed to booking or payment. It's that simple."
+    answer: "No account is required. Simply submit your research request, and our team will provide you with the best available options tailored to your needs. It's that simple."
   },
   {
     question: "Are there any hidden charges?",
     answer: "No, there are absolutely no hidden charges when you book through GoComfortUSA. We believe in full transparency and fairness. The price you see during the booking process is the final amount you are expected to pay—nothing more. Before your booking is confirmed, we will send you a final confirmation message clearly stating the total amount due. You are only required to pay that confirmed amount, and only after your booking is secured. With GoComfortUSA, what you see is exactly what you pay—no surprises, no extra fees."
   },
   {
-    question: "How do you accept payments?",
-    answer: "At GoComfortUSA, we prioritize convenience and flexibility when it comes to payments. To ensure a smooth and secure experience, we accept payments through all major payment platforms commonly used across the United States, including: <strong>Zelle</strong>, <strong>Venmo</strong>, <strong>PayPal</strong>, <strong>Cash App</strong>, <strong>Apple Pay</strong>, and <strong>Google Pay</strong>. These options allow you to choose the method that works best for you. By keeping our payment process flexible and low-cost, we're also able to pass on the maximum savings to you—helping us offer some of the lowest prices in the market for flights, hotels, IKEA orders, park tickets, and rent payments."
+    question: "How do you accept service payments?",
+    answer: "At GoComfortUSA, we prioritize convenience and flexibility for our consulting services. To ensure a smooth experience, we accept payments through all major platforms commonly used across the United States, including: <strong>Zelle</strong>, <strong>Venmo</strong>, <strong>PayPal</strong>, <strong>Cash App</strong>, <strong>Apple Pay</strong>, and <strong>Google Pay</strong>."
   },
   {
-    question: "Do you offer the lowest-priced IKEA deals in the market?",
-    answer: "Absolutely. GoComfortUSA offers exclusive access to the lowest-priced IKEA deals available anywhere in the U.S. market. We actively monitor IKEA pricing nationwide to ensure you always receive the best available rate on furniture, home goods, and accessories. Once you place an order through us, our team will process it directly with IKEA and personally handle the item pickup from the nearest IKEA store. This means you don't need to worry about availability, logistics, or transport—we take care of it all. You'll receive updates and confirmation on your order status through your selected communication method, and as always, you only pay once the order is confirmed and ready."
-  },
-  {
-    question: "Do you provide the lowest-priced Disneyland tickets?",
-    answer: "Yes, GoComfortUSA proudly offers the lowest-priced Disneyland tickets available in the market. Through our direct partnership with Disneyland, we're able to secure exclusive discounted rates not typically found on public platforms or ticket resellers. These rates are updated in real time and are available for both individual and family bookings. You'll receive a confirmation of your ticket booking through email, WhatsApp, or phone, and payment is only required after your ticket is confirmed. Enjoy unforgettable experiences at Disneyland without overpaying—our mission is to make premium entertainment more accessible for everyone."
-  },
-  {
-    question: "What kind of park tickets do you offer?",
-    answer: "GoComfortUSA offers deeply discounted tickets for virtually all types of amusement, theme, and public parks across the United States. Whether you're planning a trip to Six Flags, Universal Studios, SeaWorld, water parks, or regional fun zones, we guarantee the lowest ticket prices available in the market. Our system is connected with multiple park providers to ensure you always see the most current availability and pricing. Once you choose a ticket, you'll receive booking confirmation via your preferred communication channel, and only then will payment be required."
-  },
-  {
-    question: "Can I pay for house or apartment rent and utility bills through GoComfortUSA?",
-    answer: "Yes, GoComfortUSA offers a convenient and cost-saving way to pay your house or apartment rent, along with associated utility bills. Through our service, you can receive a discount of up to 30–35% on these monthly expenses. We act as a trusted intermediary between you and your landlord or service provider, streamlining your payment while securing exclusive discounts. All you need to do is fill out a simple form with your details, and once verified, you'll receive a confirmation message before any transaction is made. You'll only be asked to pay once everything is confirmed—ensuring a reliable and transparent process that saves you money month after month."
+    question: "Can I request research for IKEA, Disneyland, and other major services?",
+    answer: "Absolutely. GoComfortUSA provides expert research and procurement assistance for IKEA orders, Disneyland tickets, and general theme park visits. Our team monitors pricing and logistics nationwide to ensure you receive the most optimized strategy and planning. We handles the complex coordination, pickup logistics, and booking details so you can enjoy your experience without the hassle of manual management. Additionally, we provide professional assistance for rent and utility payment research to help you identify the most efficient ways to manage your recurring expenses."
   }
 ]
 
@@ -73,26 +61,26 @@ const faqSchema = {
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "How does GoComfortUSA offer up to 50% off on flights, hotels, and IKEA orders?",
+      "name": "How does GoComfortUSA optimize my travel and lifestyle expenses?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "We partner with travel and retail providers to bring exclusive deals directly to our users. You save through negotiated rates and our internal discount system. Additionally, our dedicated team actively scrapes the entire internet to find the best coupons and promotional codes available, which we automatically apply to secure the lowest final rates for you—rates that are consistently lower than what you'll find anywhere else in the market."
+        "text": "We leverage expert research and deep market analysis to identify the most efficient routes, stays, and services available. Our team performs the heavy lifting to ensure you get professional value without the stress of manual searching."
       }
     },
     {
       "@type": "Question",
-      "name": "Do you offer the lowest-priced IKEA deals in the market?",
+      "name": "Is GoComfortUSA a travel consultant or a booking agent?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Absolutely. GoComfortUSA offers exclusive access to the lowest-priced IKEA deals available anywhere in the U.S. market. We actively monitor IKEA pricing nationwide to ensure you always receive the best available rate on furniture, home goods, and accessories."
+        "text": "We are a professional travel and lifestyle consultation service. We provide expert research and guidance for domestic flights, hotel stays, rent assistance, and retail optimization in the USA."
       }
     },
     {
       "@type": "Question",
-      "name": "Do you provide the lowest-priced Disneyland tickets?",
+      "name": "How can I trust your research-backed options?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes, GoComfortUSA proudly offers the lowest-priced Disneyland tickets available in the market. Through our direct partnership with Disneyland, we're able to secure exclusive discounted rates not typically found on public platforms or ticket resellers."
+        "text": "All our recommendations are based on real-time market data and verified through official channels. You receive a professional report with clear guidance before any decisions are made."
       }
     }
   ]
@@ -114,8 +102,8 @@ export default function FAQPage() {
               Frequently Asked Questions
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Find answers to common questions about our discounted travel, hotel bookings, 
-              rent payments, and IKEA purchases. Get up to 50% off on domestic services.
+              Find answers to common questions about our travel assistance, hotel research, 
+              and professional planning services.
             </p>
           </div>
 

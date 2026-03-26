@@ -17,6 +17,9 @@ interface SiteSettings {
   twitterLink: string
   phoneNumber: string
   email: string
+  address: string
+  consultationPrice: string
+  consultationLink: string
 }
 
 export default function SiteSettingsPage() {
@@ -143,6 +146,38 @@ export default function SiteSettingsPage() {
                 onChange={handleChange}
                 required
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="address">Address</Label>
+              <Input
+                id="address"
+                name="address"
+                value={settings.address}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t pt-4">
+              <div className="space-y-2">
+                <Label htmlFor="consultationPrice">Consultation Fee ($)</Label>
+                <Input
+                  id="consultationPrice"
+                  name="consultationPrice"
+                  value={settings.consultationPrice}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="consultationLink">Consultation Link</Label>
+                <Input
+                  id="consultationLink"
+                  name="consultationLink"
+                  value={settings.consultationLink}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="whatsappLink">WhatsApp Link</Label>

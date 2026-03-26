@@ -9,31 +9,31 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions – GoComfortUSA",
-  description: "Find answers to common questions about GoComfortUSA's discounted travel, hotel bookings, rent payments, and IKEA purchases. Get up to 50% off on domestic services.",
-  keywords: "FAQ, frequently asked questions, GoComfortUSA, travel discounts, hotel bookings, rent payments, IKEA discounts",
+  description: "Find answers to common questions about GoComfortUSA's professional travel assistance, hotel research, and lifestyle planning services.",
+  keywords: "FAQ, frequently asked questions, GoComfortUSA, travel assistance, hotel research, planning services",
   openGraph: {
     title: "Frequently Asked Questions – GoComfortUSA",
-    description: "Find answers to common questions about GoComfortUSA's discounted services.",
+    description: "Find answers to common questions about GoComfortUSA's professional travel assistance services.",
     type: "website",
   },
 }
 
 const faqData = [
   {
-    question: "How does GoComfortUSA offer up to 50% off on flights, hotels, and IKEA orders?",
-    answer: "We partner with travel and retail providers to bring exclusive deals directly to our users. You save through negotiated rates and our internal discount system."
+    question: "How does GoComfortUSA optimize my travel and lifestyle expenses?",
+    answer: "We leverage expert research and deep market analysis to identify the most efficient routes, stays, and services available. Our team performs the heavy lifting to ensure you get professional value without the stress of manual searching."
   },
   {
-    question: "Is GoComfortUSA a travel agency or a discount platform?",
-    answer: "We're a smart travel and shopping assistant offering discounted services for domestic flights, hotel bookings, rent payments, and IKEA purchases in the USA."
+    question: "Is GoComfortUSA a travel consultant or a booking agent?",
+    answer: "We are a professional travel and lifestyle consultation service. We provide expert research and guidance for domestic flights, hotel stays, rent assistance, and retail optimization in the USA."
   },
   {
-    question: "How can I trust your discounts are real?",
-    answer: "All deals are verified with our partnered vendors. You'll see real-time pricing before confirming any booking or order."
+    question: "How can I trust your research-backed options?",
+    answer: "All our recommendations are based on real-time market data and verified through official channels. You receive a professional report with clear guidance before any decisions are made."
   },
   {
-    question: "Can I book last-minute flights or hotels?",
-    answer: "Yes. We specialize in last-minute domestic travel deals with up to 50% off available even a day before your trip."
+    question: "Can I request research for last-minute trips?",
+    answer: "Yes. Our team is equipped to handle urgent research requests, providing optimized options even for immediate travel needs."
   },
   {
     question: "Do I need an account to use GoComfortUSA?",
@@ -55,8 +55,8 @@ export default function FAQPage() {
             Frequently Asked Questions
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Find answers to common questions about our discounted travel, hotel bookings, 
-            rent payments, and IKEA purchases. Get up to 50% off on domestic services.
+            Find answers to common questions about our professional travel, hotel research, 
+            rent assistance, and lifestyle services.
           </p>
         </div>
 

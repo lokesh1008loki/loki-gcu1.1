@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
+import { useEffect } from "react"
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -21,6 +22,22 @@ export default function ContactPage() {
     subject: "",
     message: "",
   })
+  const [settings, setSettings] = useState({
+    phoneNumber: "+1(210) 418-2745",
+    email: "support@gocomfortusa.com",
+    address: "30 N Gould St Ste R, Sheridan, WY 82801, USA"
+  })
+
+  useEffect(() => {
+    fetch("/api/site-settings")
+      .then(res => res.json())
+      .then(data => {
+        if (data && !data.error) {
+          setSettings(data)
+        }
+      })
+      .catch(err => console.error("Error fetching settings:", err))
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -91,7 +108,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold mb-1">Our Location</h3>
-                    <p className="text-sm text-muted-foreground">125 Beltline Rd, Gaffney, SC 29341</p>
+                    <p className="text-sm text-muted-foreground">{settings.address}</p>
                   </div>
                 </div>
               </CardContent>
@@ -105,7 +122,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold mb-1">Phone Number</h3>
-                    <p className="text-sm text-muted-foreground">+1 (747) 364-0198</p>
+                    <p className="text-sm text-muted-foreground">{settings.phoneNumber}</p>
                   </div>
                 </div>
               </CardContent>
@@ -119,7 +136,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold mb-1">Email Address</h3>
-                    <p className="text-sm text-muted-foreground">support@gocomfortusa.com</p>
+                    <p className="text-sm text-muted-foreground">{settings.email}</p>
                   </div>
                 </div>
               </CardContent>

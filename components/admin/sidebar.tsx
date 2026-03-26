@@ -91,9 +91,9 @@ const navigation = [
     ]
   },
   {
-    name: "Footer",
+    name: "Site Settings",
     href: "/admin/site-settings",
-    icon: LayoutGrid,
+    icon: Settings,
   },
   {
     name: "SEO",
@@ -101,9 +101,9 @@ const navigation = [
     icon: Search,
   },
   {
-    name: "Settings",
-    href: "/admin/settings",
-    icon: Settings,
+    name: "Navbar",
+    href: "/admin/navbar",
+    icon: Menu,
   },
 ]
 

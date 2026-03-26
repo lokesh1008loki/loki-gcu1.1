@@ -281,8 +281,8 @@ export default function NurseComfortOfferPage() {
           </svg>
         </div>
         <div className="relative z-10 mb-8">
-          <h1 className="text-3xl md:text-5xl font-bold mb-4 text-blue-900 drop-shadow">Travel Nurses Deserve More Than Just a Paycheck.</h1>
-          <h2 className="text-xl md:text-2xl font-medium text-blue-700 mb-6">Save 30–50% on Rent & Flights While You Serve on the Road.</h2>
+          <h1 className="text-3xl md:text-5xl font-bold mb-4 text-blue-900 drop-shadow">Professional Travel & Housing Research for Nurses.</h1>
+          <h2 className="text-xl md:text-2xl font-medium text-blue-700 mb-6">Optimized Stay Recommendations & Flight Research Tailored to Your Location.</h2>
           {/* Nurse Animation with floating effect */}
           <div className="h-40 w-full flex items-center justify-center bg-blue-100/60 rounded-lg mb-6 shadow-inner animate-float">
             <DotLottieReact
@@ -300,7 +300,7 @@ export default function NurseComfortOfferPage() {
             onClick={handleCtaClick}
             disabled={expired}
           >
-            {expired ? "Offer Expired" : "Claim My Comfort Deal – Offer Ends in 12 Hrs"}
+            {expired ? "Consultation Ended" : "Start My Consultation Request – Ends in 12 Hrs"}
             <span className="shine" />
           </button>
           {countdownTarget ? (
@@ -324,7 +324,7 @@ export default function NurseComfortOfferPage() {
             <div className="transition-transform duration-700 will-change-transform" style={{ transform: 'translateY(var(--parallax, 0px))' }}>
               <Image
                 src="/ass/Linkedin image add.png"
-                alt="Nurse savings before and after"
+                alt="Professional travel and housing coordination"
                 width={350}
                 height={420}
                 className="rounded-lg shadow-lg object-cover w-full h-auto"
@@ -335,12 +335,12 @@ export default function NurseComfortOfferPage() {
           {/* Story text */}
           <div className="w-full md:w-1/2 flex flex-col gap-4">
             <div className="text-lg text-gray-700 font-medium mb-2">
-              <span className="block mb-2">“Samantha, an ER travel nurse, broke down between shifts — not from the trauma of the ER, but the crushing weight of rent.”</span>
-              <span className="block">“Then she found GoComfortUSA. Now her rent is slashed, her flights are locked in stress-free, and for once — her mind is finally at peace.”</span>
+              <span className="block mb-2">“Samantha, an ER travel nurse, was overwhelmed by the complexity of finding short-term housing — the endless research and uncertain locations.”</span>
+              <span className="block">“Then she found GoComfortUSA. Now her housing is research-backed, her flights are optimized, and for once — she can focus on what matters most.”</span>
             </div>
             <div className="flex gap-2 mt-4">
-              <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-xs font-bold">Before</span>
-              <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">After</span>
+              <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs font-bold">Chaos</span>
+              <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Optimized</span>
             </div>
           </div>
         </div>
@@ -362,12 +362,12 @@ export default function NurseComfortOfferPage() {
             </div>
             {/* Love Column */}
             <div className="flex-1 bg-green-50 rounded-lg p-4 flex flex-col items-center shadow-sm">
-              <div className="text-xl font-semibold text-green-700 mb-4 flex items-center gap-2">✅ Love</div>
+              <div className="text-xl font-semibold text-green-700 mb-4 flex items-center gap-2">✅ Support</div>
               <ul className="space-y-3 text-green-700 text-base font-medium">
-                <li className="flex items-center gap-2 animate-bounce-slow">💚 <span>Instant 30–50% off </span></li>
-                <li className="flex items-center gap-2 animate-bounce-slow delay-100">🛏️ <span>Verified furnished rentals</span></li>
-                <li className="flex items-center gap-2 animate-bounce-slow delay-200">✈️ <span>Nurse-dedicated flight discounts</span></li>
-                <li className="flex items-center gap-2 animate-bounce-slow delay-300">💬 <span>Real 1:1 human support (yes, even late night)</span></li>
+                <li className="flex items-center gap-2 animate-bounce-slow">💚 <span>Professional research report</span></li>
+                <li className="flex items-center gap-2 animate-bounce-slow delay-100">🛏️ <span>Optimized stay options</span></li>
+                <li className="flex items-center gap-2 animate-bounce-slow delay-200">✈️ <span>Expert flight route planning</span></li>
+                <li className="flex items-center gap-2 animate-bounce-slow delay-300">💬 <span>Real 1:1 consultation support</span></li>
               </ul>
             </div>
           </div>
@@ -392,7 +392,7 @@ export default function NurseComfortOfferPage() {
             onClick={handleCtaClick}
             disabled={expired}
           >
-            {expired ? "Offer Expired" : "Secure My Deal – 12 Hrs Left ⏳"}
+            {expired ? "Offer Expired" : "Secure My Strategy – 12 Hrs Left ⏳"}
             <span className="shine" />
           </button>
         </div>
@@ -400,8 +400,8 @@ export default function NurseComfortOfferPage() {
       {/* Slide-in Form Section */}
       <section id="form" className={`w-full max-w-md py-12 px-4${formGlow ? " animate-form-glow" : ""}`} ref={formRef}>
         <div className="bg-white rounded-xl shadow-md p-6">
-          <h3 className="text-2xl md:text-3xl font-bold text-blue-900 mb-2">Let’s Make You Comfortable.</h3>
-          <div className="text-blue-700 mb-6">Fill out this short form to start your discount journey.</div>
+          <h3 className="text-2xl md:text-3xl font-bold text-blue-900 mb-2">Let’s Optimize Your Journey.</h3>
+          <div className="text-blue-700 mb-6">Fill out this short form to start your consultation journey.</div>
           <form className="space-y-4 animate-fade-in" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-blue-900 mb-1">Name</label>
@@ -496,7 +496,7 @@ export default function NurseComfortOfferPage() {
             <div className="text-xs text-gray-500 text-center mt-2">We’ll reach out within 24 hours on WhatsApp. No spam ever.</div>
             <div className="flex justify-center mt-4">
               <a
-                href="mailto:support@gocomfortusa.com?subject=Travel%20Nurse%20Discount%20Query"
+                href="mailto:support@gocomfortusa.com?subject=Travel%20Nurse%20Research%20Query"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-sm font-semibold shadow transition"
               >
                 <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 4.99C2 3.89 2.89 3 4 3h16c1.1 0 2 .89 2 1.99v14.02A2 2 0 0 1 20 21H4c-1.1 0-2-.89-2-1.99V4.99zm2-.99v.01L12 13 20 4.01V4H4zm16 2.08l-7.58 7.58a1.003 1.003 0 0 1-1.42 0L4 6.08V19h16V6.08z"/></svg>

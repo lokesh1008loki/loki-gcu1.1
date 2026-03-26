@@ -38,13 +38,17 @@ export default function TermsOfService() {
             <CardTitle>3. Services Provided</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p>GoComfortUSA provides the following services:</p>
+            <p>GoComfortUSA is a professional travel assistance and consultation platform. Our services include:</p>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Ticket bookings for various attractions and events</li>
-              <li>Bill payment services</li>
-              <li>Travel booking services</li>
-              <li>Other related services as may be added from time to time</li>
+              <li>Personalized travel research and route optimization</li>
+              <li>Flight and accommodation recommendations</li>
+              <li>Theme park and attraction planning assistance</li>
+              <li>Booking guidance and technical support</li>
+              <li>IKEA procurement research and logistics planning</li>
             </ul>
+            <p className="font-bold text-primary mt-4 italic">
+              Important Disclosure: GoComfortUSA is a consultation platform and does not directly sell airline tickets, hotel rooms, or third-party services. All final bookings are made through official providers in the customer's name.
+            </p>
           </CardContent>
         </Card>
 
@@ -65,15 +69,15 @@ export default function TermsOfService() {
 
         <Card>
           <CardHeader>
-            <CardTitle>5. Payment Terms</CardTitle>
+            <CardTitle>5. Consultation Fees & Payments</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p>Payment terms and conditions:</p>
+            <p>Our fee structure and payment terms:</p>
             <ul className="list-disc pl-6 space-y-2">
-              <li>All prices are in USD unless otherwise stated</li>
-              <li>Payment must be made in full at the time of booking</li>
-              <li>We accept various payment methods as indicated during checkout</li>
-              <li>Prices are subject to change without notice</li>
+              <li>Consultation fees are charged for professional research and planning services rendered.</li>
+              <li>The standard travel consultation fee starts at $29 per request.</li>
+              <li>All fees must be paid in full at the time of the consultation request.</li>
+              <li>Prices for specialized research (e.g., IKEA or multi-city routes) may vary.</li>
             </ul>
           </CardContent>
         </Card>
@@ -83,12 +87,11 @@ export default function TermsOfService() {
             <CardTitle>6. Cancellations and Refunds</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p>Cancellation and refund policies:</p>
+            <p>Policy regarding service fees:</p>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Cancellation policies vary by service provider</li>
-              <li>Refunds are subject to the terms of the service provider</li>
-              <li>Processing fees may be non-refundable</li>
-              <li>Refund processing times may vary</li>
+              <li>Consultation fees are for services rendered (expert research) and are generally non-refundable once the research process has commenced.</li>
+              <li>If you wish to cancel a request before any work has started, please contact us immediately.</li>
+              <li>Cancellations or changes to final travel bookings (flights/hotels) are governed by the terms of the respective third-party provider.</li>
             </ul>
           </CardContent>
         </Card>
@@ -113,12 +116,12 @@ export default function TermsOfService() {
             <CardTitle>8. Limitation of Liability</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p>GoComfortUSA is not liable for:</p>
+            <p>GoComfortUSA acts solely as a travel consultant. We are not liable for:</p>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Any indirect, incidental, or consequential damages</li>
-              <li>Loss of profits or data</li>
-              <li>Service interruptions or errors</li>
-              <li>Actions of third-party service providers</li>
+              <li>Decisions, cancellations, or service failures of third-party providers (airlines, hotels, etc.).</li>
+              <li>Accuracy of information provided by third parties (e.g., flight schedules, availability).</li>
+              <li>Any financial loss or damages resulting from travel bookings made based on our recommendations.</li>
+              <li>Indirect, incidental, or consequential damages.</li>
             </ul>
           </CardContent>
         </Card>
@@ -147,7 +150,7 @@ export default function TermsOfService() {
           </CardContent>
         </Card>
 
-        {/*<Card>
+        <Card>
           <CardHeader>
             <CardTitle>11. Contact Information</CardTitle>
           </CardHeader>
@@ -155,11 +158,11 @@ export default function TermsOfService() {
             <p>For any questions regarding these terms, please contact us at:</p>
             <ul className="list-disc pl-6 space-y-2">
               <li>Email: support@gocomfortusa.com</li>
-              <li>Phone: +1 437 849 7841</li>
-              <li>Address: [Your Company Address]</li>
+              <li>Phone: +1(210) 418-2745</li>
+              <li>Address: 30 N Gould St Ste R, Sheridan, WY 82801, USA</li>
             </ul>
           </CardContent>
-        </Card>*/}
+        </Card>
       </div>
     </div>
   )

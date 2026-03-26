@@ -152,7 +152,7 @@ export default function LeadGenerationPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.5 }}
           >
-            Your information has been submitted successfully. We'll contact you within 15 minutes with your 35% discount details!
+            Your information has been submitted successfully. We'll contact you within 15 minutes with your personalized travel and lifestyle optimization details!
           </motion.p>
           <motion.div 
             className="bg-green-50 border border-green-200 rounded-lg p-4"
@@ -161,7 +161,7 @@ export default function LeadGenerationPage() {
             transition={{ delay: 0.6, duration: 0.5 }}
           >
             <p className="text-green-800 font-medium">
-              ✅ Your 35% discount is being processed
+              ✅ Your optimization request is being processed
             </p>
           </motion.div>
         </motion.div>
@@ -189,13 +189,13 @@ export default function LeadGenerationPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              Save Up to <motion.span 
+              Optimize Your <motion.span 
                 className="text-blue-600"
-                animate={{ scale: [1, 1.1, 1] }}
+                animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
               >
-                35%
-              </motion.span> Instantly on Your Daily Expenses!
+                Travel & Lifestyle
+              </motion.span> with Expert Planning
             </motion.h1>
             <motion.p 
               className="text-lg text-gray-600 max-w-2xl mx-auto"
@@ -229,9 +229,9 @@ export default function LeadGenerationPage() {
               </h2>
               <div className="space-y-4">
                 {[
-                  { icon: "✅", title: "No Upfront Fees", desc: "Start saving immediately without any hidden costs" },
-                  { icon: "🤝", title: "Trusted by Thousands Across the USA", desc: "Join our satisfied customer community" },
-                  { icon: "⚡", title: "Fast Response Within 15 Minutes", desc: "Get your discount details quickly" }
+                  { icon: "✅", title: "Expert Strategy", desc: "Start optimizing your travel and orders with professional research" },
+                  { icon: "🤝", title: "Trusted by Thousands Across the USA", desc: "Join our community of savvy travelers and shoppers" },
+                  { icon: "⚡", title: "Fast Response Within 15 Minutes", desc: "Get your personalized research details quickly" }
                 ].map((benefit, index) => (
                   <motion.div 
                     key={index}
@@ -305,7 +305,7 @@ export default function LeadGenerationPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.6 }}
               >
-                Get Your 35% Discount
+                Get Your Personalized Strategy
               </motion.h2>
               <motion.p 
                 className="text-gray-600"
@@ -313,7 +313,7 @@ export default function LeadGenerationPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.6 }}
               >
-                Fill out the form below and we'll contact you within 15 minutes
+                Fill out the form below and we'll contact you within 15 minutes with expert options
               </motion.p>
             </div>
 
@@ -474,7 +474,7 @@ export default function LeadGenerationPage() {
                     <span>Processing...</span>
                   </div>
                 ) : (
-                  'Submit & Get My 35% Discount'
+                  'Submit & Get My Optimized Strategy'
                 )}
               </motion.button>
             </form>

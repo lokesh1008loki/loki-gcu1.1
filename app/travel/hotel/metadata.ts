@@ -1,12 +1,12 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Budget Hotels Near Me | Cheap Hotel Deals USA 2025 | Up to 50% Off | GoComfortUSA",
-  description: "Find budget hotels near me with up to 50% off. Cheap hotel deals USA 2025, last-minute bookings, no hidden fees. Pay with Zelle, Venmo, PayPal. Cheaper than Booking.com. Available nationwide.",
-  keywords: "budget hotels near me, cheap hotel deals USA 2025, hotel discounts, last-minute hotel booking, accommodation deals, USA hotel platform",
+  title: "Premium Hotel Research & Stay Recommendations | GoComfortUSA",
+  description: "Find the perfect stay with personalized hotel research and professional recommendations. Expert guidance for your next accommodation.",
+  keywords: "hotel research, stay recommendations, travel assistance, personalized accommodation, USA hotel planning",
   openGraph: {
-    title: "Budget Hotels Near Me | Cheap Hotel Deals USA 2025 | Up to 50% Off",
-    description: "Find budget hotels near me with up to 50% off. Cheap hotel deals USA 2025, last-minute bookings, no hidden fees. Pay with Zelle, Venmo, PayPal.",
+    title: "Premium Hotel Research & Stay Recommendations",
+    description: "Expert hotel research and personalized stay options tailored to your preferences.",
     type: "website",
   },
 } 

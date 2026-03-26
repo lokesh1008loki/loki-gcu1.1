@@ -51,7 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     },
     {
-      url: 'https://gocomfortusa.com/blog/book-cheap-flights-online',
+      url: 'https://gocomfortusa.com/blog/expert-flight-research-online',
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.6,

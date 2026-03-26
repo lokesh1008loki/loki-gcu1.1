@@ -2,206 +2,155 @@ import { Metadata } from "next"
 import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Hotel, Ticket, Home, ArrowRight, Plane, ChevronRight } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "How to Save 50% on Domestic Flights: Complete Guide 2025 | GoComfortUSA",
-  description: "Learn how to save up to 50% on domestic flights in 2025. Discover insider tips, booking strategies, and the best time to book cheap flights. Book now, pay later with GoComfortUSA.",
-  keywords: "save 50% on domestic flights, cheap flight booking tips, domestic flight discounts, USA travel deals, flight booking strategies, last-minute flight deals",
+  title: "Mastering Flight Optimization: Expert Travel Research Guide 2025 | GoComfortUSA",
+  description: "Learn how to optimize your flight routes and travel planning in 2025. Discover professional research strategies and expert assistance for a seamless journey with GoComfortUSA.",
+  keywords: "flight optimization, travel research, route planning, professional travel assistance, USA travel planning, expert booking guidance",
   openGraph: {
-    title: "How to Save 50% on Domestic Flights: Complete Guide 2025",
-    description: "Learn how to save up to 50% on domestic flights in 2025. Discover insider tips, booking strategies, and the best time to book cheap flights.",
+    title: "Mastering Flight Optimization: Expert Travel Research Guide 2025",
+    description: "Discover professional strategies to optimize your flight routes and travel planning in 2025. Expert assistance for a seamless journey.",
     type: "article",
   },
 }
 
-export default function SaveOnFlightsPage() {
+export default function FlightOptimizationPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12">
       <div className="container mx-auto px-4">
         {/* Hero Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            How to Save 50% on Domestic Flights: Complete Guide 2025
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium bg-primary/10 text-primary mb-6">
+            Expert Travel Guide
+          </div>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-6 leading-tight">
+            Mastering Flight Optimization: <br />
+            <span className="text-primary italic">Expert Research Guide 2025</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-8">
-            Discover proven strategies to save up to 50% on domestic flights in the USA. 
-            Learn insider tips, booking strategies, and how GoComfortUSA helps you get the lowest prices.
+          <p className="text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto mb-10 leading-relaxed">
+            Discover professional strategies to optimize your flight routes and travel planning. 
+            Learn how GoComfortUSA's expert assistance ensures a seamless and efficient journey.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/travel/flight">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                Book Cheap Flights Now
+              <Button size="lg" className="rounded-full px-8 py-6 text-lg shadow-lg">
+                Get Travel Options
               </Button>
             </Link>
-            <Link href="/faq">
-              <Button variant="outline" size="lg">
-                View FAQ
+            <Link href="/contact">
+              <Button variant="outline" size="lg" className="rounded-full px-8 py-6 text-lg">
+                Consult an Expert
               </Button>
             </Link>
           </div>
         </div>
 
         {/* Content Sections */}
-        <div className="max-w-4xl mx-auto space-y-8">
-          {/* Why Save on Flights */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl text-blue-600">
-                Why You Should Save on Domestic Flights
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-gray-700">
-                Domestic flights in the USA can be expensive, but with the right strategies, 
-                you can save up to 50% on your airfare. Whether you're planning a business trip, 
-                family vacation, or last-minute getaway, these savings can make a significant difference.
-              </p>
-              <ul className="list-disc list-inside space-y-2 text-gray-700">
-                <li>Save hundreds of dollars on each trip</li>
-                <li>Travel more frequently with the same budget</li>
-                <li>Upgrade your travel experience with the savings</li>
-                <li>Book last-minute flights without breaking the bank</li>
-              </ul>
-            </CardContent>
-          </Card>
+        <div className="max-w-4xl mx-auto space-y-12">
+          {/* why optimization */}
+          <section className="bg-white dark:bg-slate-900 p-8 md:p-12 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-800">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">
+              The Value of Professional Flight Optimization
+            </h2>
+            <p className="text-lg text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+              Navigating the complexities of modern air travel requires more than just a simple search. 
+              Professional optimization involves deep research into routes, carrier options, and timing 
+              to ensure your journey is as efficient and comfortable as possible.
+            </p>
+            <div className="grid md:grid-cols-2 gap-6">
+              {[
+                "Optimized Multi-City Route Planning",
+                "Expert Carrier and Connection Analysis",
+                "Personalized Preference Integration",
+                "Ongoing Travel Planning Support"
+              ].map((point, index) => (
+                <div key={index} className="flex items-center gap-3">
+                  <div className="h-2 w-2 rounded-full bg-primary"></div>
+                  <span className="text-slate-700 dark:text-slate-300 font-medium">{point}</span>
+                </div>
+              ))}
+            </div>
+          </section>
 
           {/* Top Strategies */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl text-blue-600">
-                Top 5 Strategies to Save 50% on Domestic Flights
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">1. Book During Off-Peak Seasons</h3>
-                <p className="text-gray-700">
-                  Avoid peak travel times like holidays and summer months. January, February, 
-                  September, and October typically offer the best deals on domestic flights.
-                </p>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">2. Use Flexible Date Search</h3>
-                <p className="text-gray-700">
-                  Be flexible with your travel dates. Flying on Tuesdays, Wednesdays, and 
-                  Saturdays often results in lower prices compared to weekends and Mondays.
-                </p>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">3. Book Last-Minute Deals</h3>
-                <p className="text-gray-700">
-                  Airlines often drop prices for last-minute bookings to fill empty seats. 
-                  GoComfortUSA specializes in finding these deals for you.
-                </p>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">4. Use Multiple Payment Methods</h3>
-                <p className="text-gray-700">
-                  Take advantage of different payment options like Zelle, Venmo, PayPal, 
-                  and Apple Pay to find the best rates and avoid credit card fees.
-                </p>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">5. Leverage GoComfortUSA's Discount System</h3>
-                <p className="text-gray-700">
-                  Our dedicated team searches the entire internet for coupons and promo codes, 
-                  automatically applying them to secure the lowest rates available.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <section className="space-y-8">
+            <h2 className="text-3xl font-bold text-center text-slate-900 dark:text-white">
+              Professional Planning Strategies
+            </h2>
+            <div className="grid md:grid-cols-2 gap-8">
+              {[
+                {
+                  title: "Strategic Timing Analysis",
+                  description: "Expert evaluation of seasonal trends and carrier schedules to identify the most favorable travel periods for your destination."
+                },
+                {
+                  title: "Route Efficiency Research",
+                  description: "In-depth analysis of hub connections and direct flight options to minimize travel time and maximize comfort."
+                },
+                {
+                  title: "Carrier Value Comparison",
+                  description: "Comprehensive review of airline amenities, baggage policies, and reliability to find the best fit for your needs."
+                },
+                {
+                  title: "Buffer & Contingency Planning",
+                  description: "Professional guidance on connection times and alternative routes to ensure a stress-free travel experience."
+                }
+              ].map((strategy, index) => (
+                <div key={index} className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{strategy.title}</h3>
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{strategy.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
 
-          {/* How GoComfortUSA Helps */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl text-blue-600">
-                How GoComfortUSA Helps You Save 50% on Flights
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid md:grid-cols-2 gap-6">
+          {/* How we help */}
+          <section className="bg-primary text-white p-8 md:p-12 rounded-[2rem] shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+            <div className="relative z-10">
+              <h2 className="text-3xl font-bold mb-6">How GoComfortUSA Enhances Your Trip</h2>
+              <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Exclusive Partnerships</h4>
-                  <p className="text-gray-700">
-                    We partner directly with major airlines to secure exclusive discounted rates 
-                    not available to the public.
+                  <h4 className="text-xl font-bold mb-3">Personalized Research</h4>
+                  <p className="text-white/80 leading-relaxed">
+                    Our team performs the heavy lifting, scouring multiple sources to find 
+                    the most optimized flight options tailored specifically to your itinerary.
                   </p>
                 </div>
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Coupon Automation</h4>
-                  <p className="text-gray-700">
-                    Our system automatically finds and applies the best coupons and promo codes 
-                    from across the internet.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Real-Time Pricing</h4>
-                  <p className="text-gray-700">
-                    Get instant access to the latest prices and availability with our 
-                    real-time booking system.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">No Hidden Fees</h4>
-                  <p className="text-gray-700">
-                    What you see is what you pay. No surprise charges or booking fees 
-                    to worry about.
+                  <h4 className="text-xl font-bold mb-3">Booking Guidance</h4>
+                  <p className="text-white/80 leading-relaxed">
+                    We provide clear, step-by-step instructions on how to book your chosen 
+                    options directly with official providers for maximum security.
                   </p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </section>
 
-          {/* CTA Section */}
-          <Card className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
-            <CardContent className="p-8 text-center">
-              <h3 className="text-2xl font-bold mb-4">
-                Ready to Save 50% on Your Next Flight?
-              </h3>
-              <p className="text-xl mb-6">
-                Start booking your cheap domestic flights today with GoComfortUSA
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/travel/flight">
-                  <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
-                    Book Now & Save
-                  </Button>
+          {/* Related */}
+          <div className="pt-12 border-t border-slate-200 dark:border-slate-800">
+            <h3 className="text-2xl font-bold mb-8 text-slate-900 dark:text-white">Related Research Services</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { title: "Hotel Research", href: "/travel/hotel", icon: <Hotel className="h-5 w-5" /> },
+                { title: "Park Planning", href: "/tickets/disneyland", icon: <Ticket className="h-5 w-5" /> },
+                { title: "Housing Support", href: "/bills/apartment-rental", icon: <Home className="h-5 w-5" /> }
+              ].map((service, i) => (
+                <Link key={i} href={service.href} className="group flex items-center justify-between p-6 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl hover:border-primary transition-colors">
+                  <div className="flex items-center gap-4">
+                    <div className="text-primary">{service.icon}</div>
+                    <span className="font-bold text-slate-900 dark:text-white">{service.title}</span>
+                  </div>
+                  <ArrowRight className="h-5 w-5 text-slate-400 group-hover:text-primary group-hover:translate-x-1 transition-all" />
                 </Link>
-                <Link href="/contact">
-                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
-                    Contact Support
-                  </Button>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Related Services */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl text-blue-600">
-                Related Services
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-3 gap-4">
-                <Link href="/travel/hotel" className="block p-4 border rounded-lg hover:bg-gray-50 transition-colors">
-                  <h4 className="font-semibold text-gray-900">Budget Hotels</h4>
-                  <p className="text-sm text-gray-600">Save up to 50% on accommodation</p>
-                </Link>
-                <Link href="/tickets/disneyland" className="block p-4 border rounded-lg hover:bg-gray-50 transition-colors">
-                  <h4 className="font-semibold text-gray-900">Theme Park Tickets</h4>
-                  <p className="text-sm text-gray-600">Cheapest Disneyland tickets</p>
-                </Link>
-                <Link href="/others/ikea" className="block p-4 border rounded-lg hover:bg-gray-50 transition-colors">
-                  <h4 className="font-semibold text-gray-900">IKEA Deals</h4>
-                  <p className="text-sm text-gray-600">Up to 50% off furniture</p>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
   )
-} 
+}
+ 

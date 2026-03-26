@@ -1,12 +1,12 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Disneyland Ticket Discount 2025 | Cheapest Disneyland Park Entry | Theme Park Tickets Cheap | GoComfortUSA",
-  description: "Get Disneyland ticket discount 2025 with cheapest Disneyland park entry. Theme park tickets cheap, up to 50% off, no hidden fees. Pay with Zelle, Venmo, PayPal. Book now, pay later.",
-  keywords: "Disneyland ticket discount 2025, cheapest Disneyland park entry, theme park tickets cheap, Disneyland deals, park tickets USA, Disneyland booking",
+  title: "Disneyland Planning & Experience Optimization | GoComfortUSA",
+  description: "Expert assistance for your Disneyland visit. Personalized planning and ticket research for an unforgettable experience.",
+  keywords: "Disneyland planning, experience optimization, travel assistance, park entry research, Disneyland guidance",
   openGraph: {
-    title: "Disneyland Ticket Discount 2025 | Cheapest Disneyland Park Entry | Theme Park Tickets Cheap",
-    description: "Get Disneyland ticket discount 2025 with cheapest Disneyland park entry. Theme park tickets cheap, up to 50% off, no hidden fees. Pay with Zelle, Venmo, PayPal.",
+    title: "Disneyland Planning & Experience Optimization",
+    description: "Make the most of your Disneyland trip with expert planning and professional assistance.",
     type: "website",
   },
 } 

@@ -418,8 +418,8 @@ export default function IKEAOrderPage() {
                   <div className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2" />
                     <div>
-                      <h3 className="font-bold">Hassle-Free Ordering</h3>
-                      <p className="text-sm text-muted-foreground">No IKEA login required</p>
+                      <h3 className="font-bold">Expert Order Research</h3>
+                      <p className="text-sm text-muted-foreground">We optimize your order for the best experience</p>
                     </div>
                   </div>
                   <div className="flex items-start">

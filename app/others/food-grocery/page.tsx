@@ -165,7 +165,7 @@ export default function FoodGroceryComingSoon() {
                 </div>
                 <div className="flex flex-col items-center">
                   <Sparkles className="h-12 w-12 text-primary" />
-                  <span className="mt-2 text-sm text-muted-foreground">Amazing Deals</span>
+                  <span className="mt-2 text-sm text-muted-foreground">Expert Curation</span>
                 </div>
               </motion.div>
 

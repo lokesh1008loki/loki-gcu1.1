@@ -1,12 +1,12 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "IKEA Product Deals 2025 | IKEA Shopping Discounts USA | Up to 50% Off Furniture | GoComfortUSA",
-  description: "Get IKEA product deals 2025 with up to 50% off furniture, home goods & accessories. IKEA shopping discounts USA, free pickup, no hidden fees. Pay with Zelle, Venmo, PayPal. Available nationwide.",
-  keywords: "IKEA product deals 2025, IKEA shopping discounts USA, IKEA furniture deals, IKEA pickup service, home goods discounts, furniture shopping USA",
+  title: "IKEA Product Research & Procurement Assistance | GoComfortUSA",
+  description: "Professional research and assistance for your IKEA purchases. Expert procurement and logistics support for furniture and home goods.",
+  keywords: "IKEA research, procurement assistance, furniture logistics, IKEA shopping support, home goods planning",
   openGraph: {
-    title: "IKEA Product Deals 2025 | IKEA Shopping Discounts USA | Up to 50% Off Furniture",
-    description: "Get IKEA product deals 2025 with up to 50% off furniture, home goods & accessories. IKEA shopping discounts USA, free pickup, no hidden fees.",
+    title: "IKEA Product Research & Procurement Assistance",
+    description: "Expert assistance for your IKEA shopping and logistics. Professional research and procurement support.",
     type: "website",
   },
 } 

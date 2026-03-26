@@ -106,9 +106,9 @@ export default function HotelBookingPage() {
             priority
           />
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4">
-            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Book Your Perfect Stay with GoComfort USA</h1>
+            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Hotel Research & Consultation</h1>
             <p className="text-2xl text-white/95 mb-8 max-w-2xl drop-shadow-md">
-              Discover amazing deals on hotels worldwide with our guaranteed lowest rates and premium service.
+              Discover the perfect stay with our expert property research and premium consultation services.
             </p>
             <Button 
               size="lg" 
@@ -124,8 +124,8 @@ export default function HotelBookingPage() {
           <div className="lg:col-span-2 space-y-8">
             <div id="booking-section">
               <div>
-                <h1 className="text-3xl font-bold mb-2">Hotel Booking</h1>
-                <p className="text-muted-foreground">Discover Your Ideal Stay with GoComfort USA — Enjoy Unbeatable Rates and a Handpicked Selection of Hotels Across the Globe.</p>
+                <h1 className="text-3xl font-bold mb-2">Hotel Consultation</h1>
+                <p className="text-muted-foreground">Discover Your Ideal Stay with GoComfort USA — Benefit from Expert Research and a Handpicked Selection of Hotels Across the Globe.</p>
               </div>
 
               <Card>
@@ -416,8 +416,8 @@ export default function HotelBookingPage() {
                   <div className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2" />
                     <div>
-                      <h3 className="font-bold">Best Price Guarantee</h3>
-                      <p className="text-sm text-muted-foreground">We promise the lowest hotel rates</p>
+                      <h3 className="font-bold">Expert Property Research</h3>
+                      <p className="text-sm text-muted-foreground">We identify the best stays based on your needs</p>
                     </div>
                   </div>
                   <div className="flex items-start">

@@ -74,7 +74,7 @@ export default function CarRentalPage() {
           <div className="lg:col-span-2 space-y-8">
             <div>
               <h1 className="text-3xl font-bold mb-2">Car Rental</h1>
-              <p className="text-muted-foreground">Rent your perfect car with GoComfort USA — offering the best rates and a wide selection of vehicles.</p>
+              <p className="text-muted-foreground">Rent your perfect car with GoComfort USA — offering expertly researched options and a wide selection of vehicles.</p>
             </div>
 
             <Card>
@@ -383,8 +383,8 @@ export default function CarRentalPage() {
                   <div className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2" />
                     <div>
-                      <h3 className="font-bold">Best Price Guarantee</h3>
-                      <p className="text-sm text-muted-foreground">We promise the lowest rental rates</p>
+                      <h3 className="font-bold">Expert Value Optimization</h3>
+                      <p className="text-sm text-muted-foreground">We identify the most efficient rental options</p>
                     </div>
                   </div>
                   <div className="flex items-start">

@@ -23,7 +23,7 @@ export default function ApartmentRentalPage() {
     rentAmount: "",
     whatsapp: "",
     consent: false,
-    wantsDiscount: false
+    wantsOptimization: false
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
@@ -63,7 +63,7 @@ export default function ApartmentRentalPage() {
         rentAmount: "",
         whatsapp: "",
         consent: false,
-        wantsDiscount: false,
+        wantsOptimization: false,
       });
     } catch (error) {
       console.error("Form submission error:", error);
@@ -79,9 +79,9 @@ export default function ApartmentRentalPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
           <div>
-            <h1 className="text-3xl font-bold mb-2">House/Apartment Rent Payments</h1>
+            <h1 className="text-3xl font-bold mb-2">Professional Rent Assistance</h1>
             <p className="text-muted-foreground">
-                Easily manage and pay your house or apartment rent through GoComfort USA with exclusive discounts and hassle-free processing.
+                Expertly manage your house or apartment rent through GoComfort USA with professional research and hassle-free processing.
             </p>
           </div>
 
@@ -97,18 +97,18 @@ export default function ApartmentRentalPage() {
               <TabsTrigger value="reviews">Reviews</TabsTrigger>
             </TabsList>
             <TabsContent value="description" className="space-y-4 mt-4">
-              <h2 className="text-xl font-bold">Smart Rent Payments for Those Who Work Away from Home</h2>
+              <h2 className="text-xl font-bold">Expert Rent Optimization for Professionals</h2>
               <p>
-                <b>Save Up to 30% – 40% on Your House or Apartment Rent Payments.</b>
+                <b>Optimize Your House or Apartment Rent Management.</b>
                 <br />
-                Living away from home while working hard to build your future shouldn't come with the burden of high rent costs. We understand the challenges faced by professionals—especially travel nurses and individuals working far from their families—who strive to save more while earning more.
-                At GoComfort USA, we help ease the financial pressure by offering a smarter way to manage your house or apartment rent payments. Our tailored services are designed to reduce your out-of-pocket costs, giving you the freedom to focus on your goals without compromising your hard-earned money.
-                Let us help you stretch every dollar further—because you deserve comfort, affordability, and peace of mind.
+                Living away from home while working hard to build your future requires professional management of your largest expenses. We understand the challenges faced by travel nurses and professionals working far from their families.
+                At GoComfort USA, we provide a professional way to manage your house or apartment rent payments through expert research and coordination. Our tailored services are designed to ensure your housing logistics are handled with precision, giving you the freedom to focus on your career without the administrative burden.
+                Let us handle the coordination—because you deserve comfort, expert management, and peace of mind.
               </p>
               <p>
-              <b>Specially designed for travel nurses and hardworking professionals living away from home.</b>
+              <b>Expert planning for travel nurses and hardworking professionals living away from home.</b>
               <br />
-              We help you reduce rent expenses so you can focus on your career and savings.
+              We help you optimize rent expenses so you can focus on your career and financial goals.
               </p>
               
             </TabsContent>
@@ -160,9 +160,9 @@ export default function ApartmentRentalPage() {
                       <p className="text-muted-foreground">
                         {
                           [
-                            "Thanks to GoComfort USA, I'm saving nearly 35% on my apartment rent every month—couldn't believe how easy and seamless the process was!",
-                           "As a travel nurse constantly relocating, GoComfort gave me a reliable way to manage rent payments with zero hassle and real savings.",
-                            "I was skeptical at first, but GoComfort helped me cut down my rent cost and handled everything directly with my landlord—super smooth experience!",
+                            "Thanks to GoComfort USA, my apartment rent management is completely handled—the process is professional and seamless!",
+                           "As a travel nurse constantly relocating, GoComfort gave me a reliable way to manage rent payments with zero hassle and expert coordination.",
+                            "I needed a professional partner for my housing logistics, and GoComfort helped me manage everything directly with my landlord—super smooth experience!",
                           ][i - 1]
                         }
                       </p>
@@ -290,12 +290,12 @@ export default function ApartmentRentalPage() {
                     <label className="flex items-center space-x-2">
                       <input
                         type="checkbox"
-                        name="wantsDiscount"
-                        checked={formData.wantsDiscount}
-                        onChange={(e) => setFormData(prev => ({ ...prev, wantsDiscount: e.target.checked }))}
+                        name="wantsOptimization"
+                        checked={formData.wantsOptimization}
+                        onChange={(e) => setFormData(prev => ({ ...prev, wantsOptimization: e.target.checked }))}
                         className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
                       />
-                      <span className="text-sm font-medium">I want 35% off</span>
+                      <span className="text-sm font-medium">I want professional assistance</span>
                     </label>
                   </div>
                 </div>

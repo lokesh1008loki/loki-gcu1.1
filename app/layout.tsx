@@ -23,8 +23,8 @@ export async function generateMetadata() {
     if (!seoSettings || seoSettings.active !== true) {
       console.log("Falling back to static metadata because SEO is inactive or missing");
       return {
-        title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks | Book Now Pay Later",
-        description: "Save up to 50% on domestic flights, hotels, IKEA furniture, Disneyland tickets & rent payments. Book now, pay later with Zelle, Venmo, PayPal. Lowest prices guaranteed - cheaper than Expedia & Booking.com. Available in all 50 states.",
+        title: "GoComfortUSA - Professional Travel Assistance & Consultation | Flights, Hotels & More",
+        description: "Personalized travel research and assistance for flights, hotels, and lifestyle services. Get expert booking guidance and route optimization tailored to your needs.",
         metadataBase: new URL("https://gocomfortusa.com"),
         icons: {
           icon: "/ass/logo-round.png",
@@ -32,15 +32,15 @@ export async function generateMetadata() {
           apple: "/ass/logo-round.png",
         },
         openGraph: {
-          title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks",
-          description: "Save up to 50% on domestic flights, hotels, IKEA furniture, Disneyland tickets & rent payments. Book now, pay later with Zelle, Venmo, PayPal.",
+          title: "GoComfortUSA - Professional Travel Assistance & Planning",
+          description: "Get personalized flight and hotel options, optimized routes, and expert booking guidance tailored to your trip.",
           images: [{ url: "/ass/logo-round.png" }],
           type: "website",
         },
         twitter: {
           card: "summary_large_image",
-          title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks",
-          description: "Save up to 50% on domestic flights, hotels, IKEA furniture, Disneyland tickets & rent payments. Book now, pay later.",
+          title: "GoComfortUSA - Travel Assistance & Consultation",
+          description: "Expert travel research and assistance for your next trip. Flights, hotels, and route optimization made easy.",
           images: ["/ass/logo-round.png"],
         },
         alternates: {
@@ -77,8 +77,8 @@ export async function generateMetadata() {
   } catch (error) {
     console.error("Error fetching SEO settings for metadata:", error);
     return {
-      title: "GoComfortUSA - Up to 50% Off Domestic Flights, Hotels, IKEA & Theme Parks | Book Now Pay Later",
-      description: "GocomfortUSA offers amazing deals on ticket bookings and bill payments, flight ticket bookings, House rent payment and many more services, ensuring you get the best discounts and a hassle-free experience. Save on everything from travel to living.",
+      title: "GoComfortUSA - Professional Travel Assistance & Consultation",
+      description: "GoComfortUSA provides personalized travel assistance including flight and hotel research, planning, and expert booking support for a hassle-free travel experience.",
       metadataBase: new URL("https://gocomfortusa.com"),
       icons: {
         icon: "/ass/logo-round.png",

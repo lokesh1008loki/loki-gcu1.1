@@ -6,8 +6,11 @@ const defaultSettings = {
   facebookLink: "https://facebook.com",
   instagramLink: "https://instagram.com",
   twitterLink: "https://twitter.com",
-  phoneNumber: "+1 437 849 7841",
+  phoneNumber: "+1(210) 418-2745",
   email: "support@gocomfortusa.com",
+  address: "30 N Gould St Ste R, Sheridan, WY 82801, USA",
+  consultationPrice: "29",
+  consultationLink: "/tickets/water-park"
 }
 
 export async function GET() {
@@ -17,7 +20,13 @@ export async function GET() {
       // @ts-ignore - Prisma client type issue
       const settings = await prisma.siteSettings?.findFirst()
       if (settings) {
-        return NextResponse.json(settings)
+        const s = settings as any
+        return NextResponse.json({
+          ...settings,
+          address: s.address || defaultSettings.address,
+          consultationPrice: s.consultationPrice || defaultSettings.consultationPrice,
+          consultationLink: s.consultationLink || defaultSettings.consultationLink
+        })
       }
     } catch (dbError) {
       console.error("Database error:", dbError)
@@ -50,30 +59,42 @@ export async function PUT(request: Request) {
       
       if (existingSettings) {
         // @ts-ignore - Prisma client type issue
+        const data: any = {
+          whatsappLink: body.whatsappLink || (existingSettings as any).whatsappLink,
+          facebookLink: body.facebookLink || (existingSettings as any).facebookLink,
+          instagramLink: body.instagramLink || (existingSettings as any).instagramLink,
+          twitterLink: body.twitterLink || (existingSettings as any).twitterLink,
+          phoneNumber: body.phoneNumber,
+          email: body.email,
+          address: body.address || (existingSettings as any).address || defaultSettings.address,
+          consultationPrice: body.consultationPrice || (existingSettings as any).consultationPrice || defaultSettings.consultationPrice,
+          consultationLink: body.consultationLink || (existingSettings as any).consultationLink || defaultSettings.consultationLink
+        }
+
+        // @ts-ignore - Prisma client type issue
         const updatedSettings = await prisma.siteSettings?.update({
           where: { id: existingSettings.id },
-          data: {
-            whatsappLink: body.whatsappLink || existingSettings.whatsappLink,
-            facebookLink: body.facebookLink || existingSettings.facebookLink,
-            instagramLink: body.instagramLink || existingSettings.instagramLink,
-            twitterLink: body.twitterLink || existingSettings.twitterLink,
-            phoneNumber: body.phoneNumber,
-            email: body.email,
-          },
+          data
         })
         
         return NextResponse.json(updatedSettings)
       } else {
         // @ts-ignore - Prisma client type issue
+        const data: any = {
+          whatsappLink: body.whatsappLink || defaultSettings.whatsappLink,
+          facebookLink: body.facebookLink || defaultSettings.facebookLink,
+          instagramLink: body.instagramLink || defaultSettings.instagramLink,
+          twitterLink: body.twitterLink || defaultSettings.twitterLink,
+          phoneNumber: body.phoneNumber,
+          email: body.email,
+          address: body.address || defaultSettings.address,
+          consultationPrice: body.consultationPrice || defaultSettings.consultationPrice,
+          consultationLink: body.consultationLink || defaultSettings.consultationLink
+        }
+
+        // @ts-ignore - Prisma client type issue
         const newSettings = await prisma.siteSettings?.create({
-          data: {
-            whatsappLink: body.whatsappLink || defaultSettings.whatsappLink,
-            facebookLink: body.facebookLink || defaultSettings.facebookLink,
-            instagramLink: body.instagramLink || defaultSettings.instagramLink,
-            twitterLink: body.twitterLink || defaultSettings.twitterLink,
-            phoneNumber: body.phoneNumber,
-            email: body.email,
-          },
+          data
         })
         
         return NextResponse.json(newSettings)

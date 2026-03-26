@@ -67,15 +67,18 @@ model MarqueeMessage {
 }
 
 model SiteSettings {
-  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  whatsappLink  String   @default("https://whatsapp.com")
-  facebookLink  String   @default("https://facebook.com")
-  instagramLink String   @default("https://instagram.com")
-  twitterLink   String   @default("https://twitter.com")
-  phoneNumber   String   @default("+1 437 849 7841")
-  email         String   @default("support@gocomfortusa.com")
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  whatsappLink      String   @default("https://whatsapp.com")
+  facebookLink      String   @default("https://facebook.com")
+  instagramLink     String   @default("https://instagram.com")
+  twitterLink       String   @default("https://twitter.com")
+  phoneNumber       String   @default("+1(210) 418-2745")
+  email             String   @default("support@gocomfortusa.com")
+  address           String   @default("30 N Gould St Ste R, Sheridan, WY 82801, USA")
+  consultationPrice String   @default("29")
+  consultationLink  String   @default("/tickets/water-park")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model SeoSettings {
@@ -93,6 +96,20 @@ model SeoSettings {
   active        Boolean  @default(true)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+model NavbarLink {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
+  href      String
+  order     Int      @default(0)
+  parentId  String?  @db.Uuid
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  parent    NavbarLink?  @relation("SubLinks", fields: [parentId], references: [id])
+  subLinks  NavbarLink[] @relation("SubLinks")
 }
 
 
