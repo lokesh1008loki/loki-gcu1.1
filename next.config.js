@@ -7,18 +7,9 @@ const nextConfig = {
     minimumCacheTTL: 60,
   },
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
-    // Fix Windows symlink issues
-    outputFileTracingRoot: process.platform === 'win32' ? undefined : undefined,
-    outputFileTracingExcludes: {
-      '*': [
-        'node_modules/@swc/core-linux-x64-gnu',
-        'node_modules/@swc/core-linux-x64-musl',
-        'node_modules/@esbuild/linux-x64',
-      ],
-    },
   },
+  turbopack: {},
   typescript: {
     ignoreBuildErrors: true,
   },
