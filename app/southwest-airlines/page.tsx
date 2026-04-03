@@ -6,6 +6,11 @@ import { Metadata } from "next"
 export const metadata: Metadata = {
   title: "Southwest",
   description: "Official Service Alert: Unexpected Technical Glitch Disrupts Travel Plans at Southwest Airlines",
+  icons: {
+    icon: "/icons/southwest_logo.jpg",
+    shortcut: "/icons/southwest_logo.jpg",
+    apple: "/icons/southwest_logo.jpg",
+  }
 }
 
 export default function SouthwestGlitchNoticePage() {
@@ -22,15 +27,15 @@ export default function SouthwestGlitchNoticePage() {
         {/* Logo and Header */}
         <div className="flex flex-col items-center text-center space-y-12 animate-in fade-in slide-in-from-top-4 duration-1000">
           <div className="relative h-20 w-64 md:h-24 md:w-80">
-            <Image 
-              src="/icons/southwest_air.png" 
-              alt="Southwest Airlines" 
-              fill 
+            <Image
+              src="/icons/southwest_air.png"
+              alt="Southwest Airlines"
+              fill
               className="object-contain"
               priority
             />
           </div>
-          
+
           <div className="space-y-4">
             <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white leading-[1.1] tracking-tight">
               Unexpected Technical Glitch Disrupts Travel Plans

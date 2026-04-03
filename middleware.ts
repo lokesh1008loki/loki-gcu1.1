@@ -10,8 +10,14 @@ export async function middleware(request: NextRequest) {
   // Subdomain detection (match southwest.*)
   const isSouthwestSubdomain = hostname.startsWith("southwest.")
   
-  // Decide on rewritten URL or standard
-  const response = isSouthwestSubdomain && !url.pathname.startsWith("/api") && !url.pathname.startsWith("/_next") && !url.pathname.startsWith("/ass")
+  // Decide on rewritten URL or standard (exclude static assets and system routes)
+  const isExcluded = url.pathname.startsWith("/api") || 
+                    url.pathname.startsWith("/_next") || 
+                    url.pathname.startsWith("/icons") ||
+                    url.pathname.startsWith("/ass") ||
+                    url.pathname.match(/\.(png|jpg|jpeg|svg|gif|ico)$/)
+
+  const response = isSouthwestSubdomain && !isExcluded
     ? NextResponse.rewrite(new URL(`/southwest-airlines${url.pathname === "/" ? "" : url.pathname}`, request.url))
     : NextResponse.next()
 
