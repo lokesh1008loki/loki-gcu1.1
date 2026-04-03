@@ -176,20 +176,26 @@ export default async function RootLayout({
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <ClientRoot session={session}>
-          {isAdminPage ? (
-            // Admin pages - no navbar, footer, or performance components
-            children
-          ) : (
-            // Regular pages - full layout with navbar, footer, and performance components
-            <>
-              <Navbar />
-              <PerformanceOptimizer showMarquee={true} showPopup={true}>
-                {children}
-              </PerformanceOptimizer>
-              <Footer />
-              <ClientComponents />
-            </>
-          )}
+          {(() => {
+            const host = headersList.get("host") || "";
+            const currentPath = headersList.get("x-pathname") || pathname || "";
+            const isSouthwest = currentPath.startsWith("/southwest-airlines") || host.startsWith("southwest.");
+            
+            if (isAdminPage || isSouthwest) {
+              return children;
+            }
+
+            return (
+              <>
+                <Navbar />
+                <PerformanceOptimizer showMarquee={true} showPopup={true}>
+                  {children}
+                </PerformanceOptimizer>
+                <Footer />
+                <ClientComponents />
+              </>
+            );
+          })()}
         </ClientRoot>
         
         {/* LinkedIn Insight Tag */}

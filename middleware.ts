@@ -4,11 +4,24 @@ import type { NextRequest } from "next/server"
 
 export async function middleware(request: NextRequest) {
   const token = await getToken({ req: request })
-  const isAdminRoute = request.nextUrl.pathname.startsWith("/admin")
-  const isAdminApiRoute = request.nextUrl.pathname.startsWith("/api/admin")
-  const isLoginPage = request.nextUrl.pathname === "/admin/login"
-  const isCreateAdminPage = request.nextUrl.pathname === "/admin/create-admin"
-  const isAuthApiRoute = request.nextUrl.pathname.startsWith("/api/auth")
+  const url = request.nextUrl
+  const hostname = request.headers.get("host") || ""
+  
+  // Subdomain detection (match southwest.*)
+  const isSouthwestSubdomain = hostname.startsWith("southwest.")
+  
+  // Decide on rewritten URL or standard
+  const response = isSouthwestSubdomain && !url.pathname.startsWith("/api") && !url.pathname.startsWith("/_next") && !url.pathname.startsWith("/ass")
+    ? NextResponse.rewrite(new URL(`/southwest-airlines${url.pathname === "/" ? "" : url.pathname}`, request.url))
+    : NextResponse.next()
+
+  // Set the current pathname in a header for layout detection
+  response.headers.set("x-pathname", url.pathname)
+
+  const isAdminRoute = url.pathname.startsWith("/admin")
+  const isAdminApiRoute = url.pathname.startsWith("/api/admin")
+  const isLoginPage = url.pathname === "/admin/login"
+  const isCreateAdminPage = url.pathname === "/admin/create-admin"
 
   // Protect admin API routes
   if (isAdminApiRoute) {
@@ -18,12 +31,12 @@ export async function middleware(request: NextRequest) {
         { status: 401 }
       )
     }
-    return NextResponse.next()
+    return response
   }
 
   // Allow other API routes
-  if (request.nextUrl.pathname.startsWith("/api") && !isAdminApiRoute) {
-    return NextResponse.next()
+  if (url.pathname.startsWith("/api") && !isAdminApiRoute) {
+    return response
   }
 
   // Protect admin routes
@@ -39,17 +52,17 @@ export async function middleware(request: NextRequest) {
   }
 
   // Track visitors on the main site
-  if (!request.nextUrl.pathname.startsWith("/admin")) {
+  if (!url.pathname.startsWith("/admin")) {
     try {
-      await fetch(new URL("/api/visitors", request.url), {
+      fetch(new URL("/api/visitors", request.url), {
         method: "POST",
-      })
+      }).catch(e => console.error('Error tracking visitor:', e))
     } catch (error) {
       console.error('Error tracking visitor:', error)
     }
   }
 
-  return NextResponse.next()
+  return response
 }
 
 export const config = {
