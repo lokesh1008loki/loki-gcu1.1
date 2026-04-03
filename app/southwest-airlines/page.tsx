@@ -50,7 +50,7 @@ export default function SouthwestGlitchNoticePage() {
           </p>
 
           <p className="text-lg leading-relaxed text-slate-600 dark:text-slate-400">
-            According to initial reports, the server malfunction led to the automatic cancellation of approximately 1,000 booked tickets. Passengers who had already checked in or were preparing to board suddenly found their reservations invalid due to the system error. This created confusion at airport terminals, with long queues forming at customer service counters as travelers sought clarification and assistance.
+            According to initial reports, the server malfunction led to the automatic cancellation of approximately 1,000+ booked tickets. Passengers who had already checked in or were preparing to board suddenly found their reservations invalid due to the system error. This created confusion at airport terminals, with long queues forming at customer service counters as travelers sought clarification and assistance.
           </p>
 
           <p className="text-lg leading-relaxed text-slate-600 dark:text-slate-400">
