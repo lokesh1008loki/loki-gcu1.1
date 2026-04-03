@@ -15,14 +15,26 @@ export async function middleware(request: NextRequest) {
                     url.pathname.startsWith("/_next") || 
                     url.pathname.startsWith("/icons") ||
                     url.pathname.startsWith("/ass") ||
-                    url.pathname.match(/\.(png|jpg|jpeg|svg|gif|ico)$/)
+                    url.pathname.match(/\.(png|jpg|jpeg|svg|gif|ico)$/i)
 
-  const response = isSouthwestSubdomain && !isExcluded
-    ? NextResponse.rewrite(new URL(`/southwest-airlines${url.pathname === "/" ? "" : url.pathname}`, request.url))
-    : NextResponse.next()
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set("x-pathname", url.pathname)
 
-  // Set the current pathname in a header for layout detection
-  response.headers.set("x-pathname", url.pathname)
+  let response: NextResponse
+  
+  if (isSouthwestSubdomain && !isExcluded) {
+    response = NextResponse.rewrite(new URL(`/southwest-airlines${url.pathname === "/" ? "" : url.pathname}`, request.url), {
+      request: {
+        headers: requestHeaders,
+      }
+    })
+  } else {
+    response = NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      }
+    })
+  }
 
   const isAdminRoute = url.pathname.startsWith("/admin")
   const isAdminApiRoute = url.pathname.startsWith("/api/admin")

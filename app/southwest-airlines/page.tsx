@@ -26,13 +26,11 @@ export default function SouthwestGlitchNoticePage() {
       <main className="container mx-auto px-6 py-16 md:py-24 max-w-4xl space-y-16">
         {/* Logo and Header */}
         <div className="flex flex-col items-center text-center space-y-12 animate-in fade-in slide-in-from-top-4 duration-1000">
-          <div className="relative h-20 w-64 md:h-24 md:w-80">
-            <Image
-              src="/icons/southwest_air.png"
-              alt="Southwest Airlines"
-              fill
-              className="object-contain"
-              priority
+          <div className="relative h-20 w-64 md:h-24 md:w-80 flex items-center justify-center">
+            <img 
+              src="/icons/southwest_air.png" 
+              alt="Southwest Airlines" 
+              className="max-h-full max-w-full object-contain"
             />
           </div>
 
