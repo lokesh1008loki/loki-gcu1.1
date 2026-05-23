@@ -119,6 +119,12 @@ export default function FoodGroceryLandingPage() {
       })
 
       setSubmitStatus("success")
+      
+      // Trigger Google Ads conversion tracking event
+      if (typeof window !== "undefined" && (window as any).gtag_report_conversion) {
+        (window as any).gtag_report_conversion();
+      }
+
       setFormData({
         fullName: "",
         phone: "",
@@ -152,6 +158,26 @@ export default function FoodGroceryLandingPage() {
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', 'AW-18183373348');
+        `}
+      </Script>
+      <Script id="google-ads-conversion" strategy="afterInteractive">
+        {`
+          window.gtag_report_conversion = function(url) {
+            var callback = function () {
+              if (typeof(url) != 'undefined') {
+                window.location = url;
+              }
+            };
+            if (typeof window.gtag === 'function') {
+              window.gtag('event', 'conversion', {
+                  'send_to': 'AW-18183373348/bvZ5CPSr-7EcEKSEwd5D',
+                  'value': 1.0,
+                  'currency': 'USD',
+                  'event_callback': callback
+              });
+            }
+            return false;
+          };
         `}
       </Script>
       {/* Promotional Top Bar */}
