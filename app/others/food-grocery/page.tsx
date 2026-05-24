@@ -147,19 +147,7 @@ export default function FoodGroceryLandingPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 pb-20 md:pb-8 overflow-x-hidden">
-      {/* Google tag (gtag.js) */}
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=AW-18183373348"
-        strategy="afterInteractive"
-      />
-      <Script id="google-ads-tag" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'AW-18183373348');
-        `}
-      </Script>
+      {/* Google tag (gtag.js) is loaded globally in layout.tsx */}
       <Script id="google-ads-conversion" strategy="afterInteractive">
         {`
           window.gtag_report_conversion = function(url) {
