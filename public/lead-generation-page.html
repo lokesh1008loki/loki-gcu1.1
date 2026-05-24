@@ -10,6 +10,25 @@
 
       gtag('config', 'AW-18183373348');
     </script>
+    <!-- Event snippet for lead form conversion -->
+    <script>
+      function gtag_report_submission(url) {
+        var callback = function () {
+          if (typeof(url) != 'undefined') {
+            window.location = url;
+          }
+        };
+        if (typeof gtag === 'function') {
+          gtag('event', 'conversion', {
+              'send_to': 'AW-18183373348/bvZ5CPSr-7EcEKSEwd5D',
+              'value': 1.0,
+              'currency': 'USD',
+              'event_callback': callback
+          });
+        }
+        return false;
+      }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Save 35% on Daily Expenses - GoComfortUSA</title>
@@ -349,6 +368,11 @@
                 
                 // Show success modal
                 successModal.classList.remove('hidden');
+                
+                // Trigger Google Ads conversion tracking
+                if (typeof gtag_report_submission === 'function') {
+                    gtag_report_submission();
+                }
                 
                 // Reset form
                 form.reset();

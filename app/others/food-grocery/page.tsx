@@ -168,6 +168,26 @@ export default function FoodGroceryLandingPage() {
           };
         `}
       </Script>
+      <Script id="google-ads-call-conversion" strategy="afterInteractive">
+        {`
+          window.gtag_report_call_conversion = function(url) {
+            var callback = function () {
+              if (typeof(url) != 'undefined') {
+                window.location = url;
+              }
+            };
+            if (typeof window.gtag === 'function') {
+              window.gtag('event', 'conversion', {
+                  'send_to': 'AW-18183373348/AnY0CO2xt7IcEKSEwd5D',
+                  'value': 1.0,
+                  'currency': 'USD',
+                  'event_callback': callback
+              });
+            }
+            return false;
+          };
+        `}
+      </Script>
       {/* Promotional Top Bar */}
       <div className="bg-emerald-700 text-white py-2 px-4 text-center text-xs sm:text-sm font-semibold tracking-wide shadow-sm">
         ✨ Save Up To <span className="text-yellow-300 font-bold">35% OFF</span> On Your Final Price. We Shop, You Relax!
@@ -230,7 +250,15 @@ export default function FoodGroceryLandingPage() {
                   className="w-full sm:w-auto rounded-full border-2 border-slate-200 hover:bg-slate-50 font-bold px-8 py-7 transition-all duration-300 text-base flex justify-center items-center"
                   asChild
                 >
-                  <Link href={`tel:${CLEANED_PHONE}`} className="w-full flex justify-center items-center">
+                  <Link 
+                    href={`tel:${CLEANED_PHONE}`} 
+                    className="w-full flex justify-center items-center"
+                    onClick={() => {
+                      if (typeof window !== "undefined" && (window as any).gtag_report_call_conversion) {
+                        (window as any).gtag_report_call_conversion();
+                      }
+                    }}
+                  >
                     <Phone className="mr-2 h-5 w-5 text-emerald-600" />
                     Call Now: {PRIMARY_PHONE}
                   </Link>
@@ -654,7 +682,14 @@ export default function FoodGroceryLandingPage() {
           className="flex-1 rounded-full py-6 font-bold border-2 border-slate-200 text-slate-800 text-sm flex items-center justify-center gap-1.5"
           asChild
         >
-          <Link href={`tel:${CLEANED_PHONE}`}>
+          <Link 
+            href={`tel:${CLEANED_PHONE}`}
+            onClick={() => {
+              if (typeof window !== "undefined" && (window as any).gtag_report_call_conversion) {
+                (window as any).gtag_report_call_conversion();
+              }
+            }}
+          >
             <Phone className="h-4 w-4 text-emerald-600" />
             Call Now
           </Link>
