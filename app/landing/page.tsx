@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useMemo } from "react"
+import Script from "next/script"
 import { motion, AnimatePresence } from "framer-motion"
 import { 
   ShoppingBag, 
@@ -396,6 +397,19 @@ export default function MultiServiceLandingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 text-slate-800 dark:text-slate-200 pb-12 relative overflow-hidden">
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=AW-18186338290"
+        strategy="afterInteractive"
+      />
+      <Script id="google-tag-landing" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'AW-18186338290');
+        `}
+      </Script>
       <Toaster position="top-center" richColors />
 
       {/* Top Promotional Bar */}
