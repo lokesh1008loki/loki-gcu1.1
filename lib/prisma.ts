@@ -23,16 +23,21 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 prisma.$use(async (params: any, next: any) => {
   try {
     return await next(params)
-  } catch (error) {
+  } catch (error: any) {
+    const errorDetails = error ? {
+      message: error.message || String(error),
+      stack: error.stack,
+      name: error.name || (error.constructor ? error.constructor.name : 'Error'),
+      code: error.code,
+      meta: error.meta,
+      clientVersion: error.clientVersion
+    } : error
+
     console.error('Prisma error:', {
       model: params.model,
       action: params.action,
       args: params.args,
-      error: error instanceof Error ? {
-        message: error.message,
-        stack: error.stack,
-        name: error.name
-      } : error
+      error: errorDetails
     })
     throw error
   }

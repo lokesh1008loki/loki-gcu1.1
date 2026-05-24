@@ -200,15 +200,15 @@ export default async function RootLayout({
         </ClientRoot>
         
         {/* LinkedIn Insight Tag */}
-        <script type="text/javascript" dangerouslySetInnerHTML={{
-          __html: `
-            _linkedin_partner_id = "7550706";
+        <Script id="linkedin-insight-init" type="text/javascript" strategy="afterInteractive">
+          {`
+            window._linkedin_partner_id = "7550706";
             window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
-            window._linkedin_data_partner_ids.push(_linkedin_partner_id);
-          `
-        }} />
-        <script type="text/javascript" dangerouslySetInnerHTML={{
-          __html: `
+            window._linkedin_data_partner_ids.push(window._linkedin_partner_id);
+          `}
+        </Script>
+        <Script id="linkedin-insight-load" type="text/javascript" strategy="afterInteractive">
+          {`
             (function(l) {
               if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
               window.lintrk.q=[]
@@ -218,8 +218,8 @@ export default async function RootLayout({
             b.type = "text/javascript";b.async = true;
             b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
             s.parentNode.insertBefore(b, s);})(window.lintrk);
-          `
-        }} />
+          `}
+        </Script>
         <noscript>
           <img height="1" width="1" style={{display: "none"}} alt="" src="https://px.ads.linkedin.com/collect/?pid=7550706&fmt=gif" />
         </noscript>

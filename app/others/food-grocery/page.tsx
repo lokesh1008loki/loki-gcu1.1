@@ -43,6 +43,15 @@ const stores = [
   { id: "other", name: "Other Store (Specify in List)" }
 ]
 
+const DELIVERY_SLOTS = [
+  "ASAP (Within 2 Hours)",
+  "Today: 4:00 PM - 6:00 PM",
+  "Today: 7:00 PM - 9:00 PM",
+  "Tomorrow: 9:00 AM - 11:00 AM",
+  "Tomorrow: 2:00 PM - 4:00 PM",
+  "Tomorrow: 6:00 PM - 8:00 PM"
+]
+
 export default function FoodGroceryLandingPage() {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -59,6 +68,7 @@ export default function FoodGroceryLandingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
   const [errorMessage, setErrorMessage] = useState("")
+  const [deliverySlot, setDeliverySlot] = useState("")
 
   const [activeSlide, setActiveSlide] = useState(0)
   const sliderImages = [
@@ -104,6 +114,13 @@ export default function FoodGroceryLandingPage() {
       return
     }
 
+    if (!deliverySlot) {
+      setErrorMessage("Please select a delivery time slot.")
+      setSubmitStatus("error")
+      setIsSubmitting(false)
+      return
+    }
+
     try {
       // Direct POST to Google Sheets via Apps Script Web App
       await fetch(GOOGLE_SHEET_URL, {
@@ -113,12 +130,14 @@ export default function FoodGroceryLandingPage() {
         },
         body: JSON.stringify({
           ...formData,
+          deliverySlot: deliverySlot,
           timestamp: new Date().toISOString()
         }),
         mode: "no-cors" // Standard mode for cross-domain Apps Script requests
       })
 
       setSubmitStatus("success")
+      setDeliverySlot("")
       
       // Trigger Google Ads conversion tracking event
       if (typeof window !== "undefined" && (window as any).gtag_report_conversion) {
@@ -432,7 +451,7 @@ export default function FoodGroceryLandingPage() {
                           name="preferredStore"
                           value={formData.preferredStore}
                           onChange={handleChange}
-                          required
+                  required
                           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base sm:text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                         >
                           <option value="">Select store</option>
@@ -442,6 +461,31 @@ export default function FoodGroceryLandingPage() {
                             </option>
                           ))}
                         </select>
+                      </div>
+                    </div>
+
+                    {/* Delivery Time Selection */}
+                    <div className="space-y-3 pt-2">
+                      <Label className="text-sm font-semibold flex items-center gap-1.5 text-slate-900">
+                        <Clock className="h-4 w-4 text-emerald-600" />
+                        Delivery Time Selection <span className="text-red-500">*</span>
+                      </Label>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                        {DELIVERY_SLOTS.map((slot) => (
+                          <button
+                            key={slot}
+                            type="button"
+                            onClick={() => setDeliverySlot(slot)}
+                            className={`p-3 rounded-2xl text-xs font-bold text-center border-2 transition-all duration-300 ${
+                              deliverySlot === slot
+                                ? "border-emerald-600 bg-emerald-50 text-emerald-700"
+                                : "border-slate-200 hover:border-slate-350 hover:bg-slate-50"
+                            }`}
+                          >
+                            {slot}
+                          </button>
+                        ))}
                       </div>
                     </div>
 
