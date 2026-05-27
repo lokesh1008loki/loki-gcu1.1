@@ -735,6 +735,11 @@ export default function MultiServiceLandingPage() {
                       {/* Submit Button */}
                       <Button 
                         type="submit" 
+                        onClick={() => {
+                          if (typeof window !== 'undefined') {
+                            (window as any).rkp?.('event', 'LEAD');
+                          }
+                        }}
                         className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-6 rounded-lg text-lg shadow-md transition-all mt-4"
                       >
                         Submit Grocery Request
@@ -1018,6 +1023,11 @@ export default function MultiServiceLandingPage() {
                       {/* Submit Button */}
                       <Button
                         type="submit"
+                        onClick={() => {
+                          if (typeof window !== 'undefined') {
+                            (window as any).rkp?.('event', 'LEAD');
+                          }
+                        }}
                         className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-6 rounded-2xl text-lg shadow-lg hover:shadow-blue-500/20 transition-all flex items-center justify-center gap-2 mt-4"
                       >
                         <span>Book Tickets Now</span>
