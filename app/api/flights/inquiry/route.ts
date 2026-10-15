@@ -45,14 +45,57 @@ export async function POST(req: NextRequest) {
       flightData,
     } = body;
 
-    // Basic Validation
-    if (!contactFirstName || !contactLastName || !phoneNumber) {
+    // 1. Validate Primary Contact First and Last Names
+    const nameRegex = /^[a-zA-ZÀ-ÿ\s'-]+$/;
+    if (!contactFirstName || !contactFirstName.trim()) {
+      return NextResponse.json({ error: "Contact First Name is required." }, { status: 400 });
+    }
+    if (contactFirstName.trim().length < 2) {
+      return NextResponse.json({ error: "Contact First Name must be at least 2 characters." }, { status: 400 });
+    }
+    if (!nameRegex.test(contactFirstName.trim())) {
+      return NextResponse.json({ error: "Contact First Name can only contain letters, spaces, or hyphens." }, { status: 400 });
+    }
+
+    if (!contactLastName || !contactLastName.trim()) {
+      return NextResponse.json({ error: "Contact Last Name is required." }, { status: 400 });
+    }
+    if (contactLastName.trim().length < 2) {
+      return NextResponse.json({ error: "Contact Last Name must be at least 2 characters." }, { status: 400 });
+    }
+    if (!nameRegex.test(contactLastName.trim())) {
+      return NextResponse.json({ error: "Contact Last Name can only contain letters, spaces, or hyphens." }, { status: 400 });
+    }
+
+    // 2. Validate WhatsApp / Phone Number (10 to 15 numeric digits, no obvious dummy sequences)
+    const phoneTrimmed = (phoneNumber || "").trim();
+    const phoneDigits = phoneTrimmed.replace(/\D/g, "");
+    if (!phoneDigits || phoneDigits.length < 10 || phoneDigits.length > 15) {
       return NextResponse.json(
-        { error: "Contact name and phone number are required." },
+        { error: "Please enter a valid phone or WhatsApp number (10 to 15 digits)." },
+        { status: 400 }
+      );
+    }
+    const fakeSequences = ["0000000000", "1111111111", "2222222222", "3333333333", "4444444444", "5555555555", "1234567890"];
+    if (fakeSequences.some((seq) => phoneDigits.includes(seq))) {
+      return NextResponse.json(
+        { error: "Please enter a real, active mobile or WhatsApp phone number." },
         { status: 400 }
       );
     }
 
+    // 3. Validate Email Address (Optional, but if supplied must be a valid RFC format)
+    if (email && email.trim()) {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(email.trim())) {
+        return NextResponse.json(
+          { error: "Please enter a valid email address (e.g. name@domain.com)." },
+          { status: 400 }
+        );
+      }
+    }
+
+    // 4. Validate Traveler Identification & Passenger List
     if (!passengers || !Array.isArray(passengers) || passengers.length === 0) {
       return NextResponse.json(
         { error: "At least one traveler's information is required." },
@@ -60,26 +103,92 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Validate DOB format (MM/DD/YYYY) for each passenger
-    const dobRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/(19|20)\d{2}$/;
+    const today = new Date();
     for (const [index, p] of passengers.entries()) {
-      if (!p.fullNameAsPerId || p.fullNameAsPerId.trim().length < 2) {
+      const pNum = index + 1;
+      const fullName = (p.fullNameAsPerId || "").trim();
+      
+      // Full Legal Name validation (minimum 2 words: First + Last Name as required by airlines)
+      if (!fullName || fullName.length < 3) {
         return NextResponse.json(
-          { error: `Traveler #${index + 1}: Please enter full name as per Valid ID.` },
+          { error: `Traveler #${pNum}: Please enter full legal name as printed on Valid Government ID.` },
           { status: 400 }
         );
       }
-      if (!p.dob || !dobRegex.test(p.dob.trim())) {
+      if (!nameRegex.test(fullName)) {
         return NextResponse.json(
-          { error: `Traveler #${index + 1} (${p.fullNameAsPerId}): DOB must be in valid MM/DD/YYYY format.` },
+          { error: `Traveler #${pNum} (${fullName}): Name can only contain letters, spaces, hyphens, or apostrophes.` },
           { status: 400 }
         );
       }
-      if (p.passengerType === "CHILD") {
-        const age = Number(p.childAge)
-        if (p.childAge === null || p.childAge === undefined || !Number.isInteger(age) || age < 0 || age > 17) {
+      const nameParts = fullName.split(/\s+/).filter(Boolean);
+      if (nameParts.length < 2) {
+        return NextResponse.json(
+          { error: `Traveler #${pNum} (${fullName}): Airlines require both First and Last Name as shown on Valid ID.` },
+          { status: 400 }
+        );
+      }
+
+      // Date of Birth format & calendar calendar day validation (MM/DD/YYYY)
+      const dobStr = (p.dob || "").trim();
+      const dobMatch = dobStr.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+      if (!dobMatch) {
+        return NextResponse.json(
+          { error: `Traveler #${pNum} (${fullName}): DOB must be in valid MM/DD/YYYY format (e.g. 10/14/1989).` },
+          { status: 400 }
+        );
+      }
+      const mm = parseInt(dobMatch[1], 10);
+      const dd = parseInt(dobMatch[2], 10);
+      const yyyy = parseInt(dobMatch[3], 10);
+
+      if (mm < 1 || mm > 12) {
+        return NextResponse.json(
+          { error: `Traveler #${pNum} (${fullName}): Invalid birth month (${mm}). Must be between 01 and 12.` },
+          { status: 400 }
+        );
+      }
+      const daysInMonth = new Date(yyyy, mm, 0).getDate();
+      if (dd < 1 || dd > daysInMonth) {
+        return NextResponse.json(
+          { error: `Traveler #${pNum} (${fullName}): Invalid day (${dd}) for month ${mm}. Maximum days is ${daysInMonth}.` },
+          { status: 400 }
+        );
+      }
+      if (yyyy < 1905 || yyyy > today.getFullYear()) {
+        return NextResponse.json(
+          { error: `Traveler #${pNum} (${fullName}): Birth year must be between 1905 and ${today.getFullYear()}.` },
+          { status: 400 }
+        );
+      }
+
+      const birthDate = new Date(yyyy, mm - 1, dd);
+      if (birthDate > today) {
+        return NextResponse.json(
+          { error: `Traveler #${pNum} (${fullName}): Date of birth cannot be in the future.` },
+          { status: 400 }
+        );
+      }
+
+      // Exact age calculation
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const mDiff = today.getMonth() - birthDate.getMonth();
+      if (mDiff < 0 || (mDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+
+      // Age category check: ADULT must be 18+, CHILD must be 0-17
+      if (p.passengerType === "ADULT") {
+        if (age < 18) {
           return NextResponse.json(
-            { error: `Traveler #${index + 1} (${p.fullNameAsPerId}): child age must be between 0 and 17.` },
+            { error: `Traveler #${pNum} (${fullName}): Booked as an Adult (18+), but date of birth indicates age ${age}. Adults must be at least 18 years old.` },
+            { status: 400 }
+          );
+        }
+      } else if (p.passengerType === "CHILD") {
+        if (age < 0 || age > 17) {
+          return NextResponse.json(
+            { error: `Traveler #${pNum} (${fullName}): Booked as a Child (0-17), but date of birth indicates age ${age}. Children must be 17 or younger.` },
             { status: 400 }
           );
         }

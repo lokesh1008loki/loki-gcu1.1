@@ -531,6 +531,75 @@ function AirlineLogo({
   )
 }
 
+// --- Input Validation Helpers ---
+export function validateContactName(name: string, label: string): string | null {
+  const clean = (name || "").trim()
+  if (!clean) return `${label} is required.`
+  if (clean.length < 2) return `${label} must be at least 2 characters.`
+  if (!/^[a-zA-ZÀ-ÿ\s'-]+$/.test(clean)) return `${label} can only contain letters, spaces, or hyphens.`
+  return null
+}
+
+export function validatePhone(phone: string): string | null {
+  const clean = (phone || "").trim()
+  if (!clean) return "WhatsApp or Phone number is required."
+  const digits = clean.replace(/\D/g, "")
+  if (digits.length < 10) return "Phone number must have at least 10 digits."
+  if (digits.length > 15) return "Phone number cannot exceed 15 digits."
+  const fakeSequences = ["0000000000", "1111111111", "2222222222", "3333333333", "4444444444", "5555555555", "1234567890"]
+  if (fakeSequences.some((s) => digits.includes(s))) return "Please enter a real, active mobile or WhatsApp phone number."
+  return null
+}
+
+export function validateEmailField(email: string): string | null {
+  const clean = (email || "").trim()
+  if (!clean) return null // optional
+  if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(clean)) {
+    return "Please enter a valid email address (e.g. name@domain.com)."
+  }
+  return null
+}
+
+export function validateTravelerName(name: string, travelerIndex: number): string | null {
+  const clean = (name || "").trim()
+  if (!clean) return `Traveler #${travelerIndex}: Full Legal Name as printed on Valid ID is required.`
+  if (clean.length < 3) return `Traveler #${travelerIndex}: Name must be at least 3 characters.`
+  if (!/^[a-zA-ZÀ-ÿ\s'-]+$/.test(clean)) return `Traveler #${travelerIndex}: Name can only contain letters, spaces, or hyphens.`
+  const parts = clean.split(/\s+/).filter(Boolean)
+  if (parts.length < 2) return `Traveler #${travelerIndex}: Airlines require both First and Last Name as on Valid ID.`
+  return null
+}
+
+export function validateTravelerDob(dob: string, passengerType: "ADULT" | "CHILD", travelerIndex: number): string | null {
+  const clean = (dob || "").trim()
+  if (!clean) return `Traveler #${travelerIndex}: Date of birth is required.`
+  const match = clean.match(/^(\d{2})\/(\d{2})\/(\d{4})$/)
+  if (!match) return `Traveler #${travelerIndex}: DOB must be in MM/DD/YYYY format (e.g. 10/14/1989).`
+  const mm = parseInt(match[1], 10)
+  const dd = parseInt(match[2], 10)
+  const yyyy = parseInt(match[3], 10)
+  if (mm < 1 || mm > 12) return `Traveler #${travelerIndex}: Invalid birth month (${mm}). Must be 01 to 12.`
+  const daysInMonth = new Date(yyyy, mm, 0).getDate()
+  if (dd < 1 || dd > daysInMonth) return `Traveler #${travelerIndex}: Invalid day (${dd}) for month ${mm}. Maximum is ${daysInMonth}.`
+  const today = new Date()
+  if (yyyy < 1905 || yyyy > today.getFullYear()) return `Traveler #${travelerIndex}: Birth year must be between 1905 and ${today.getFullYear()}.`
+  const birthDate = new Date(yyyy, mm - 1, dd)
+  if (birthDate > today) return `Traveler #${travelerIndex}: Date of birth cannot be in the future.`
+
+  let age = today.getFullYear() - birthDate.getFullYear()
+  const m = today.getMonth() - birthDate.getMonth()
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--
+  }
+
+  if (passengerType === "ADULT") {
+    if (age < 18) return `Traveler #${travelerIndex}: Booked as Adult (18+), but date of birth indicates age ${age}. Adults must be at least 18 years old.`
+  } else if (passengerType === "CHILD") {
+    if (age < 0 || age > 17) return `Traveler #${travelerIndex}: Booked as Child (0-17), but date of birth indicates age ${age}. Children must be 17 or younger.`
+  }
+  return null
+}
+
 export default function FlightBookingFlow() {
   const today = React.useMemo(() => formatYMD(new Date()), [])
   const defaultDepart = React.useMemo(() => {
@@ -632,6 +701,12 @@ export default function FlightBookingFlow() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [inquirySuccess, setInquirySuccess] = useState<any | null>(null)
   const [formError, setFormError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
+
+  const markFieldTouched = (field: string) => {
+    setTouched((prev) => ({ ...prev, [field]: true }))
+  }
 
   const totalPassengers = adults + children
 
@@ -787,12 +862,23 @@ export default function FlightBookingFlow() {
     setPassengersList((prev) =>
       prev.map((p, idx) => (idx === index ? { ...p, dob: formatted } : p))
     )
+
+    if (touched[`traveler_${index}_dob`]) {
+      const p = passengersList[index]
+      const err = validateTravelerDob(formatted, p?.passengerType || "ADULT", index + 1)
+      setFieldErrors((prev) => ({ ...prev, [`traveler_${index}_dob`]: err || "" }))
+    }
   }
 
   const handlePassengerNameChange = (index: number, name: string) => {
     setPassengersList((prev) =>
       prev.map((p, idx) => (idx === index ? { ...p, fullNameAsPerId: name } : p))
     )
+
+    if (touched[`traveler_${index}_name`]) {
+      const err = validateTravelerName(name, index + 1)
+      setFieldErrors((prev) => ({ ...prev, [`traveler_${index}_name`]: err || "" }))
+    }
   }
 
   const handleGenderChange = (index: number, gender: "MALE" | "FEMALE" | "OTHER") => {
@@ -915,22 +1001,46 @@ export default function FlightBookingFlow() {
       return
     }
 
-    if (!contactFirstName.trim() || !contactLastName.trim() || !phoneNumber.trim()) {
-      setFormError("Please fill out all contact details (First Name, Last Name, Phone Number).")
-      return
-    }
+    // Comprehensive validation across all inputs
+    const errors: Record<string, string> = {}
+    const fnErr = validateContactName(contactFirstName, "Contact First Name")
+    if (fnErr) errors.contactFirstName = fnErr
 
-    const dobPattern = /^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/(19|20)\d{2}$/
+    const lnErr = validateContactName(contactLastName, "Contact Last Name")
+    if (lnErr) errors.contactLastName = lnErr
+
+    const phErr = validatePhone(phoneNumber)
+    if (phErr) errors.phoneNumber = phErr
+
+    const emErr = validateEmailField(email)
+    if (emErr) errors.email = emErr
+
     for (let i = 0; i < passengersList.length; i++) {
       const p = passengersList[i]
-      if (!p.fullNameAsPerId.trim()) {
-        setFormError(`Traveler #${i + 1}: Please enter Full Legal Name as printed on Valid ID.`)
-        return
+      const nameErr = validateTravelerName(p.fullNameAsPerId, i + 1)
+      if (nameErr) errors[`traveler_${i}_name`] = nameErr
+
+      const dobErr = validateTravelerDob(p.dob, p.passengerType, i + 1)
+      if (dobErr) errors[`traveler_${i}_dob`] = dobErr
+    }
+
+    if (Object.keys(errors).length > 0) {
+      const allTouched: Record<string, boolean> = {
+        contactFirstName: true,
+        contactLastName: true,
+        phoneNumber: true,
+        email: true,
       }
-      if (!dobPattern.test(p.dob)) {
-        setFormError(`Traveler #${i + 1} (${p.fullNameAsPerId}): DOB must be in valid MM/DD/YYYY format.`)
-        return
-      }
+      passengersList.forEach((_, i) => {
+        allTouched[`traveler_${i}_name`] = true
+        allTouched[`traveler_${i}_dob`] = true
+      })
+      setTouched(allTouched)
+      setFieldErrors(errors)
+      const firstErr = Object.values(errors)[0]
+      setFormError(firstErr)
+      toast.error(firstErr)
+      return
     }
 
     setIsSubmitting(true)
@@ -1990,9 +2100,27 @@ export default function FlightBookingFlow() {
                       id="contactFirstName"
                       required
                       value={contactFirstName}
-                      onChange={(e) => setContactFirstName(e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value
+                        setContactFirstName(val)
+                        if (touched.contactFirstName) {
+                          setFieldErrors((prev) => ({ ...prev, contactFirstName: validateContactName(val, "Contact First Name") || "" }))
+                        }
+                      }}
+                      onBlur={() => {
+                        markFieldTouched("contactFirstName")
+                        const err = validateContactName(contactFirstName, "Contact First Name")
+                        setFieldErrors((prev) => ({ ...prev, contactFirstName: err || "" }))
+                      }}
                       placeholder="e.g. John"
+                      className={touched.contactFirstName && fieldErrors.contactFirstName ? "border-red-500 ring-1 ring-red-500 bg-red-50/20" : ""}
                     />
+                    {touched.contactFirstName && fieldErrors.contactFirstName && (
+                      <p className="text-[11px] text-red-600 dark:text-red-400 font-medium flex items-center gap-1 mt-1">
+                        <AlertCircle className="h-3 w-3 shrink-0" />
+                        <span>{fieldErrors.contactFirstName}</span>
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-1.5">
@@ -2001,9 +2129,27 @@ export default function FlightBookingFlow() {
                       id="contactLastName"
                       required
                       value={contactLastName}
-                      onChange={(e) => setContactLastName(e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value
+                        setContactLastName(val)
+                        if (touched.contactLastName) {
+                          setFieldErrors((prev) => ({ ...prev, contactLastName: validateContactName(val, "Contact Last Name") || "" }))
+                        }
+                      }}
+                      onBlur={() => {
+                        markFieldTouched("contactLastName")
+                        const err = validateContactName(contactLastName, "Contact Last Name")
+                        setFieldErrors((prev) => ({ ...prev, contactLastName: err || "" }))
+                      }}
                       placeholder="e.g. Doe"
+                      className={touched.contactLastName && fieldErrors.contactLastName ? "border-red-500 ring-1 ring-red-500 bg-red-50/20" : ""}
                     />
+                    {touched.contactLastName && fieldErrors.contactLastName && (
+                      <p className="text-[11px] text-red-600 dark:text-red-400 font-medium flex items-center gap-1 mt-1">
+                        <AlertCircle className="h-3 w-3 shrink-0" />
+                        <span>{fieldErrors.contactLastName}</span>
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-1.5">
@@ -2013,9 +2159,27 @@ export default function FlightBookingFlow() {
                       type="tel"
                       required
                       value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value
+                        setPhoneNumber(val)
+                        if (touched.phoneNumber) {
+                          setFieldErrors((prev) => ({ ...prev, phoneNumber: validatePhone(val) || "" }))
+                        }
+                      }}
+                      onBlur={() => {
+                        markFieldTouched("phoneNumber")
+                        const err = validatePhone(phoneNumber)
+                        setFieldErrors((prev) => ({ ...prev, phoneNumber: err || "" }))
+                      }}
                       placeholder="+1 (555) 000-0000"
+                      className={touched.phoneNumber && fieldErrors.phoneNumber ? "border-red-500 ring-1 ring-red-500 bg-red-50/20" : ""}
                     />
+                    {touched.phoneNumber && fieldErrors.phoneNumber && (
+                      <p className="text-[11px] text-red-600 dark:text-red-400 font-medium flex items-center gap-1 mt-1">
+                        <AlertCircle className="h-3 w-3 shrink-0" />
+                        <span>{fieldErrors.phoneNumber}</span>
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-1.5">
@@ -2024,9 +2188,27 @@ export default function FlightBookingFlow() {
                       id="email"
                       type="email"
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value
+                        setEmail(val)
+                        if (touched.email) {
+                          setFieldErrors((prev) => ({ ...prev, email: validateEmailField(val) || "" }))
+                        }
+                      }}
+                      onBlur={() => {
+                        markFieldTouched("email")
+                        const err = validateEmailField(email)
+                        setFieldErrors((prev) => ({ ...prev, email: err || "" }))
+                      }}
                       placeholder="john.doe@example.com"
+                      className={touched.email && fieldErrors.email ? "border-red-500 ring-1 ring-red-500 bg-red-50/20" : ""}
                     />
+                    {touched.email && fieldErrors.email && (
+                      <p className="text-[11px] text-red-600 dark:text-red-400 font-medium flex items-center gap-1 mt-1">
+                        <AlertCircle className="h-3 w-3 shrink-0" />
+                        <span>{fieldErrors.email}</span>
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -2065,9 +2247,20 @@ export default function FlightBookingFlow() {
                             required
                             value={passenger.fullNameAsPerId}
                             onChange={(e) => handlePassengerNameChange(idx, e.target.value)}
+                            onBlur={() => {
+                              markFieldTouched(`traveler_${idx}_name`)
+                              const err = validateTravelerName(passenger.fullNameAsPerId, idx + 1)
+                              setFieldErrors((prev) => ({ ...prev, [`traveler_${idx}_name`]: err || "" }))
+                            }}
                             placeholder="First Middle Last"
-                            className="bg-white dark:bg-slate-950"
+                            className={`bg-white dark:bg-slate-950 ${touched[`traveler_${idx}_name`] && fieldErrors[`traveler_${idx}_name`] ? "border-red-500 ring-1 ring-red-500 bg-red-50/20" : ""}`}
                           />
+                          {touched[`traveler_${idx}_name`] && fieldErrors[`traveler_${idx}_name`] && (
+                            <p className="text-[11px] text-red-600 dark:text-red-400 font-medium flex items-center gap-1 mt-1">
+                              <AlertCircle className="h-3 w-3 shrink-0" />
+                              <span>{fieldErrors[`traveler_${idx}_name`]}</span>
+                            </p>
+                          )}
                         </div>
 
                         <div className="space-y-1">
@@ -2077,9 +2270,20 @@ export default function FlightBookingFlow() {
                             maxLength={10}
                             value={passenger.dob}
                             onChange={(e) => handleDobChange(idx, e.target.value)}
+                            onBlur={() => {
+                              markFieldTouched(`traveler_${idx}_dob`)
+                              const err = validateTravelerDob(passenger.dob, passenger.passengerType, idx + 1)
+                              setFieldErrors((prev) => ({ ...prev, [`traveler_${idx}_dob`]: err || "" }))
+                            }}
                             placeholder="MM/DD/YYYY"
-                            className="bg-white dark:bg-slate-950 font-mono"
+                            className={`bg-white dark:bg-slate-950 font-mono ${touched[`traveler_${idx}_dob`] && fieldErrors[`traveler_${idx}_dob`] ? "border-red-500 ring-1 ring-red-500 bg-red-50/20" : ""}`}
                           />
+                          {touched[`traveler_${idx}_dob`] && fieldErrors[`traveler_${idx}_dob`] && (
+                            <p className="text-[11px] text-red-600 dark:text-red-400 font-medium flex items-center gap-1 mt-1">
+                              <AlertCircle className="h-3 w-3 shrink-0" />
+                              <span>{fieldErrors[`traveler_${idx}_dob`]}</span>
+                            </p>
+                          )}
                         </div>
 
                         <div className="space-y-1">
