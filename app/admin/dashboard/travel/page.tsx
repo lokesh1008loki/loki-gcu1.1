@@ -17,8 +17,10 @@ import {
   Eye, 
   ArrowRight,
   Luggage,
-  MessageSquare
+  MessageSquare,
+  RotateCcw
 } from "lucide-react";
+import { getAirlineLogo } from "@/components/FlightBookingFlow";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -506,64 +508,106 @@ export default function AdminTravelInquiriesPage() {
                   </div>
 
                   {/* Outbound Leg */}
-                  <div className="bg-white p-3 rounded-md border border-gray-200 shadow-xs">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold text-blue-600 flex items-center gap-1.5">
-                        <Plane className="h-3.5 w-3.5" />
-                        Outbound Flight ({selectedInquiry.origin} ➔ {selectedInquiry.destination})
-                      </span>
-                      <span className="text-[11px] font-mono font-semibold text-gray-600 bg-gray-100 px-2 py-0.5 rounded">
+                  <div className="bg-white p-3.5 rounded-lg border border-slate-200 shadow-xs">
+                    <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-dashed border-slate-200">
+                      <div className="flex items-center gap-2">
+                        {getAirlineLogo(selectedInquiry.selectedAirline) && (
+                          <img 
+                            src={getAirlineLogo(selectedInquiry.selectedAirline)!} 
+                            alt={selectedInquiry.selectedAirline} 
+                            className="h-5 w-auto object-contain" 
+                          />
+                        )}
+                        <div>
+                          <span className="text-xs font-bold text-slate-900 block">
+                            Outbound: {selectedInquiry.selectedAirline} {selectedInquiry.flightNumber ? `· Flight ${selectedInquiry.flightNumber}` : ""}
+                          </span>
+                          <span className="text-[10px] text-gray-500 font-mono">
+                            {selectedInquiry.origin} ➔ {selectedInquiry.destination}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-[11px] font-mono font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded">
                         {selectedInquiry.departDate}
                       </span>
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                       <div>
-                        <span className="text-gray-400 block text-[10px]">Airline & Flight #:</span>
-                        <span className="font-semibold text-gray-900">{selectedInquiry.selectedAirline} · {selectedInquiry.flightNumber || "Flight Option"}</span>
+                        <span className="text-gray-400 block text-[10px] uppercase font-bold">Flight Times:</span>
+                        <div className="font-extrabold text-sm text-gray-900 flex items-center gap-1.5 mt-0.5">
+                          <span>{selectedInquiry.departureTime || "TBD"}</span>
+                          <span className="text-xs text-gray-400 font-mono">({selectedInquiry.origin})</span>
+                          <ArrowRight className="h-3 w-3 text-gray-400 shrink-0" />
+                          <span>{selectedInquiry.arrivalTime || "TBD"}</span>
+                          <span className="text-xs text-gray-400 font-mono">({selectedInquiry.destination})</span>
+                        </div>
                       </div>
                       <div>
-                        <span className="text-gray-400 block text-[10px]">Flight Times:</span>
-                        <span className="font-semibold text-gray-900">{selectedInquiry.departureTime || "TBD"} ➔ {selectedInquiry.arrivalTime || "TBD"}</span>
+                        <span className="text-gray-400 block text-[10px] uppercase font-bold">Duration & Stops:</span>
+                        <div className="font-semibold text-gray-800 flex items-center gap-1 mt-0.5">
+                          <Clock className="h-3.5 w-3.5 text-gray-400" />
+                          <span>{selectedInquiry.duration || "Direct"} · {selectedInquiry.stops || "Direct"}</span>
+                        </div>
                       </div>
                       <div>
-                        <span className="text-gray-400 block text-[10px]">Duration & Stops:</span>
-                        <span className="font-semibold text-gray-900">{selectedInquiry.duration || "Direct"} · {selectedInquiry.stops}</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-400 block text-[10px]">Baggage:</span>
-                        <span className="font-semibold text-emerald-700">{selectedInquiry.baggage || "1 personal item included"}</span>
+                        <span className="text-gray-400 block text-[10px] uppercase font-bold">Baggage & Cabin:</span>
+                        <div className="font-medium text-emerald-700 flex items-center gap-1 mt-0.5">
+                          <Luggage className="h-3.5 w-3.5 text-emerald-600" />
+                          <span className="truncate">{selectedInquiry.baggage || "1 personal item included"} ({selectedInquiry.cabinClass})</span>
+                        </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Return Leg (if round trip) */}
                   {selectedInquiry.tripType === "ROUNDTRIP" && (
-                    <div className="bg-white p-3 rounded-md border border-blue-200 bg-blue-50/20 shadow-xs">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-bold text-blue-700 flex items-center gap-1.5">
-                          <RotateCcw className="h-3.5 w-3.5 text-blue-600" />
-                          Return Flight ({selectedInquiry.returnOrigin || selectedInquiry.destination} ➔ {selectedInquiry.returnDestination || selectedInquiry.origin})
-                        </span>
-                        <span className="text-[11px] font-mono font-semibold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
+                    <div className="bg-white p-3.5 rounded-lg border border-blue-200 bg-blue-50/20 shadow-xs">
+                      <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-dashed border-blue-200">
+                        <div className="flex items-center gap-2">
+                          {getAirlineLogo(selectedInquiry.returnAirline || selectedInquiry.selectedAirline) && (
+                            <img 
+                              src={getAirlineLogo(selectedInquiry.returnAirline || selectedInquiry.selectedAirline)!} 
+                              alt={selectedInquiry.returnAirline || selectedInquiry.selectedAirline} 
+                              className="h-5 w-auto object-contain" 
+                            />
+                          )}
+                          <div>
+                            <span className="text-xs font-bold text-blue-900 block">
+                              Return: {selectedInquiry.returnAirline || selectedInquiry.selectedAirline} {selectedInquiry.returnFlightNumber ? `· Flight ${selectedInquiry.returnFlightNumber}` : ""}
+                            </span>
+                            <span className="text-[10px] text-blue-600 font-mono">
+                              {selectedInquiry.returnOrigin || selectedInquiry.destination} ➔ {selectedInquiry.returnDestination || selectedInquiry.origin}
+                            </span>
+                          </div>
+                        </div>
+                        <span className="text-[11px] font-mono font-bold text-blue-800 bg-blue-100 border border-blue-300 px-2 py-0.5 rounded">
                           {selectedInquiry.returnDate || "Return Date"}
                         </span>
                       </div>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                         <div>
-                          <span className="text-gray-400 block text-[10px]">Airline & Flight #:</span>
-                          <span className="font-semibold text-gray-900">{selectedInquiry.returnAirline || selectedInquiry.selectedAirline} · {selectedInquiry.returnFlightNumber || "Return Flight"}</span>
+                          <span className="text-blue-500 block text-[10px] uppercase font-bold">Flight Times:</span>
+                          <div className="font-extrabold text-sm text-blue-950 flex items-center gap-1.5 mt-0.5">
+                            <span>{selectedInquiry.returnDepartureTime || "12:00 PM"}</span>
+                            <span className="text-xs text-blue-600 font-mono">({selectedInquiry.returnOrigin || selectedInquiry.destination})</span>
+                            <ArrowRight className="h-3 w-3 text-blue-400 shrink-0" />
+                            <span>{selectedInquiry.returnArrivalTime || "3:00 PM"}</span>
+                            <span className="text-xs text-blue-600 font-mono">({selectedInquiry.returnDestination || selectedInquiry.origin})</span>
+                          </div>
                         </div>
                         <div>
-                          <span className="text-gray-400 block text-[10px]">Flight Times:</span>
-                          <span className="font-semibold text-gray-900">{selectedInquiry.returnDepartureTime || "12:00 PM"} ➔ {selectedInquiry.returnArrivalTime || "3:00 PM"}</span>
+                          <span className="text-blue-500 block text-[10px] uppercase font-bold">Duration & Stops:</span>
+                          <div className="font-semibold text-blue-900 flex items-center gap-1 mt-0.5">
+                            <Clock className="h-3.5 w-3.5 text-blue-500" />
+                            <span>{selectedInquiry.returnDuration || selectedInquiry.duration || "Direct"} · {selectedInquiry.returnStops || "Direct"}</span>
+                          </div>
                         </div>
                         <div>
-                          <span className="text-gray-400 block text-[10px]">Duration & Stops:</span>
-                          <span className="font-semibold text-gray-900">{selectedInquiry.returnDuration || selectedInquiry.duration || "N/A"} · {selectedInquiry.returnStops || "Direct"}</span>
-                        </div>
-                        <div>
-                          <span className="text-gray-400 block text-[10px]">Baggage:</span>
-                          <span className="font-semibold text-emerald-700">{selectedInquiry.baggage || "1 personal item included"}</span>
+                          <span className="text-blue-500 block text-[10px] uppercase font-bold">Baggage & Cabin:</span>
+                          <div className="font-medium text-emerald-700 flex items-center gap-1 mt-0.5">
+                            <Luggage className="h-3.5 w-3.5 text-emerald-600" />
+                            <span className="truncate">{selectedInquiry.baggage || "1 personal item included"} ({selectedInquiry.cabinClass})</span>
+                          </div>
                         </div>
                       </div>
                     </div>
