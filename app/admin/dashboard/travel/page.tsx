@@ -88,14 +88,21 @@ export default function AdminTravelInquiriesPage() {
   const [updatingStatus, setUpdatingStatus] = useState(false);
   const [adminNoteInput, setAdminNoteInput] = useState("");
 
-  const fetchInquiries = async () => {
+  const fetchInquiries = async (showLoadingSpinner = true) => {
     try {
-      setLoading(true);
+      if (showLoadingSpinner) setLoading(true);
       const params = new URLSearchParams();
       if (statusFilter !== "ALL") params.append("status", statusFilter);
       if (search.trim()) params.append("search", search.trim());
+      params.append("_t", Date.now().toString());
 
-      const res = await fetch(`/api/admin/flights/inquiries?${params.toString()}`);
+      const res = await fetch(`/api/admin/flights/inquiries?${params.toString()}`, {
+        cache: "no-store",
+        headers: {
+          "Pragma": "no-cache",
+          "Cache-Control": "no-cache",
+        },
+      });
       if (res.ok) {
         const data = await res.json();
         setInquiries(data.inquiries || []);
@@ -103,17 +110,24 @@ export default function AdminTravelInquiriesPage() {
     } catch (err) {
       console.error("Error fetching inquiries:", err);
     } finally {
-      setLoading(false);
+      if (showLoadingSpinner) setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchInquiries();
+    fetchInquiries(true);
+
+    // Auto-refresh every 8 seconds so newly submitted flight quotes appear automatically without manual reloads
+    const interval = setInterval(() => {
+      fetchInquiries(false);
+    }, 8000);
+
+    return () => clearInterval(interval);
   }, [statusFilter]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    fetchInquiries();
+    fetchInquiries(true);
   };
 
   const handleOpenDetail = (inquiry: FlightInquiry) => {
@@ -182,15 +196,21 @@ export default function AdminTravelInquiriesPage() {
             Real-time customer bookings, ID documents, traveler details, and 30% discount quote reconciliations.
           </p>
         </div>
-        <Button 
-          variant="outline" 
-          onClick={fetchInquiries} 
-          disabled={loading}
-          className="flex items-center gap-2 self-start md:self-auto"
-        >
-          <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
-          Refresh
-        </Button>
+        <div className="flex items-center gap-3 self-start md:self-auto">
+          <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+            Auto-refresh (8s)
+          </span>
+          <Button 
+            variant="outline" 
+            onClick={() => fetchInquiries(true)} 
+            disabled={loading}
+            className="flex items-center gap-2"
+          >
+            <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+            Refresh
+          </Button>
+        </div>
       </div>
 
       {/* KPI Stats Cards */}
