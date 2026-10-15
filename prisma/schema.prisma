@@ -134,7 +134,7 @@ model FlightInquiry {
   totalPassengers   Int                @default(1)
   quoteId           String?            // scraper pricing quote id, for reconciling actual partner commission
 
-  // Selected Flight Details
+  // Selected Flight Details (Outbound / Primary)
   selectedAirline   String
   flightNumber      String?
   departureTime     String?
@@ -142,6 +142,19 @@ model FlightInquiry {
   duration          String?
   stops             String             @default("Direct")
   baggage           String?
+
+  // Return Flight Details (Populated for Round-Trip Flights)
+  returnAirline       String?
+  returnFlightNumber  String?
+  returnDepartureTime String?
+  returnArrivalTime   String?
+  returnOrigin        String?
+  returnDestination   String?
+  returnDuration      String?
+  returnStops         String?
+
+  // Full Itinerary & Leg Details Snapshot (JSON)
+  flightData          String?
 
   // Pricing & 30% Slab Calculations
   scrapedBaseFare   Float

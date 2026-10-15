@@ -65,6 +65,15 @@ interface FlightInquiry {
   duration?: string | null;
   stops: string;
   baggage?: string | null;
+  returnAirline?: string | null;
+  returnFlightNumber?: string | null;
+  returnDepartureTime?: string | null;
+  returnArrivalTime?: string | null;
+  returnOrigin?: string | null;
+  returnDestination?: string | null;
+  returnDuration?: string | null;
+  returnStops?: string | null;
+  flightData?: string | null;
   scrapedBaseFare: number;
   regularMarketFare: number;
   discountPercent: number;
@@ -358,23 +367,32 @@ export default function AdminTravelInquiriesPage() {
                       )}
                     </td>
                     <td className="py-3.5 px-4">
-                      <div className="flex items-center gap-1.5 font-bold text-gray-900">
+                      <div className="flex items-center gap-1.5 font-bold text-gray-900 text-xs">
                         <span>{inquiry.origin}</span>
-                        <ArrowRight className="h-3.5 w-3.5 text-gray-400" />
+                        <ArrowRight className="h-3 w-3 text-gray-400" />
                         <span>{inquiry.destination}</span>
+                        <Badge variant="outline" className={`text-[10px] py-0 px-1.5 font-semibold ${inquiry.tripType === "ROUNDTRIP" ? "border-blue-400 text-blue-700 bg-blue-50" : "border-gray-300 text-gray-600 bg-gray-50"}`}>
+                          {inquiry.tripType === "ROUNDTRIP" ? "Round Trip" : "One Way"}
+                        </Badge>
                       </div>
-                      <div className="text-xs text-gray-500 font-medium">
-                        {inquiry.selectedAirline}
-                        {inquiry.flightNumber ? ` · ${inquiry.flightNumber}` : ""}
+                      <div className="text-[11px] text-gray-500 mt-0.5">
+                        {inquiry.selectedAirline} {inquiry.flightNumber ? `· ${inquiry.flightNumber}` : ""}
                       </div>
+                      {inquiry.tripType === "ROUNDTRIP" && (
+                        <div className="text-[10px] text-blue-600 font-medium mt-0.5 flex items-center gap-1">
+                          <RotateCcw className="h-2.5 w-2.5" />
+                          <span>Ret: {inquiry.returnOrigin || inquiry.destination} ➔ {inquiry.returnDestination || inquiry.origin} ({inquiry.returnFlightNumber || "Flight"})</span>
+                        </div>
+                      )}
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-1.5 text-xs font-medium text-gray-700">
                         <Calendar className="h-3.5 w-3.5 text-gray-400" />
                         {inquiry.departDate}
                       </div>
-                      {inquiry.returnDate && (
-                        <div className="text-xs text-gray-400 mt-0.5">
+                      {inquiry.tripType === "ROUNDTRIP" && inquiry.returnDate && (
+                        <div className="text-[11px] text-blue-600 mt-0.5 font-medium flex items-center gap-1">
+                          <RotateCcw className="h-2.5 w-2.5" />
                           Ret: {inquiry.returnDate}
                         </div>
                       )}
@@ -477,38 +495,91 @@ export default function AdminTravelInquiriesPage() {
                 </div>
 
                 {/* Flight & Pricing Summary */}
-                <div className="bg-gray-50 p-4 rounded-lg border">
-                  <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                    Flight Itinerary & Pricing (30% OFF Applied)
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                <div className="bg-gray-50 p-4 rounded-lg border space-y-4">
+                  <div className="flex items-center justify-between border-b pb-2">
+                    <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider">
+                      Selected Flight Itinerary ({selectedInquiry.tripType === "ROUNDTRIP" ? "Round Trip" : "One Way"})
+                    </h3>
+                    <Badge className={selectedInquiry.tripType === "ROUNDTRIP" ? "bg-blue-600 text-white" : "bg-emerald-600 text-white"}>
+                      {selectedInquiry.tripType === "ROUNDTRIP" ? "Round Trip (2 Legs)" : "One Way"}
+                    </Badge>
+                  </div>
+
+                  {/* Outbound Leg */}
+                  <div className="bg-white p-3 rounded-md border border-gray-200 shadow-xs">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-blue-600 flex items-center gap-1.5">
+                        <Plane className="h-3.5 w-3.5" />
+                        Outbound Flight ({selectedInquiry.origin} ➔ {selectedInquiry.destination})
+                      </span>
+                      <span className="text-[11px] font-mono font-semibold text-gray-600 bg-gray-100 px-2 py-0.5 rounded">
+                        {selectedInquiry.departDate}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                      <div>
+                        <span className="text-gray-400 block text-[10px]">Airline & Flight #:</span>
+                        <span className="font-semibold text-gray-900">{selectedInquiry.selectedAirline} · {selectedInquiry.flightNumber || "Flight Option"}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400 block text-[10px]">Flight Times:</span>
+                        <span className="font-semibold text-gray-900">{selectedInquiry.departureTime || "TBD"} ➔ {selectedInquiry.arrivalTime || "TBD"}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400 block text-[10px]">Duration & Stops:</span>
+                        <span className="font-semibold text-gray-900">{selectedInquiry.duration || "Direct"} · {selectedInquiry.stops}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400 block text-[10px]">Baggage:</span>
+                        <span className="font-semibold text-emerald-700">{selectedInquiry.baggage || "1 personal item included"}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Return Leg (if round trip) */}
+                  {selectedInquiry.tripType === "ROUNDTRIP" && (
+                    <div className="bg-white p-3 rounded-md border border-blue-200 bg-blue-50/20 shadow-xs">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-bold text-blue-700 flex items-center gap-1.5">
+                          <RotateCcw className="h-3.5 w-3.5 text-blue-600" />
+                          Return Flight ({selectedInquiry.returnOrigin || selectedInquiry.destination} ➔ {selectedInquiry.returnDestination || selectedInquiry.origin})
+                        </span>
+                        <span className="text-[11px] font-mono font-semibold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
+                          {selectedInquiry.returnDate || "Return Date"}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                        <div>
+                          <span className="text-gray-400 block text-[10px]">Airline & Flight #:</span>
+                          <span className="font-semibold text-gray-900">{selectedInquiry.returnAirline || selectedInquiry.selectedAirline} · {selectedInquiry.returnFlightNumber || "Return Flight"}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-400 block text-[10px]">Flight Times:</span>
+                          <span className="font-semibold text-gray-900">{selectedInquiry.returnDepartureTime || "12:00 PM"} ➔ {selectedInquiry.returnArrivalTime || "3:00 PM"}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-400 block text-[10px]">Duration & Stops:</span>
+                          <span className="font-semibold text-gray-900">{selectedInquiry.returnDuration || selectedInquiry.duration || "N/A"} · {selectedInquiry.returnStops || "Direct"}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-400 block text-[10px]">Baggage:</span>
+                          <span className="font-semibold text-emerald-700">{selectedInquiry.baggage || "1 personal item included"}</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Pricing Breakdown */}
+                  <div className="pt-2 border-t grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                     <div>
-                      <span className="text-gray-500 text-xs">Airline & Route:</span>
-                      <p className="font-semibold text-gray-900">
-                        {selectedInquiry.selectedAirline} ({selectedInquiry.origin} → {selectedInquiry.destination})
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {selectedInquiry.departureTime || ""} {selectedInquiry.stops} {selectedInquiry.duration ? `(${selectedInquiry.duration})` : ""}
+                      <span className="text-gray-500 block">Published Scraped vs Regular Market Fare:</span>
+                      <p className="font-medium text-gray-800">
+                        Scraped Base: ${selectedInquiry.scrapedBaseFare?.toFixed(2)} · Regular: ${selectedInquiry.regularMarketFare?.toFixed(2)}
                       </p>
                     </div>
                     <div>
-                      <span className="text-gray-500 text-xs">Travel Dates:</span>
-                      <p className="font-semibold text-gray-900">
-                        Depart: {selectedInquiry.departDate}
-                      </p>
-                      {selectedInquiry.returnDate && (
-                        <p className="text-xs text-gray-500">Return: {selectedInquiry.returnDate}</p>
-                      )}
-                    </div>
-                    <div>
-                      <span className="text-gray-500 text-xs">Scraped Fare vs Quotation Base:</span>
-                      <p className="font-medium text-gray-900 text-xs">
-                        Scraped Base: ${selectedInquiry.scrapedBaseFare?.toFixed(2)} · Regular Base: ${selectedInquiry.regularMarketFare?.toFixed(2)}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="text-gray-500 text-xs">Customer Final Payment:</span>
-                      <p className="text-lg font-bold text-emerald-600">
+                      <span className="text-gray-500 block">Customer Total (30% Discount Applied):</span>
+                      <p className="text-base font-extrabold text-emerald-600">
                         ${selectedInquiry.totalPrice?.toFixed(2)} <span className="text-xs text-gray-500 font-normal">(${selectedInquiry.finalFarePerPerson?.toFixed(2)}/traveler)</span>
                       </p>
                     </div>
