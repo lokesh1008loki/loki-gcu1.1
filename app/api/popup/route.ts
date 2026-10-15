@@ -17,7 +17,12 @@ export async function GET(request: Request) {
       
       // Get the current path from the referer header
       const referer = request.headers.get("referer") || ""
-      const path = new URL(referer).pathname || "/"
+      let path = "/"
+      try {
+        path = referer ? new URL(referer).pathname || "/" : "/"
+      } catch {
+        path = "/"
+      }
       console.log("Current path:", path)
       
       // First, let's check all popups to see what's in the database

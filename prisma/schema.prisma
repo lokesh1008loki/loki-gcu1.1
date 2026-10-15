@@ -112,4 +112,68 @@ model NavbarLink {
   subLinks  NavbarLink[] @relation("SubLinks")
 }
 
+model FlightInquiry {
+  id                String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  inquiryNumber     String             @unique
+  
+  // Primary Contact
+  contactFirstName  String
+  contactLastName   String
+  phoneNumber       String
+  email             String?
 
+  // Trip Specifications
+  origin            String
+  destination       String
+  departDate        String
+  returnDate        String?
+  tripType          String             @default("ONEWAY")
+  cabinClass        String             @default("ECONOMY")
+  adults            Int                @default(1)
+  children          Int                @default(0)
+  totalPassengers   Int                @default(1)
+  quoteId           String?            // scraper pricing quote id, for reconciling actual partner commission
+
+  // Selected Flight Details
+  selectedAirline   String
+  flightNumber      String?
+  departureTime     String?
+  arrivalTime       String?
+  duration          String?
+  stops             String             @default("Direct")
+  baggage           String?
+
+  // Pricing & 30% Slab Calculations
+  scrapedBaseFare   Float
+  regularMarketFare Float
+  discountPercent   Int                @default(30)
+  finalFarePerPerson Float
+  totalPrice        Float
+  currency          String             @default("USD")
+
+  // Passenger ID & DOB list
+  passengers        FlightPassenger[]
+
+  // Status & Notes
+  status            String             @default("PENDING")
+  customerNotes     String?
+  adminNotes        String?
+
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+model FlightPassenger {
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  inquiryId       String         @db.Uuid
+  inquiry         FlightInquiry  @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  
+  passengerIndex  Int
+  passengerType   String         @default("ADULT")
+  childAge        Int?           // age at time of flying (0-17), CHILD only
+  fullNameAsPerId String
+  dob             String
+  gender          String
+
+  createdAt       DateTime       @default(now())
+}

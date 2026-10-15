@@ -1,15 +1,17 @@
 "use client"
 
-import { useState } from "react"
+import { useState, Suspense } from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle, AlertCircle, Plane } from "lucide-react"
-import { Toaster } from "@/components/ui/sonner"
+import { CheckCircle, AlertCircle, Plane, Search, FileText, Sparkles } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
+import { Badge } from "@/components/ui/badge"
+import FlightBookingFlow from "@/components/FlightBookingFlow"
 
 export default function FlightBookingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -63,7 +65,6 @@ export default function FlightBookingPage() {
 
   const handleDepartureDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDepartureDate(e.target.value)
-    // If return date is before new departure date, clear it
     if (returnDate && e.target.value > returnDate) {
       setReturnDate("")
     }
@@ -75,7 +76,6 @@ export default function FlightBookingPage() {
 
   return (
     <>
-      <Toaster />
       <div className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="relative mb-12 rounded-lg overflow-hidden shadow-xl">
@@ -105,21 +105,60 @@ export default function FlightBookingPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
-            <div id="booking-section">
+            <div id="booking-section" className="space-y-6">
               <div>
-                <h1 className="text-3xl font-bold mb-2">Flight Research</h1>
-                  <p className="text-muted-foreground">Expertly plan your travel with GoComfort USA — offering professional research and optimized routes across the globe.</p>
+                <div className="flex items-center gap-2 mb-2">
+                  <Badge className="bg-primary/10 text-primary border-primary/20 text-xs font-bold uppercase tracking-wider">
+                    Airline Deals
+                  </Badge>
+                  <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-xs font-bold flex items-center gap-1">
+                    <Sparkles className="h-3 w-3" />
+                    Save 30% on Every Flight
+                  </Badge>
+                </div>
+                <h2 className="text-3xl font-extrabold tracking-tight mb-2">Flight Booking & Research</h2>
+                <p className="text-muted-foreground text-sm max-w-2xl">
+                  Search live airline fares with our guaranteed 30% savings applied, or submit a custom route request to our dedicated travel specialists.
+                </p>
               </div>
 
-              <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Plane className="h-5 w-5 mr-2 text-primary" />
-                      Flight Details
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <form className="space-y-4" onSubmit={handleSubmit}>
+              <Tabs defaultValue="live-search" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 p-1 h-12 bg-slate-100 dark:bg-slate-800/80 rounded-xl mb-6">
+                  <TabsTrigger 
+                    value="live-search" 
+                    className="rounded-lg text-sm font-bold flex items-center gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:text-primary data-[state=active]:shadow-sm"
+                  >
+                    <Search className="h-4 w-4 text-primary" />
+                    <span>Live Flight Search</span>
+                    <span className="hidden sm:inline-block px-1.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+                      30% OFF
+                    </span>
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="custom-inquiry" 
+                    className="rounded-lg text-sm font-bold flex items-center gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:text-primary data-[state=active]:shadow-sm"
+                  >
+                    <FileText className="h-4 w-4" />
+                    <span>Custom Route Inquiry</span>
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="live-search" className="mt-0 focus-visible:outline-none">
+                  <Suspense fallback={<div className="p-8 text-center text-sm text-muted-foreground animate-pulse">Loading live flight search...</div>}>
+                    <FlightBookingFlow />
+                  </Suspense>
+                </TabsContent>
+
+                <TabsContent value="custom-inquiry" className="mt-0 focus-visible:outline-none">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center">
+                        <Plane className="h-5 w-5 mr-2 text-primary" />
+                        Flight Details
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <form className="space-y-4" onSubmit={handleSubmit}>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="first-name">First Name *</Label>
@@ -275,10 +314,12 @@ export default function FlightBookingPage() {
                         </div>
                       )}
                     </form>
-                </CardContent>
-              </Card>
-            </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
           </div>
+        </div>
 
           <div className="space-y-6">
             <Card>

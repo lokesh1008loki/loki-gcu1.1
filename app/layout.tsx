@@ -189,7 +189,7 @@ export default async function RootLayout({
             return (
               <>
                 <Navbar />
-                <PerformanceOptimizer showMarquee={true} showPopup={true}>
+                <PerformanceOptimizer showMarquee={true} showPopup={false}>
                   {children}
                 </PerformanceOptimizer>
                 <Footer />
