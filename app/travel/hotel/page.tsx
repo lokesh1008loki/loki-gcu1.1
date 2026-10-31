@@ -239,12 +239,7 @@ export default function HotelBookingPage() {
 
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-xs font-semibold text-blue-200">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>Booking.com Live Partner Engine</span>
-              <span className="w-1 h-1 rounded-full bg-blue-400" />
-              <span className="text-emerald-400 font-bold">30% OFF APPLIED</span>
-            </div>
+            
 
             <div className="flex items-center gap-4 text-xs text-slate-300">
               <div className="flex items-center gap-1.5">
