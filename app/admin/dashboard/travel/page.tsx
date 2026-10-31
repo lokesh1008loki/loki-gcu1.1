@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { useEffect, useState } from "react";
 import { 
   Plane, 
@@ -212,6 +214,11 @@ export default function AdminTravelInquiriesPage() {
             <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
             Auto-refresh (8s)
           </span>
+          <Link href="/admin/dashboard/ikea">
+            <Button variant="outline" size="sm" className="flex items-center gap-1.5 text-xs text-amber-700 border-amber-300 hover:bg-amber-50">
+              <span>🛋️ View IKEA Orders</span>
+            </Button>
+          </Link>
           <Button 
             variant="outline" 
             onClick={() => fetchInquiries(true)} 
