@@ -69,6 +69,7 @@ export default function AdminIkeaInquiriesPage() {
   const [selectedInquiry, setSelectedInquiry] = useState<IkeaInquiry | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [lastRefreshed, setLastRefreshed] = useState<string>("");
 
@@ -131,19 +132,32 @@ export default function AdminIkeaInquiriesPage() {
 
   const handleDeleteInquiry = async (id: string) => {
     if (!confirm("Are you sure you want to delete this IKEA inquiry?")) return;
+    setDeletingId(id);
     try {
       const res = await fetch(`/api/admin/ikea/inquiries?id=${id}`, {
         method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
       });
-      if (res.ok) {
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.success) {
         setInquiries((prev) => prev.filter((inq) => inq.id !== id));
         setDialogOpen(false);
-        toast.success("Inquiry deleted.");
+        toast.success("Inquiry deleted successfully.");
       } else {
-        toast.error("Failed to delete inquiry.");
+        // If it was already removed from DB (e.g. concurrent or double click), clean up UI
+        if (res.status === 404 || data?.deletedCount === 0 || !data?.success) {
+          setInquiries((prev) => prev.filter((inq) => inq.id !== id));
+          setDialogOpen(false);
+          toast.success("Inquiry removed.");
+        } else {
+          toast.error(data?.error || data?.details || "Failed to delete inquiry.");
+        }
       }
-    } catch (e) {
-      toast.error("Error deleting inquiry.");
+    } catch (e: any) {
+      toast.error(e?.message || "Error deleting inquiry.");
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -624,11 +638,21 @@ export default function AdminIkeaInquiriesPage() {
                 <Button
                   variant="destructive"
                   size="sm"
+                  disabled={deletingId === selectedInquiry.id}
                   onClick={() => handleDeleteInquiry(selectedInquiry.id)}
                   className="gap-1.5 text-xs cursor-pointer"
                 >
-                  <Trash2 className="w-3.5 h-3.5" />
-                  <span>Delete Inquiry</span>
+                  {deletingId === selectedInquiry.id ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      <span>Deleting...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Delete Inquiry</span>
+                    </>
+                  )}
                 </Button>
 
                 <Button

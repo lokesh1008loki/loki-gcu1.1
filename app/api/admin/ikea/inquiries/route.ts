@@ -53,21 +53,33 @@ export async function PATCH(req: NextRequest) {
   }
 }
 
-// DELETE an inquiry
+// DELETE an inquiry (supports both query param ?id= and json body { id })
 export async function DELETE(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const id = searchParams.get("id");
+    let id = searchParams.get("id");
+
+    if (!id) {
+      try {
+        const body = await req.json();
+        id = body?.id;
+      } catch (_) {}
+    }
 
     if (!id) {
       return NextResponse.json({ error: "Inquiry ID is required" }, { status: 400 });
     }
 
-    await prisma.ikeaInquiry.delete({
+    // Use deleteMany for safe, idempotent deletion (avoids P2025 error on double clicks)
+    const result = await prisma.ikeaInquiry.deleteMany({
       where: { id },
     });
 
-    return NextResponse.json({ success: true, message: "Inquiry deleted" });
+    return NextResponse.json({
+      success: true,
+      message: "Inquiry deleted successfully",
+      deletedCount: result.count,
+    });
   } catch (error: any) {
     console.error("Admin delete IKEA inquiry error:", error);
     return NextResponse.json(
@@ -76,4 +88,3 @@ export async function DELETE(req: NextRequest) {
     );
   }
 }
-
