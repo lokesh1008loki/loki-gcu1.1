@@ -190,3 +190,28 @@ model FlightPassenger {
 
   createdAt       DateTime       @default(now())
 }
+
+
+model IkeaInquiry {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  inquiryNumber   String   @unique
+  customerName    String
+  phoneNumber     String
+  email           String?
+  itemNumber      String
+  productName     String
+  productType     String?
+  productUrl      String?
+  imageUrl        String?
+  ikeaPrice       Float
+  discountPercent Int      @default(30)
+  quotePrice      Float
+  serviceType     String   @default("DELIVERY")
+  storeLocation   String?
+  deliveryZip     String?
+  deliveryAddress String?
+  customerNotes   String?
+  status          String   @default("PENDING")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

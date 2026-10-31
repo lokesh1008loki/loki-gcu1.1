@@ -1,5 +1,5 @@
 const { Pool } = require('pg');
-require('dotenv').config();
+require('dotenv').config({ path: 'x:/gcu/.env' });
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -11,16 +11,22 @@ const pool = new Pool({
 async function unlockTables() {
   const client = await pool.connect();
   try {
-    console.log('Unlocking FlightInquiry schema...');
-    await client.query('ALTER TABLE "FlightInquiry" SET (schema_locked = false);');
-    console.log('FlightInquiry unlocked successfully!');
-
-    // Check if FlightPassenger is also locked or any other table
+    console.log('Unlocking tables...');
     try {
-      await client.query('ALTER TABLE "FlightPassenger" SET (schema_locked = false);');
-      console.log('FlightPassenger unlocked successfully!');
+      await client.query('ALTER TABLE IF EXISTS "FlightInquiry" SET (schema_locked = false);');
     } catch (e) {
-      console.log('FlightPassenger unlock info:', e.message);
+      console.log('FlightInquiry:', e.message);
+    }
+    try {
+      await client.query('ALTER TABLE IF EXISTS "FlightPassenger" SET (schema_locked = false);');
+    } catch (e) {
+      console.log('FlightPassenger:', e.message);
+    }
+    try {
+      await client.query('ALTER TABLE IF EXISTS "IkeaInquiry" SET (schema_locked = false);');
+      console.log('IkeaInquiry unlocked successfully!');
+    } catch (e) {
+      console.log('IkeaInquiry:', e.message);
     }
   } catch (error) {
     console.error('Error unlocking table:', error);
