@@ -28,6 +28,12 @@ async function unlockTables() {
     } catch (e) {
       console.log('IkeaInquiry:', e.message);
     }
+    try {
+      await client.query('ALTER TABLE IF EXISTS "HotelInquiry" SET (schema_locked = false);');
+      console.log('HotelInquiry unlocked successfully!');
+    } catch (e) {
+      console.log('HotelInquiry:', e.message);
+    }
   } catch (error) {
     console.error('Error unlocking table:', error);
   } finally {

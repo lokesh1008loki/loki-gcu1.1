@@ -207,6 +207,12 @@ export default function AdminIkeaInquiriesPage() {
             </Button>
           </Link>
 
+          <Link href="/admin/dashboard/hotels">
+            <Button variant="outline" size="sm" className="gap-1.5 cursor-pointer text-xs text-blue-700 border-blue-300 hover:bg-blue-50">
+              <span>🏨 View Hotel Bookings</span>
+            </Button>
+          </Link>
+
           <Button
             variant="outline"
             size="sm"

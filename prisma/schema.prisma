@@ -215,3 +215,31 @@ model IkeaInquiry {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
+
+
+model HotelInquiry {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  inquiryNumber    String   @unique
+  customerName     String
+  phoneNumber      String
+  email            String?
+  hotelName        String
+  hotelUrl         String?
+  imageUrl         String?
+  location         String?
+  checkInDate      String
+  checkOutDate     String
+  numberOfNights   Int      @default(1)
+  numberOfRooms    Int      @default(1)
+  numberOfAdults   Int      @default(2)
+  numberOfChildren Int      @default(0)
+  roomType         String?
+  retailPrice      Float    @default(0)
+  discountPercent  Int      @default(30)
+  quotePrice       Float    @default(0)
+  specialRequests  String?
+  status           String   @default("PENDING")
+  adminNotes       String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}

@@ -219,6 +219,11 @@ export default function AdminTravelInquiriesPage() {
               <span>🛋️ View IKEA Orders</span>
             </Button>
           </Link>
+          <Link href="/admin/dashboard/hotels">
+            <Button variant="outline" size="sm" className="flex items-center gap-1.5 text-xs text-blue-700 border-blue-300 hover:bg-blue-50">
+              <span>🏨 View Hotel Bookings</span>
+            </Button>
+          </Link>
           <Button 
             variant="outline" 
             onClick={() => fetchInquiries(true)} 

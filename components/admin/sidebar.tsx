@@ -25,6 +25,7 @@ import {
   LayoutGrid,
   Search,
   Package,
+  Building2,
 } from "lucide-react"
 import { useState } from "react"
 
@@ -68,6 +69,11 @@ const navigation = [
     name: "IKEA Orders",
     href: "/admin/dashboard/ikea",
     icon: Package,
+  },
+  {
+    name: "Hotel Bookings",
+    href: "/admin/dashboard/hotels",
+    icon: Building2,
   },
   {
     name: "Food & Grocery",
