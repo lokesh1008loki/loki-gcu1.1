@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
-import { sign } from "jsonwebtoken"
+import * as jose from "jose"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
+
+export const dynamic = "force-dynamic"
+export const runtime = "nodejs"
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key"
 
@@ -30,17 +32,18 @@ export async function POST(request: Request) {
       )
     }
 
-    // Create token with user ID
-    const token = sign(
-      { 
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role
-      }, 
-      JWT_SECRET, 
-      { expiresIn: "1d" }
-    )
+    // Create token with user ID using jose
+    const secret = new TextEncoder().encode(JWT_SECRET)
+    const token = await new jose.SignJWT({ 
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role
+    })
+      .setProtectedHeader({ alg: "HS256" })
+      .setIssuedAt()
+      .setExpirationTime("1d")
+      .sign(secret)
 
     const response = NextResponse.json({ 
       user: {
@@ -71,4 +74,4 @@ export async function POST(request: Request) {
       { status: 500 }
     )
   }
-} 
+}

@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
-import { sign } from "jsonwebtoken"
+import * as jose from "jose"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { getJwtSecret } from '@/lib/env'
+
+export const dynamic = "force-dynamic"
+export const runtime = "nodejs"
 
 export async function POST(request: Request) {
   try {
@@ -26,17 +28,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: "Invalid username or password" }, { status: 401 })
     }
 
-    // Create JWT token
-    const token = sign(
-      {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role
-      },
-      getJwtSecret(),
-      { expiresIn: "8h" }
-    )
+    // Create JWT token using jose
+    const secret = new TextEncoder().encode(getJwtSecret())
+    const token = await new jose.SignJWT({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role
+    })
+      .setProtectedHeader({ alg: "HS256" })
+      .setIssuedAt()
+      .setExpirationTime("8h")
+      .sign(secret)
 
     const response = NextResponse.json({ 
       success: true,
