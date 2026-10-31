@@ -38,9 +38,16 @@ export async function POST(req: NextRequest) {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 35000);
 
+        const requestHeaders: Record<string, string> = {
+          "Content-Type": "application/json"
+        };
+        if (process.env.SCRAPER_API_KEY) {
+          requestHeaders["X-API-Key"] = process.env.SCRAPER_API_KEY;
+        }
+
         const response = await fetch(`${baseUrl}/api/search`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: requestHeaders,
           body: payload,
           signal: controller.signal
         });
