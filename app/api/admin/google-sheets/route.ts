@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server"
-import { google } from "googleapis"
+
+export const dynamic = "force-dynamic"
+export const runtime = "nodejs"
 
 // Google Sheets API credentials
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 export async function POST(request: Request) {
   try {
+    const { google } = await import("googleapis")
     const body = await request.json()
     const { formData, sheetId, sheetName } = body
 
