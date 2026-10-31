@@ -1,19 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+export const maxDuration = 60; // Allow sufficient time for live Booking.com scrape
+
+const VPS_SCRAPER_URL = "http://174.138.39.163:5001";
+const DEFAULT_SCRAPER_KEY = "gcu_sec_7557d718c8998e4f54b841e248e0d117e9601a6aa53f3374047c92abc9c5a6d5";
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    // Candidate URLs for the Python Scraper (user's local tab / dev server or VPS)
+    // Candidate URLs for the Python Scraper: checks configured env, VPS endpoint, and local dev
     const candidates = [
       process.env.SCRAPER_API_URL,
+      VPS_SCRAPER_URL,
       "http://127.0.0.1:5001",
-      "http://127.0.0.1:5002",
-      "http://127.0.0.1:5000",
       "http://localhost:5001",
+      "http://127.0.0.1:5002",
       "http://localhost:5002",
-      "http://localhost:5000"
     ].filter(Boolean) as string[];
+
+    const apiKey = process.env.SCRAPER_API_KEY || DEFAULT_SCRAPER_KEY;
 
     const payload = JSON.stringify({
       from: body.from,
@@ -33,17 +41,18 @@ export async function POST(req: NextRequest) {
     let lastError: any = null;
     let data: any = null;
 
-    for (const baseUrl of candidates) {
+    // Use Set to prevent redundant attempts if process.env.SCRAPER_API_URL is identical to VPS_SCRAPER_URL
+    const uniqueCandidates = Array.from(new Set(candidates));
+
+    for (const baseUrl of uniqueCandidates) {
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 35000);
+        const timeoutId = setTimeout(() => controller.abort(), 45000);
 
         const requestHeaders: Record<string, string> = {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "X-API-Key": apiKey
         };
-        if (process.env.SCRAPER_API_KEY) {
-          requestHeaders["X-API-Key"] = process.env.SCRAPER_API_KEY;
-        }
 
         const response = await fetch(`${baseUrl}/api/search`, {
           method: "POST",
@@ -71,14 +80,14 @@ export async function POST(req: NextRequest) {
     }
 
     if (!data) {
-      throw lastError || new Error("Could not connect to any active flight scraper backend (ports 5001, 5002, 5000).");
+      throw lastError || new Error("Could not connect to flight search engine on VPS or local scraper.");
     }
 
     return NextResponse.json(data);
   } catch (error: any) {
     console.error("Flight search API proxy error:", error);
     return NextResponse.json(
-      { error: error?.message || "Could not connect to flight search engine. Please verify the scraper tab is running." },
+      { error: error?.message || "Could not connect to flight search engine. Please verify the scraper is active." },
       { status: 500 }
     );
   }
