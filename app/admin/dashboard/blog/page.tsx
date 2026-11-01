@@ -101,44 +101,56 @@ export default function BlogManagement() {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this blog post?")) return
 
+    const previousBlogs = blogs
+    setBlogs(prev => prev.filter(b => b.id !== id))
+
     try {
       const response = await fetch(`/api/admin/blogs/${id}`, {
         method: "DELETE",
-        credentials: "include"
+        credentials: "include",
+        cache: "no-store",
       })
-      if (!response.ok) throw new Error("Failed to delete blog")
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.details || errorData.error || "Failed to delete blog")
+      }
       toast.success("Blog post deleted successfully")
       fetchBlogs()
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error deleting blog:", error)
-      toast.error("Failed to delete blog post")
+      setBlogs(previousBlogs)
+      toast.error(error?.message || "Failed to delete blog post")
     }
   }
 
   const handleTogglePublish = async (id: string, currentStatus: boolean) => {
+    setBlogs(prev => prev.map(b => b.id === id ? { ...b, published: !currentStatus } : b))
+
     try {
       const response = await fetch(`/api/admin/blogs/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
         },
-        credentials: "include", cache: "no-store",
+        credentials: "include",
+        cache: "no-store",
         body: JSON.stringify({
           published: !currentStatus
         })
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || "Failed to update blog status")
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.details || errorData.error || "Failed to update blog status")
       }
 
       const updatedBlog = await response.json()
       toast.success(`Blog post ${updatedBlog.published ? "published" : "unpublished"} successfully`)
       fetchBlogs()
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating blog status:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to update blog status")
+      setBlogs(prev => prev.map(b => b.id === id ? { ...b, published: currentStatus } : b))
+      toast.error(error?.message || "Failed to update blog status")
     }
   }
 

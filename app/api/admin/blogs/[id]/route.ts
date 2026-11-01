@@ -167,7 +167,7 @@ export async function DELETE(
     }
 
     // Delete the blog post
-    await prisma.blog.delete({
+    await prisma.blog.deleteMany({
       where: { id }
     })
 
