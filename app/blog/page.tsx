@@ -1,9 +1,10 @@
 import { Metadata } from "next"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BlogSearch } from "@/components/blog-search"
 import { prisma } from "@/lib/prisma"
+
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: "Travel Blog | GoComfort USA",
@@ -35,21 +36,11 @@ async function getPublishedBlogs() {
   return blogs
 }
 
-const categories = [
-  "All",
-  "Destinations",
-  "Travel Tips",
-  "Theme Parks",
-  "Family Travel",
-  "Adventure",
-  "City Guides",
-]
-
 export default async function BlogPage() {
   const blogs = await getPublishedBlogs()
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto py-8 px-4">
       <h1 className="text-4xl font-bold mb-8">Blog</h1>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {blogs.map((blog) => (
