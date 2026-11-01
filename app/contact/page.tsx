@@ -96,7 +96,7 @@ export default function ContactPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div>
           <div className="relative h-[300px] rounded-xl overflow-hidden mb-8">
-            <Image src="/ass/contact-us.jpg?height=300&width=600" alt="Contact Us" fill className="object-cover" />
+            <Image src="/ass/contact-us.jpg" alt="Contact Us" fill sizes="(max-width: 768px) 100vw, 50vw" priority className="object-cover" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

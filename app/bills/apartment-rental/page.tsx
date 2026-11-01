@@ -86,7 +86,7 @@ export default function ApartmentRentalPage() {
           </div>
 
           <div className="relative h-[300px] md:h-[400px] rounded-xl overflow-hidden">
-            <Image src="/ass/sub_hero.jpg?height=400&width=800" alt="Apartment Rental" fill className="object-cover" />
+            <Image src="/ass/sub_hero.jpg" alt="Apartment Rental" fill sizes="(max-width: 768px) 100vw, 800px" className="object-cover" />
           </div>
 
           <Tabs defaultValue="description">
