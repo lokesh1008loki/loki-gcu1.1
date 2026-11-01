@@ -105,11 +105,18 @@ export default function BlogManagement() {
     setBlogs(prev => prev.filter(b => b.id !== id))
 
     try {
-      const response = await fetch(`/api/admin/blogs/${id}`, {
+      let response = await fetch(`/api/admin/blogs/${id}`, {
         method: "DELETE",
         credentials: "include",
         cache: "no-store",
       })
+      if (!response.ok) {
+        response = await fetch(`/api/admin/blogs?id=${encodeURIComponent(id)}`, {
+          method: "DELETE",
+          credentials: "include",
+          cache: "no-store",
+        })
+      }
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
         throw new Error(errorData.details || errorData.error || "Failed to delete blog")

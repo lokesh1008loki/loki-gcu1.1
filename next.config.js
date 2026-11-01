@@ -43,6 +43,15 @@ const nextConfig = {
         ],
       },
       {
+        source: '/api/admin/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-store, no-cache, must-revalidate, proxy-revalidate',
+          },
+        ],
+      },
+      {
         source: '/api/(.*)',
         headers: [
           {

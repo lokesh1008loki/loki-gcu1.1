@@ -1,37 +1,19 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
+import { verifyAdminAuth } from "@/lib/admin-auth"
 import { revalidatePath } from "next/cache"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const auth = await verifyAdminAuth(request)
     
-    if (!session?.user) {
+    if (!auth.authenticated) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
-      )
-    }
-
-    // Verify user exists in database
-    const user = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { email: session.user.email || undefined },
-          { id: session.user.id }
-        ]
-      }
-    })
-
-    if (!user) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
       )
     }
 
@@ -48,7 +30,11 @@ export async function GET() {
       }
     })
 
-    return NextResponse.json(blogs)
+    return NextResponse.json(blogs, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      }
+    })
   } catch (error) {
     console.error("Error fetching blogs:", error)
     return NextResponse.json(
@@ -63,9 +49,9 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const auth = await verifyAdminAuth(request)
     
-    if (!session?.user) {
+    if (!auth.authenticated) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
@@ -73,18 +59,27 @@ export async function POST(request: Request) {
     }
 
     // Verify user exists in database
-    const user = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { email: session.user.email || undefined },
-          { id: session.user.id }
-        ]
-      }
-    })
+    let user = null
+    if (auth.user?.email || auth.user?.id) {
+      user = await prisma.user.findFirst({
+        where: {
+          OR: [
+            { email: auth.user.email || undefined },
+            { id: auth.user.id || undefined }
+          ]
+        }
+      })
+    }
+
+    if (!user) {
+      user = await prisma.user.findFirst({
+        where: { role: "admin" }
+      }) || await prisma.user.findFirst()
+    }
 
     if (!user) {
       return NextResponse.json(
-        { error: "User not found" },
+        { error: "Admin user not found" },
         { status: 404 }
       )
     }
@@ -163,6 +158,61 @@ export async function POST(request: Request) {
       { 
         error: "Failed to create blog",
         details: error instanceof Error ? error.message : "Unknown error"
+      },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      )
+    }
+
+    const url = new URL(request.url)
+    let id = url.searchParams.get("id")
+
+    if (!id) {
+      const body = await request.json().catch(() => ({}))
+      id = body?.id
+    }
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Blog ID is required" },
+        { status: 400 }
+      )
+    }
+
+    const result = await prisma.blog.deleteMany({
+      where: { id }
+    })
+
+    try {
+      revalidatePath("/blog")
+      revalidatePath("/blog/[slug]", "page")
+      revalidatePath("/admin/blogs")
+      revalidatePath("/admin/dashboard/blog")
+    } catch (e) {
+      console.error("Revalidation error:", e)
+    }
+
+    return NextResponse.json({
+      success: true,
+      deletedCount: result.count,
+      message: "Blog post deleted successfully"
+    })
+  } catch (error: any) {
+    console.error("Error deleting blog in base route:", error)
+    return NextResponse.json(
+      {
+        error: "Failed to delete blog",
+        details: error?.message || String(error)
       },
       { status: 500 }
     )

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
+import { verifyAdminAuth } from "@/lib/admin-auth"
 import { revalidatePath } from "next/cache"
 
 export const dynamic = "force-dynamic"
@@ -13,7 +12,12 @@ export async function GET(
 ) {
   try {
     const resolvedParams = await Promise.resolve(params)
-    const id = resolvedParams?.id
+    let id = resolvedParams?.id
+
+    if (!id) {
+      const url = new URL(request.url)
+      id = url.searchParams.get("id") || url.pathname.split("/").pop() || ""
+    }
 
     if (!id) {
       return NextResponse.json({ error: "Blog ID is required" }, { status: 400 })
@@ -40,8 +44,8 @@ export async function PUT(
   { params }: { params: { id: string } | Promise<{ id: string }> }
 ) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user) {
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
@@ -49,7 +53,12 @@ export async function PUT(
     }
 
     const resolvedParams = await Promise.resolve(params)
-    const id = resolvedParams?.id
+    let id = resolvedParams?.id
+
+    if (!id) {
+      const url = new URL(request.url)
+      id = url.searchParams.get("id") || url.pathname.split("/").pop() || ""
+    }
 
     if (!id) {
       return NextResponse.json({ error: "Blog ID is required" }, { status: 400 })
@@ -151,8 +160,8 @@ export async function DELETE(
   { params }: { params: { id: string } | Promise<{ id: string }> }
 ) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user) {
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
@@ -160,14 +169,19 @@ export async function DELETE(
     }
 
     const resolvedParams = await Promise.resolve(params)
-    const id = resolvedParams?.id
+    let id = resolvedParams?.id
+
+    if (!id) {
+      const url = new URL(request.url)
+      id = url.searchParams.get("id") || url.pathname.split("/").pop() || ""
+    }
 
     if (!id) {
       return NextResponse.json({ error: "Blog ID is required" }, { status: 400 })
     }
 
-    // Delete the blog post
-    await prisma.blog.deleteMany({
+    // Delete the blog post idempotently
+    const result = await prisma.blog.deleteMany({
       where: { id }
     })
 
@@ -180,7 +194,11 @@ export async function DELETE(
       console.error("Revalidation error:", e)
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ 
+      success: true,
+      deletedCount: result.count,
+      message: "Blog post deleted successfully"
+    })
   } catch (error: any) {
     console.error("Error deleting blog:", error)
     return NextResponse.json(
