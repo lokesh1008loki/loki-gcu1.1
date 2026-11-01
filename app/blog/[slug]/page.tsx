@@ -4,8 +4,11 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Calendar, User, ArrowLeft, Facebook, Twitter, Linkedin, Share2 } from "lucide-react"
+import { Calendar, ArrowLeft, Facebook, Twitter, Linkedin, Share2 } from "lucide-react"
 import { prisma } from "@/lib/prisma"
+
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 type Blog = {
   id: string;
@@ -35,8 +38,17 @@ type BlogWithAuthor = Blog & {
   canonicalUrl?: string;
 };
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const { slug } = params
+export async function generateMetadata({ params }: { params: { slug: string } | Promise<{ slug: string }> }): Promise<Metadata> {
+  const resolvedParams = await Promise.resolve(params)
+  const slug = resolvedParams?.slug
+
+  if (!slug) {
+    return {
+      title: "Blog Post Not Found | GoComfort USA",
+      description: "The requested blog post could not be found.",
+    }
+  }
+
   const blog = await (prisma as any).blog.findUnique({
     where: { slug },
     include: { author: true }
@@ -66,9 +78,14 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  const { slug } = params
+export default async function BlogPostPage({ params }: { params: { slug: string } | Promise<{ slug: string }> }) {
+  const resolvedParams = await Promise.resolve(params)
+  const slug = resolvedParams?.slug
   
+  if (!slug) {
+    notFound()
+  }
+
   const blog = await (prisma as any).blog.findUnique({
     where: { slug },
     include: { author: true }

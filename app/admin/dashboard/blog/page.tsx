@@ -67,7 +67,7 @@ export default function BlogManagement() {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
+        credentials: "include", cache: "no-store",
       })
 
       if (!response.ok) {
@@ -122,7 +122,7 @@ export default function BlogManagement() {
         headers: {
           "Content-Type": "application/json"
         },
-        credentials: "include",
+        credentials: "include", cache: "no-store",
         body: JSON.stringify({
           published: !currentStatus
         })
@@ -171,7 +171,7 @@ export default function BlogManagement() {
           headers: {
             "Content-Type": "application/json"
           },
-          credentials: "include",
+          credentials: "include", cache: "no-store",
           body: JSON.stringify(data)
         })
         const result = await response.json()
@@ -185,7 +185,7 @@ export default function BlogManagement() {
           headers: {
             "Content-Type": "application/json"
           },
-          credentials: "include",
+          credentials: "include", cache: "no-store",
           body: JSON.stringify(data)
         })
         const result = await response.json()
@@ -228,7 +228,7 @@ export default function BlogManagement() {
             <DialogHeader className="sticky top-0 bg-background z-10">
               <DialogTitle>{editingBlog ? "Edit Blog Post" : "Add New Blog Post"}</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4 overflow-y-auto">
+            <form key={editingBlog?.id || "new"} onSubmit={handleSubmit} className="space-y-4 overflow-y-auto"><input type="hidden" name="image" value={formData.image || editingBlog?.image || ""} />
               <div className="space-y-2">
                 <Label htmlFor="title">Title</Label>
                 <Input id="title" name="title" defaultValue={editingBlog?.title || ""} required />
@@ -252,7 +252,7 @@ export default function BlogManagement() {
                 <Label>Featured Image</Label>
                 <ImageUpload
                   onImageUploadAction={handleImageUpload}
-                  currentImage={formData.image}
+                  currentImage={formData.image || editingBlog?.image || ""}
                 />
               </div>
               <div className="space-y-2">

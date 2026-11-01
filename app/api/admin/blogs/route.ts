@@ -2,6 +2,10 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
+import { revalidatePath } from "next/cache"
+
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 export async function GET() {
   try {
@@ -139,10 +143,18 @@ export async function POST(request: Request) {
         keywords: keywords || null,
         seoContent: seoContent || null,
         canonicalUrl: canonicalUrl || null,
-        published: published || true,
+        published: published !== undefined ? published : true,
         authorId: user.id
       }
     })
+
+    try {
+      revalidatePath("/blog")
+      revalidatePath("/admin/blogs")
+      revalidatePath("/admin/dashboard/blog")
+    } catch (e) {
+      console.error("Revalidation error:", e)
+    }
 
     return NextResponse.json(blog)
   } catch (error) {
@@ -155,4 +167,4 @@ export async function POST(request: Request) {
       { status: 500 }
     )
   }
-} 
+}
