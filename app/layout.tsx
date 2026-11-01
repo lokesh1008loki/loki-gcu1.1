@@ -120,7 +120,7 @@ export default async function RootLayout({
 }) {
   // Only fetch session if needed (admin pages)
   const headersList = await headers()
-  const pathname = headersList.get("x-invoke-path") || ""
+  const pathname = headersList.get("x-pathname") || headersList.get("x-invoke-path") || ""
   const isAdminPage = pathname.startsWith("/admin")
   
   // Only fetch session for admin pages to improve performance

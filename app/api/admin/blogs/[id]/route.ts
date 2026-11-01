@@ -3,30 +3,40 @@ import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } | Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await Promise.resolve(params)
+    const id = resolvedParams?.id
+
+    if (!id) {
+      return NextResponse.json({ error: "Blog ID is required" }, { status: 400 })
+    }
+
     const blog = await prisma.blog.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { author: true }
     })
 
     if (!blog) {
-      return new NextResponse("Blog not found", { status: 404 })
+      return NextResponse.json({ error: "Blog not found" }, { status: 404 })
     }
 
     return NextResponse.json(blog)
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching blog:", error)
-    return new NextResponse("Internal Server Error", { status: 500 })
+    return NextResponse.json({ error: error?.message || "Internal Server Error" }, { status: 500 })
   }
 }
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } | Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -37,9 +47,26 @@ export async function PUT(
       )
     }
 
-    const { id } = params
+    const resolvedParams = await Promise.resolve(params)
+    const id = resolvedParams?.id
+
+    if (!id) {
+      return NextResponse.json({ error: "Blog ID is required" }, { status: 400 })
+    }
+
     const body = await request.json()
-    const { title, content, excerpt, image, published } = body
+    const { 
+      title, 
+      content, 
+      excerpt, 
+      image, 
+      published,
+      metaTitle,
+      metaDescription,
+      keywords,
+      seoContent,
+      canonicalUrl
+    } = body
 
     // Get existing blog
     const existingBlog = await prisma.blog.findUnique({
@@ -54,21 +81,36 @@ export async function PUT(
     }
 
     // Prepare update data
-    const updateData: any = {}
+    const updateData: Record<string, any> = {}
 
     // Only update fields that are provided
-    if (title !== undefined) {
+    if (title !== undefined && title !== null && title !== existingBlog.title) {
       updateData.title = title
-      // Generate new slug if title changed
-      updateData.slug = title
+      // Generate new unique slug if title changed
+      const baseSlug = title
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/(^-|-$)/g, '')
+      
+      let slug = baseSlug
+      let count = 1
+      while (await prisma.blog.findFirst({ where: { slug, NOT: { id } } })) {
+        slug = `${baseSlug}-${count++}`
+      }
+      updateData.slug = slug
+    } else if (title !== undefined && title !== null) {
+      updateData.title = title
     }
+
     if (content !== undefined) updateData.content = content
     if (excerpt !== undefined) updateData.excerpt = excerpt
     if (image !== undefined) updateData.image = image
     if (published !== undefined) updateData.published = published
+    if (metaTitle !== undefined) updateData.metaTitle = metaTitle
+    if (metaDescription !== undefined) updateData.metaDescription = metaDescription
+    if (keywords !== undefined) updateData.keywords = keywords
+    if (seoContent !== undefined) updateData.seoContent = seoContent
+    if (canonicalUrl !== undefined) updateData.canonicalUrl = canonicalUrl
 
     const updatedBlog = await prisma.blog.update({
       where: { id },
@@ -76,10 +118,13 @@ export async function PUT(
     })
 
     return NextResponse.json(updatedBlog)
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error updating blog:", error)
     return NextResponse.json(
-      { error: "Failed to update blog" },
+      { 
+        error: "Failed to update blog",
+        details: error?.message || String(error)
+      },
       { status: 500 }
     )
   }
@@ -87,7 +132,7 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } | Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -98,7 +143,12 @@ export async function DELETE(
       )
     }
 
-    const { id } = params
+    const resolvedParams = await Promise.resolve(params)
+    const id = resolvedParams?.id
+
+    if (!id) {
+      return NextResponse.json({ error: "Blog ID is required" }, { status: 400 })
+    }
 
     // Delete the blog post
     await prisma.blog.delete({
@@ -106,11 +156,14 @@ export async function DELETE(
     })
 
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error deleting blog:", error)
     return NextResponse.json(
-      { error: "Failed to delete blog" },
+      { 
+        error: "Failed to delete blog",
+        details: error?.message || String(error)
+      },
       { status: 500 }
     )
   }
-} 
+}

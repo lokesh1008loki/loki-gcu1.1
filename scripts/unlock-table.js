@@ -12,27 +12,27 @@ async function unlockTables() {
   const client = await pool.connect();
   try {
     console.log('Unlocking tables...');
-    try {
-      await client.query('ALTER TABLE IF EXISTS "FlightInquiry" SET (schema_locked = false);');
-    } catch (e) {
-      console.log('FlightInquiry:', e.message);
-    }
-    try {
-      await client.query('ALTER TABLE IF EXISTS "FlightPassenger" SET (schema_locked = false);');
-    } catch (e) {
-      console.log('FlightPassenger:', e.message);
-    }
-    try {
-      await client.query('ALTER TABLE IF EXISTS "IkeaInquiry" SET (schema_locked = false);');
-      console.log('IkeaInquiry unlocked successfully!');
-    } catch (e) {
-      console.log('IkeaInquiry:', e.message);
-    }
-    try {
-      await client.query('ALTER TABLE IF EXISTS "HotelInquiry" SET (schema_locked = false);');
-      console.log('HotelInquiry unlocked successfully!');
-    } catch (e) {
-      console.log('HotelInquiry:', e.message);
+    const tables = [
+      'FlightInquiry',
+      'FlightPassenger',
+      'IkeaInquiry',
+      'HotelInquiry',
+      'NavbarLink',
+      'Blog',
+      'User',
+      'PopupNotification',
+      'MarqueeMessage',
+      'SiteSettings',
+      'SeoSettings'
+    ];
+
+    for (const table of tables) {
+      try {
+        await client.query(`ALTER TABLE IF EXISTS "${table}" SET (schema_locked = false);`);
+        console.log(`${table} unlocked successfully!`);
+      } catch (e) {
+        console.log(`${table}:`, e.message);
+      }
     }
   } catch (error) {
     console.error('Error unlocking table:', error);

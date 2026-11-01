@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
@@ -23,9 +26,9 @@ export async function GET(request: Request) {
     })
 
     return NextResponse.json(links || [])
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching navbar links:", error)
-    return NextResponse.json({ error: "Failed to fetch navbar links" }, { status: 500 })
+    return NextResponse.json({ error: error?.message || "Failed to fetch navbar links" }, { status: 500 })
   }
 }
 
@@ -43,9 +46,9 @@ export async function POST(request: Request) {
       }
     })
     return NextResponse.json(newLink)
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating navbar link:", error)
-    return NextResponse.json({ error: "Failed to create navbar link" }, { status: 500 })
+    return NextResponse.json({ error: error?.message || "Failed to create navbar link" }, { status: 500 })
   }
 }
 
@@ -54,21 +57,22 @@ export async function PUT(request: Request) {
     const body = await request.json()
     if (!body.id) return NextResponse.json({ error: "ID is required" }, { status: 400 })
 
+    const updateData: Record<string, any> = {}
+    if (body.name !== undefined) updateData.name = body.name
+    if (body.href !== undefined) updateData.href = body.href
+    if (body.order !== undefined) updateData.order = body.order
+    if (body.parentId !== undefined) updateData.parentId = body.parentId
+    if (body.isActive !== undefined) updateData.isActive = body.isActive
+
     // @ts-ignore
     const updatedLink = await prisma.navbarLink?.update({
       where: { id: body.id },
-      data: {
-        name: body.name,
-        href: body.href,
-        order: body.order,
-        parentId: body.parentId !== undefined ? body.parentId : undefined,
-        isActive: body.isActive
-      }
+      data: updateData
     })
     return NextResponse.json(updatedLink)
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error updating navbar link:", error)
-    return NextResponse.json({ error: "Failed to update navbar link" }, { status: 500 })
+    return NextResponse.json({ error: error?.message || "Failed to update navbar link" }, { status: 500 })
   }
 }
 
@@ -83,8 +87,8 @@ export async function DELETE(request: Request) {
       where: { id: id }
     })
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error deleting navbar link:", error)
-    return NextResponse.json({ error: "Failed to delete navbar link" }, { status: 500 })
+    return NextResponse.json({ error: error?.message || "Failed to delete navbar link" }, { status: 500 })
   }
 }
