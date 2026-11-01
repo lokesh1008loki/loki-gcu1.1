@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
+import { verifyAdminAuth } from "@/lib/admin-auth"
+import { revalidatePath } from "next/cache"
+
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 interface MarqueeMessageData {
   id?: string
@@ -11,10 +14,10 @@ interface MarqueeMessageData {
   textColor?: string
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session) {
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -24,7 +27,11 @@ export async function GET() {
       }
     })
 
-    return NextResponse.json(messages)
+    return NextResponse.json(messages, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      }
+    })
   } catch (error) {
     console.error("Error fetching marquee messages:", error)
     return NextResponse.json(
@@ -36,8 +43,8 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session) {
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -60,7 +67,18 @@ export async function POST(request: Request) {
       } as any
     })
 
-    return NextResponse.json(newMessage)
+    try {
+      revalidatePath("/")
+      revalidatePath("/admin/dashboard/marquee")
+    } catch (e) {
+      console.error("Revalidation error:", e)
+    }
+
+    return NextResponse.json(newMessage, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      }
+    })
   } catch (error) {
     console.error("Error creating marquee message:", error)
     return NextResponse.json(
@@ -72,34 +90,43 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session) {
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const data = await request.json() as MarqueeMessageData
-    const { message, isActive, backgroundColor, textColor } = data
+    const { id, message, isActive, backgroundColor, textColor } = data
 
-    if (!message) {
+    if (!id) {
       return NextResponse.json(
-        { error: "Message is required" },
+        { error: "Message ID is required" },
         { status: 400 }
       )
     }
 
     const updatedMessage = await prisma.marqueeMessage.update({
-      where: {
-        id: data.id
-      },
+      where: { id },
       data: {
-        message,
-        isActive: isActive ?? true,
-        backgroundColor: backgroundColor ?? "primary",
-        textColor: textColor ?? "white"
+        ...(message !== undefined && { message }),
+        ...(isActive !== undefined && { isActive }),
+        ...(backgroundColor !== undefined && { backgroundColor }),
+        ...(textColor !== undefined && { textColor })
       } as any
     })
 
-    return NextResponse.json(updatedMessage)
+    try {
+      revalidatePath("/")
+      revalidatePath("/admin/dashboard/marquee")
+    } catch (e) {
+      console.error("Revalidation error:", e)
+    }
+
+    return NextResponse.json(updatedMessage, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      }
+    })
   } catch (error) {
     console.error("Error updating marquee message:", error)
     return NextResponse.json(
@@ -107,4 +134,4 @@ export async function PUT(request: Request) {
       { status: 500 }
     )
   }
-} 
+}

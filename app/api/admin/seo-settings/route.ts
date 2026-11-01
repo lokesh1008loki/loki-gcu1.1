@@ -1,44 +1,40 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
-import { headers } from "next/headers"
+import { verifyAdminAuth } from "@/lib/admin-auth"
+import { revalidatePath } from "next/cache"
 
-export async function GET() {
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
+export async function GET(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session) {
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
-
-    // Set cache control headers
-    const headersList = headers()
-    const response = NextResponse.json({})
-    response.headers.set("Cache-Control", "no-store, must-revalidate")
-    response.headers.set("Pragma", "no-cache")
-    response.headers.set("Expires", "0")
 
     const settings = await prisma.seoSettings.findFirst()
     
     if (!settings) {
-      // Create default settings if none exist
       const defaultSettings = await prisma.seoSettings.create({
-        data: {}
+        data: {
+          siteTitle: "GoComfortUSA - Professional Travel Optimization & Consultation",
+          siteDescription: "Expert research and itinerary optimization for domestic flights, hotel stays, and lifestyle services.",
+          keywords: "travel optimization, flight research, hotel consultation, travel planning, concierge services",
+          canonicalUrl: "https://gocomfortusa.com",
+          active: true
+        }
       })
       return NextResponse.json(defaultSettings, {
         headers: {
-          "Cache-Control": "no-store, must-revalidate",
-          "Pragma": "no-cache",
-          "Expires": "0"
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate"
         }
       })
     }
 
     return NextResponse.json(settings, {
       headers: {
-        "Cache-Control": "no-store, must-revalidate",
-        "Pragma": "no-cache",
-        "Expires": "0"
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate"
       }
     })
   } catch (error) {
@@ -52,8 +48,8 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session) {
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -68,53 +64,65 @@ export async function PUT(request: Request) {
       twitterTitle,
       twitterDescription,
       twitterImage,
-      canonicalUrl
+      canonicalUrl,
+      active
     } = body
 
     const settings = await prisma.seoSettings.findFirst()
     
+    let savedSettings
     if (!settings) {
-      // Create new settings if none exist
-      const newSettings = await prisma.seoSettings.create({
+      savedSettings = await prisma.seoSettings.create({
         data: {
-          siteTitle,
-          siteDescription,
-          keywords,
-          ogTitle,
-          ogDescription,
-          ogImage,
-          twitterTitle,
-          twitterDescription,
-          twitterImage,
-          canonicalUrl
+          siteTitle: siteTitle || "",
+          siteDescription: siteDescription || "",
+          keywords: keywords || "",
+          ogTitle: ogTitle || "",
+          ogDescription: ogDescription || "",
+          ogImage: ogImage || "",
+          twitterTitle: twitterTitle || "",
+          twitterDescription: twitterDescription || "",
+          twitterImage: twitterImage || "",
+          canonicalUrl: canonicalUrl || "https://gocomfortusa.com",
+          active: active !== undefined ? active : true
         }
       })
-      return NextResponse.json(newSettings)
+    } else {
+      savedSettings = await prisma.seoSettings.update({
+        where: { id: settings.id },
+        data: {
+          ...(siteTitle !== undefined && { siteTitle }),
+          ...(siteDescription !== undefined && { siteDescription }),
+          ...(keywords !== undefined && { keywords }),
+          ...(ogTitle !== undefined && { ogTitle }),
+          ...(ogDescription !== undefined && { ogDescription }),
+          ...(ogImage !== undefined && { ogImage }),
+          ...(twitterTitle !== undefined && { twitterTitle }),
+          ...(twitterDescription !== undefined && { twitterDescription }),
+          ...(twitterImage !== undefined && { twitterImage }),
+          ...(canonicalUrl !== undefined && { canonicalUrl }),
+          ...(active !== undefined && { active })
+        }
+      })
     }
 
-    // Update existing settings
-    const updatedSettings = await prisma.seoSettings.update({
-      where: { id: settings.id },
-      data: {
-        siteTitle,
-        siteDescription,
-        keywords,
-        ogTitle,
-        ogDescription,
-        ogImage,
-        twitterTitle,
-        twitterDescription,
-        twitterImage,
-        canonicalUrl
+    try {
+      revalidatePath("/", "layout")
+      revalidatePath("/admin/dashboard/seo")
+    } catch (e) {
+      console.error("Revalidation error:", e)
+    }
+
+    return NextResponse.json(savedSettings, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate"
       }
     })
-
-    return NextResponse.json(updatedSettings)
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error updating SEO settings:", error)
     return NextResponse.json(
-      { error: "Failed to update SEO settings" },
+      { error: "Failed to update SEO settings", details: error?.message || String(error) },
       { status: 500 }
     )
   }
-} 
+}

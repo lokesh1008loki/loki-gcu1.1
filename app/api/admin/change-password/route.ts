@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
+import { verifyAdminAuth } from "@/lib/admin-auth"
 import { prisma } from "@/lib/prisma"
 import { compare, hash } from "bcryptjs"
 
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const auth = await verifyAdminAuth(request)
     
-    if (!session?.user) {
+    if (!auth.authenticated || !auth.user) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
@@ -24,10 +26,25 @@ export async function POST(request: Request) {
       )
     }
 
+    if (newPassword.length < 6) {
+      return NextResponse.json(
+        { error: "New password must be at least 6 characters long" },
+        { status: 400 }
+      )
+    }
+
     // Get the user from database
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id }
-    })
+    let user = null
+    if (auth.user.id) {
+      user = await prisma.user.findUnique({
+        where: { id: auth.user.id }
+      })
+    }
+    if (!user && auth.user.email) {
+      user = await prisma.user.findUnique({
+        where: { email: auth.user.email }
+      })
+    }
 
     if (!user) {
       return NextResponse.json(
@@ -58,11 +75,11 @@ export async function POST(request: Request) {
       success: true,
       message: "Password updated successfully" 
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error changing password:", error)
     return NextResponse.json(
-      { error: "Failed to change password" },
+      { error: "Failed to change password", details: error?.message || String(error) },
       { status: 500 }
     )
   }
-} 
+}

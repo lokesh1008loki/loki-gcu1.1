@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
+import { verifyAdminAuth } from "@/lib/admin-auth"
 import { prisma } from "@/lib/prisma"
+import { revalidatePath } from "next/cache"
 
-export async function GET() {
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
+export async function GET(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session?.user) {
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -17,11 +19,15 @@ export async function GET() {
       },
     })
 
-    return NextResponse.json(popups)
-  } catch (error) {
+    return NextResponse.json(popups, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      }
+    })
+  } catch (error: any) {
     console.error("Error fetching popups:", error)
     return NextResponse.json(
-      { error: "Failed to fetch popups" },
+      { error: "Failed to fetch popups", details: error?.message || String(error) },
       { status: 500 }
     )
   }
@@ -29,18 +35,17 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session?.user) {
+    const auth = await verifyAdminAuth(req)
+    if (!auth.authenticated) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const body = await req.json()
     const { title, message, type, isActive, startDate, endDate, showOnPages } = body
 
-    if (!title || !message || !type) {
+    if (!title || !message) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Title and message are required" },
         { status: 400 }
       )
     }
@@ -48,12 +53,11 @@ export async function POST(req: Request) {
     // Ensure showOnPages is an array
     const showOnPagesArray = Array.isArray(showOnPages) ? showOnPages : []
 
-    // Convert dates to proper format
     const data = {
       title,
       message,
-      type,
-      isActive,
+      type: type || "info",
+      isActive: isActive !== undefined ? isActive : true,
       startDate: startDate ? new Date(startDate) : null,
       endDate: endDate ? new Date(endDate) : null,
       showOnPages: showOnPagesArray,
@@ -63,12 +67,23 @@ export async function POST(req: Request) {
       data,
     })
 
-    return NextResponse.json(popup)
-  } catch (error) {
+    try {
+      revalidatePath("/")
+      revalidatePath("/admin/dashboard/popups")
+    } catch (e) {
+      console.error("Revalidation error:", e)
+    }
+
+    return NextResponse.json(popup, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      }
+    })
+  } catch (error: any) {
     console.error("Error creating popup:", error)
     return NextResponse.json(
-      { error: "Failed to create popup" },
+      { error: "Failed to create popup", details: error?.message || String(error) },
       { status: 500 }
     )
   }
-} 
+}

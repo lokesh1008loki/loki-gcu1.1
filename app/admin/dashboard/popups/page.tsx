@@ -61,7 +61,7 @@ export default function PopupManagement() {
   const fetchPopups = async () => {
     try {
       setIsLoading(true)
-      const response = await fetch("/api/admin/popups")
+      const response = await fetch("/api/admin/popups", { cache: "no-store", credentials: "include" })
       if (!response.ok) {
         throw new Error("Failed to fetch popups")
       }

@@ -38,7 +38,7 @@ export default function SeoSettingsPage() {
 
   const fetchSettings = async () => {
     try {
-      const response = await fetch("/api/seo")
+      const response = await fetch("/api/seo?admin=true", { cache: "no-store", credentials: "include" })
       if (!response.ok) {
         throw new Error("Failed to fetch SEO settings")
       }

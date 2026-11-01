@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { revalidatePath } from "next/cache"
+import { verifyAdminAuth } from "@/lib/admin-auth"
+
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 const defaultSettings = {
   whatsappLink: "https://whatsapp.com",
@@ -15,29 +20,37 @@ const defaultSettings = {
 
 export async function GET() {
   try {
-    // Try to fetch settings from the database
-    try {
-      // @ts-ignore - Prisma client type issue
-      const settings = await prisma.siteSettings?.findFirst()
-      if (settings) {
-        const s = settings as any
-        return NextResponse.json({
-          ...settings,
-          address: s.address || defaultSettings.address,
-          consultationPrice: s.consultationPrice || defaultSettings.consultationPrice,
-          consultationLink: s.consultationLink || defaultSettings.consultationLink
-        })
-      }
-    } catch (dbError) {
-      console.error("Database error:", dbError)
+    const settings = await prisma.siteSettings.findFirst()
+    if (settings) {
+      const s = settings as any
+      return NextResponse.json({
+        ...settings,
+        address: s.address || defaultSettings.address,
+        consultationPrice: s.consultationPrice || defaultSettings.consultationPrice,
+        consultationLink: s.consultationLink || defaultSettings.consultationLink
+      }, {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          "Pragma": "no-cache",
+          "Expires": "0"
+        }
+      })
     }
 
-    // If we can't fetch from database, return default settings
-    return NextResponse.json(defaultSettings)
+    return NextResponse.json(defaultSettings, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0"
+      }
+    })
   } catch (error) {
-    console.error("Error in site settings route:", error)
-    // Return default settings as fallback
-    return NextResponse.json(defaultSettings)
+    console.error("Error in site settings GET route:", error)
+    return NextResponse.json(defaultSettings, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      }
+    })
   }
 }
 
@@ -45,72 +58,58 @@ export async function PUT(request: Request) {
   try {
     const body = await request.json()
     
-    // Validate required fields
-    if (!body.phoneNumber || !body.email) {
+    if (!body.phoneNumber && !body.email) {
       return NextResponse.json(
-        { error: "Phone number and email are required" },
+        { error: "Phone number or email is required" },
         { status: 400 }
       )
     }
+
+    const existingSettings = await prisma.siteSettings.findFirst()
     
-    try {
-      // @ts-ignore - Prisma client type issue
-      const existingSettings = await prisma.siteSettings?.findFirst()
-      
-      if (existingSettings) {
-        // @ts-ignore - Prisma client type issue
-        const data: any = {
-          whatsappLink: body.whatsappLink || (existingSettings as any).whatsappLink,
-          facebookLink: body.facebookLink || (existingSettings as any).facebookLink,
-          instagramLink: body.instagramLink || (existingSettings as any).instagramLink,
-          twitterLink: body.twitterLink || (existingSettings as any).twitterLink,
-          phoneNumber: body.phoneNumber,
-          email: body.email,
-          address: body.address || (existingSettings as any).address || defaultSettings.address,
-          consultationPrice: body.consultationPrice || (existingSettings as any).consultationPrice || defaultSettings.consultationPrice,
-          consultationLink: body.consultationLink || (existingSettings as any).consultationLink || defaultSettings.consultationLink
-        }
-
-        // @ts-ignore - Prisma client type issue
-        const updatedSettings = await prisma.siteSettings?.update({
-          where: { id: existingSettings.id },
-          data
-        })
-        
-        return NextResponse.json(updatedSettings)
-      } else {
-        // @ts-ignore - Prisma client type issue
-        const data: any = {
-          whatsappLink: body.whatsappLink || defaultSettings.whatsappLink,
-          facebookLink: body.facebookLink || defaultSettings.facebookLink,
-          instagramLink: body.instagramLink || defaultSettings.instagramLink,
-          twitterLink: body.twitterLink || defaultSettings.twitterLink,
-          phoneNumber: body.phoneNumber,
-          email: body.email,
-          address: body.address || defaultSettings.address,
-          consultationPrice: body.consultationPrice || defaultSettings.consultationPrice,
-          consultationLink: body.consultationLink || defaultSettings.consultationLink
-        }
-
-        // @ts-ignore - Prisma client type issue
-        const newSettings = await prisma.siteSettings?.create({
-          data
-        })
-        
-        return NextResponse.json(newSettings)
-      }
-    } catch (dbError) {
-      console.error("Database error:", dbError)
-      return NextResponse.json(
-        { error: "Failed to update settings in database" },
-        { status: 500 }
-      )
+    const dataToSave = {
+      whatsappLink: body.whatsappLink !== undefined ? body.whatsappLink : (existingSettings?.whatsappLink || defaultSettings.whatsappLink),
+      facebookLink: body.facebookLink !== undefined ? body.facebookLink : (existingSettings?.facebookLink || defaultSettings.facebookLink),
+      instagramLink: body.instagramLink !== undefined ? body.instagramLink : (existingSettings?.instagramLink || defaultSettings.instagramLink),
+      twitterLink: body.twitterLink !== undefined ? body.twitterLink : (existingSettings?.twitterLink || defaultSettings.twitterLink),
+      phoneNumber: body.phoneNumber || (existingSettings?.phoneNumber || defaultSettings.phoneNumber),
+      email: body.email || (existingSettings?.email || defaultSettings.email),
+      address: body.address !== undefined ? body.address : ((existingSettings as any)?.address || defaultSettings.address),
+      consultationPrice: body.consultationPrice !== undefined ? body.consultationPrice : ((existingSettings as any)?.consultationPrice || defaultSettings.consultationPrice),
+      consultationLink: body.consultationLink !== undefined ? body.consultationLink : ((existingSettings as any)?.consultationLink || defaultSettings.consultationLink)
     }
-  } catch (error) {
+
+    let savedSettings
+    if (existingSettings) {
+      savedSettings = await prisma.siteSettings.update({
+        where: { id: existingSettings.id },
+        data: dataToSave
+      })
+    } else {
+      savedSettings = await prisma.siteSettings.create({
+        data: dataToSave
+      })
+    }
+
+    try {
+      revalidatePath("/")
+      revalidatePath("/about")
+      revalidatePath("/contact")
+      revalidatePath("/admin/site-settings")
+    } catch (e) {
+      console.error("Revalidation error:", e)
+    }
+
+    return NextResponse.json(savedSettings, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate"
+      }
+    })
+  } catch (error: any) {
     console.error("Error updating site settings:", error)
     return NextResponse.json(
-      { error: "Failed to update site settings" },
+      { error: "Failed to update site settings", details: error?.message || String(error) },
       { status: 500 }
     )
   }
-} 
+}

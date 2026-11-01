@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { useToast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 import { Loader2 } from "lucide-react"
 
 interface SiteSettings {
-  id: string
+  id?: string
   whatsappLink: string
   facebookLink: string
   instagramLink: string
@@ -24,7 +24,6 @@ interface SiteSettings {
 
 export default function SiteSettingsPage() {
   const router = useRouter()
-  const { toast } = useToast()
   const [settings, setSettings] = useState<SiteSettings | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
@@ -35,19 +34,28 @@ export default function SiteSettingsPage() {
 
   const fetchSettings = async () => {
     try {
-      const response = await fetch("/api/site-settings")
+      setIsLoading(true)
+      const response = await fetch("/api/admin/site-settings", {
+        cache: "no-store",
+        credentials: "include",
+      })
       if (!response.ok) {
-        throw new Error("Failed to fetch site settings")
+        // Fallback to public route
+        const fallbackRes = await fetch("/api/site-settings", {
+          cache: "no-store",
+        })
+        if (!fallbackRes.ok) {
+          throw new Error("Failed to fetch site settings")
+        }
+        const fallbackData = await fallbackRes.json()
+        setSettings(fallbackData)
+        return
       }
       const data = await response.json()
       setSettings(data)
     } catch (error) {
       console.error("Error fetching site settings:", error)
-      toast({
-        title: "Error",
-        description: "Failed to fetch site settings",
-        variant: "destructive",
-      })
+      toast.error("Failed to fetch site settings")
     } finally {
       setIsLoading(false)
     }
@@ -64,36 +72,40 @@ export default function SiteSettingsPage() {
 
     try {
       setIsSaving(true)
-      const response = await fetch("/api/site-settings", {
+      let response = await fetch("/api/admin/site-settings", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
+        cache: "no-store",
         body: JSON.stringify(settings),
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || "Failed to update site settings")
+        response = await fetch("/api/site-settings", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          cache: "no-store",
+          body: JSON.stringify(settings),
+        })
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.details || errorData.error || "Failed to update site settings")
       }
 
       const updatedData = await response.json()
       setSettings(updatedData)
-
-      toast({
-        title: "Success",
-        description: "Site settings updated successfully",
-      })
-
-      // Force a hard refresh of the page
-      window.location.reload()
-    } catch (error) {
+      toast.success("Site settings updated successfully")
+      router.refresh()
+    } catch (error: any) {
       console.error("Error updating site settings:", error)
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to update site settings",
-        variant: "destructive",
-      })
+      toast.error(error?.message || "Failed to update site settings")
     } finally {
       setIsSaving(false)
     }
@@ -101,16 +113,17 @@ export default function SiteSettingsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     )
   }
 
   if (!settings) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-red-500">Failed to load site settings</p>
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <p className="text-red-500 font-medium">Failed to load site settings</p>
+        <Button onClick={fetchSettings} variant="outline">Retry</Button>
       </div>
     )
   }
@@ -131,7 +144,7 @@ export default function SiteSettingsPage() {
               <Input
                 id="phoneNumber"
                 name="phoneNumber"
-                value={settings.phoneNumber}
+                value={settings.phoneNumber || ""}
                 onChange={handleChange}
                 required
               />
@@ -142,7 +155,7 @@ export default function SiteSettingsPage() {
                 id="email"
                 name="email"
                 type="email"
-                value={settings.email}
+                value={settings.email || ""}
                 onChange={handleChange}
                 required
               />
@@ -152,7 +165,7 @@ export default function SiteSettingsPage() {
               <Input
                 id="address"
                 name="address"
-                value={settings.address}
+                value={settings.address || ""}
                 onChange={handleChange}
                 required
               />
@@ -163,7 +176,7 @@ export default function SiteSettingsPage() {
                 <Input
                   id="consultationPrice"
                   name="consultationPrice"
-                  value={settings.consultationPrice}
+                  value={settings.consultationPrice || ""}
                   onChange={handleChange}
                   required
                 />
@@ -173,7 +186,7 @@ export default function SiteSettingsPage() {
                 <Input
                   id="consultationLink"
                   name="consultationLink"
-                  value={settings.consultationLink}
+                  value={settings.consultationLink || ""}
                   onChange={handleChange}
                   required
                 />
@@ -184,7 +197,7 @@ export default function SiteSettingsPage() {
               <Input
                 id="whatsappLink"
                 name="whatsappLink"
-                value={settings.whatsappLink}
+                value={settings.whatsappLink || ""}
                 onChange={handleChange}
               />
             </div>
@@ -193,7 +206,7 @@ export default function SiteSettingsPage() {
               <Input
                 id="facebookLink"
                 name="facebookLink"
-                value={settings.facebookLink}
+                value={settings.facebookLink || ""}
                 onChange={handleChange}
               />
             </div>
@@ -202,7 +215,7 @@ export default function SiteSettingsPage() {
               <Input
                 id="instagramLink"
                 name="instagramLink"
-                value={settings.instagramLink}
+                value={settings.instagramLink || ""}
                 onChange={handleChange}
               />
             </div>
@@ -211,7 +224,7 @@ export default function SiteSettingsPage() {
               <Input
                 id="twitterLink"
                 name="twitterLink"
-                value={settings.twitterLink}
+                value={settings.twitterLink || ""}
                 onChange={handleChange}
               />
             </div>
@@ -232,4 +245,4 @@ export default function SiteSettingsPage() {
       </Card>
     </div>
   )
-} 
+}
