@@ -45,7 +45,10 @@ export async function generateMetadata() {
         },
         alternates: {
           canonical: "https://gocomfortusa.com"
-        }
+        },
+        other: {
+          cyber: "9fa74b5554f3953be569783694238369",
+        },
       };
     }
     console.log("SEO settings used in metadata:", seoSettings);
@@ -72,7 +75,10 @@ export async function generateMetadata() {
       },
       alternates: {
         canonical: seoSettings.canonicalUrl
-      }
+      },
+        other: {
+          cyber: "9fa74b5554f3953be569783694238369",
+        },
     };
   } catch (error) {
     console.error("Error fetching SEO settings for metadata:", error);
@@ -99,7 +105,10 @@ export async function generateMetadata() {
       },
       alternates: {
         canonical: "https://gocomfortusa.com"
-      }
+      },
+        other: {
+          cyber: "9fa74b5554f3953be569783694238369",
+        },
     };
   }
 }
@@ -129,6 +138,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <meta name="cyber" content="9fa74b5554f3953be569783694238369" />
         {!isAdminPage && (
           <>
             <Script
