@@ -26,6 +26,7 @@ import {
   Search,
   Package,
   Building2,
+  CircleDollarSign,
 } from "lucide-react"
 import { useState } from "react"
 
@@ -54,6 +55,11 @@ const navigation = [
     name: "Bills & Payments",
     href: "/admin/dashboard/bills",
     icon: CreditCard,
+  },
+  {
+    name: "Payment Gateway",
+    href: "/admin/dashboard/payments",
+    icon: CircleDollarSign,
   },
   {
     name: "Popups",
