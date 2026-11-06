@@ -22,7 +22,8 @@ import {
   Receipt, 
   Clock, 
   Smartphone,
-  Check
+  Check,
+  Trash2
 } from "lucide-react"
 import { toast } from "sonner"
 
@@ -68,51 +69,36 @@ export default function CyberbizPaymentsPage() {
   const [description, setDescription] = useState("GoComfortUSA Service Payment")
   const [activeGeneratedInvoice, setActiveGeneratedInvoice] = useState<PaymentInvoice | null>(null)
 
-  // Load saved invoices from localStorage
+  // Load saved invoices from localStorage (cleans out demo items)
   useEffect(() => {
     try {
       const saved = localStorage.getItem("gcu_cyberbiz_invoices")
       if (saved) {
-        setInvoices(JSON.parse(saved))
+        const parsed: PaymentInvoice[] = JSON.parse(saved)
+        // Clean out demo samples (IDs "1", "2")
+        const clean = parsed.filter(i => i.id !== "1" && i.id !== "2")
+        setInvoices(clean)
+        localStorage.setItem("gcu_cyberbiz_invoices", JSON.stringify(clean))
       } else {
-        // Initial sample data
-        const initialSamples: PaymentInvoice[] = [
-          {
-            id: "1",
-            orderId: "GCU-M29B7Z-8812",
-            customerName: "Sarah Jenkins",
-            customerEmail: "sarah.j@example.com",
-            customerPhone: "+1 (555) 234-5678",
-            category: "Rent & Housing Assistance",
-            amount: 450.00,
-            description: "Apartment Monthly Rent Assistance - Unit 3B",
-            checkoutUrl: "https://pay.cyberbiz.bz/kassa/pay?merchant=1793867127&amount=450.00&comment=GCU-M29B7Z-8812&payment=1",
-            localPayUrl: "https://gocomfortusa.com/pay?amount=450&order_id=GCU-M29B7Z-8812",
-            status: "PAID",
-            createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-          },
-          {
-            id: "2",
-            orderId: "GCU-M30K1P-4409",
-            customerName: "David Miller",
-            customerEmail: "dmiller@example.com",
-            customerPhone: "+1 (555) 987-6543",
-            category: "Flight & Travel Bookings",
-            amount: 29.99,
-            description: "Flight Booking Consultation & Ticket Inquiry",
-            checkoutUrl: "https://pay.cyberbiz.bz/kassa/pay?merchant=1793867127&amount=29.99&comment=GCU-M30K1P-4409&payment=1",
-            localPayUrl: "https://gocomfortusa.com/pay?amount=29.99&order_id=GCU-M30K1P-4409",
-            status: "PENDING",
-            createdAt: new Date(Date.now() - 3600000 * 3).toISOString(),
-          }
-        ]
-        setInvoices(initialSamples)
-        localStorage.setItem("gcu_cyberbiz_invoices", JSON.stringify(initialSamples))
+        setInvoices([])
       }
     } catch {
-      // Ignore storage errors
+      setInvoices([])
     }
   }, [])
+
+  const deleteInvoice = (id: string) => {
+    const updated = invoices.filter(inv => inv.id !== id)
+    saveInvoices(updated)
+    toast.success("Invoice removed")
+  }
+
+  const clearAllInvoices = () => {
+    if (confirm("Are you sure you want to clear all invoice history?")) {
+      saveInvoices([])
+      toast.success("All invoices cleared")
+    }
+  }
 
   const saveInvoices = (updated: PaymentInvoice[]) => {
     setInvoices(updated)
@@ -543,18 +529,31 @@ export default function CyberbizPaymentsPage() {
                 Recent payment links generated for customers
               </CardDescription>
             </div>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => {
-                const refreshed = [...invoices]
-                saveInvoices(refreshed)
-                toast.success("List refreshed")
-              }}
-            >
-              <RefreshCw className="h-3.5 w-3.5 mr-1" />
-              Refresh
-            </Button>
+            <div className="flex items-center gap-2">
+              {invoices.length > 0 && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                  onClick={clearAllInvoices}
+                >
+                  <Trash2 className="h-3.5 w-3.5 mr-1" />
+                  Clear All
+                </Button>
+              )}
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => {
+                  const refreshed = [...invoices]
+                  saveInvoices(refreshed)
+                  toast.success("List refreshed")
+                }}
+              >
+                <RefreshCw className="h-3.5 w-3.5 mr-1" />
+                Refresh
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
@@ -643,6 +642,15 @@ export default function CyberbizPaymentsPage() {
                             <Send className="h-4 w-4" />
                           </Button>
                         )}
+                        <Button 
+                          size="sm" 
+                          variant="ghost" 
+                          className="h-8 px-2 text-red-500 hover:text-red-700 hover:bg-red-50"
+                          onClick={() => deleteInvoice(inv.id)}
+                          title="Delete Invoice"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -655,3 +663,4 @@ export default function CyberbizPaymentsPage() {
     </div>
   )
 }
+
