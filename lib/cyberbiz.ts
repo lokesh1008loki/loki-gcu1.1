@@ -2,7 +2,8 @@ import crypto from "crypto"
 
 export const CYBERBIZ_CONFIG = {
   shopId: process.env.CYBERBIZ_SHOP_ID || "1793867127",
-  secretKey: process.env.CYBERBIZ_SECRET_KEY || "s5crNWKMwnhTAzWJlb",
+  secretKey: process.env.CYBERBIZ_SECRET_KEY || "gF4xbTGdSfzoRXP9Lp",
+  gatewayUrl: "https://pay.cyberbiz.bz/kassa/pay",
   domain: "gocomfortusa.com",
   baseUrl: process.env.NEXT_PUBLIC_BASE_URL || "https://gocomfortusa.com",
   webhookUrl: "https://gocomfortusa.com/api/payment/cyberbiz/webhook",
@@ -45,3 +46,4 @@ export function generateOrderId(prefix = "GCU"): string {
   const random = Math.random().toString(36).substring(2, 6).toUpperCase()
   return `${prefix}-${timestamp}-${random}`
 }
+
