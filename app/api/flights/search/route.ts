@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 export const maxDuration = 60; // Allow sufficient time for live Booking.com scrape
 
-const VPS_SCRAPER_URL = "http://174.138.39.163:5001";
+const VPS_SCRAPER_URL = "http://187.127.191.92:5001";
 const DEFAULT_SCRAPER_KEY = "gcu_sec_7557d718c8998e4f54b841e248e0d117e9601a6aa53f3374047c92abc9c5a6d5";
 
 export async function POST(req: NextRequest) {
