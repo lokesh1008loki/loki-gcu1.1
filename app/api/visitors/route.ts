@@ -12,8 +12,8 @@ export async function POST() {
     })
 
     return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error('Error tracking visitor:', error)
-    return NextResponse.json({ error: 'Failed to track visitor' }, { status: 500 })
+  } catch (error: any) {
+    console.warn('Notice: Visitor tracking paused due to momentary database connectivity:', error?.message || error)
+    return NextResponse.json({ success: false, offline: true })
   }
 } 

@@ -47,10 +47,10 @@ export function TaglineReveal({ phrase, subphrase }: TaglineRevealProps) {
   }, [words.length])
 
   return (
-    <section className="py-20 md:py-24 bg-slate-50 dark:bg-[#181818] border-y border-slate-200 dark:border-neutral-800">
+    <section className="py-20 md:py-24 bg-white dark:bg-[#1F1F1F] border-y border-slate-200/80 dark:border-neutral-800">
       <div className="container mx-auto px-4">
         <div ref={containerRef} className="max-w-[680px] mx-auto text-center space-y-6">
-          <p className="text-xs uppercase tracking-widest font-semibold text-primary">
+          <p className="text-xs uppercase tracking-widest font-semibold text-blue-600 dark:text-blue-400">
             Our Core Principle
           </p>
 
@@ -82,3 +82,4 @@ export function TaglineReveal({ phrase, subphrase }: TaglineRevealProps) {
     </section>
   )
 }
+
