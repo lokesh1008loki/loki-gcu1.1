@@ -99,6 +99,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     title: blog.seo.metaTitle,
     description: blog.seo.metaDescription,
     keywords: blog.seo.keywords,
+    alternates: {
+      canonical: "https://gocomfortusa.com/blog/how-to-save-money-on-theme-park-tickets",
+    },
     openGraph: {
       title: blog.seo.ogTitle,
       description: blog.seo.ogDescription,

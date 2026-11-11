@@ -15,6 +15,15 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function generateMetadata() {
+  let cleanPathname = "";
+  try {
+    const headerList = headers();
+    const rawPathname = headerList.get("x-pathname") || "";
+    cleanPathname = rawPathname === "/" ? "" : rawPathname.replace(/\/+$/, "");
+  } catch (e) {
+    // headers() might not be accessible during build-time prerendering
+  }
+
   try {
     const seoSettings = await prisma.seoSettings.findFirst({
       orderBy: { updatedAt: 'desc' }
@@ -22,10 +31,12 @@ export async function generateMetadata() {
     console.log("SeoSettings record:", seoSettings, "active type:", typeof seoSettings?.active);
     if (!seoSettings || seoSettings.active !== true) {
       console.log("Falling back to static metadata because SEO is inactive or missing");
+      const siteBase = "https://gocomfortusa.com";
+      const pageCanonical = cleanPathname ? `${siteBase}${cleanPathname}` : siteBase;
       return {
         title: "GoComfortUSA - Professional Travel Assistance & Consultation | Flights, Hotels & More",
         description: "Personalized travel research and assistance for flights, hotels, and lifestyle services. Get expert booking guidance and route optimization tailored to your needs.",
-        metadataBase: new URL("https://gocomfortusa.com"),
+        metadataBase: new URL(siteBase),
         icons: {
           icon: "/ass/logo-round.png",
           shortcut: "/ass/logo-round.png",
@@ -44,7 +55,7 @@ export async function generateMetadata() {
           images: ["/ass/logo-round.png"],
         },
         alternates: {
-          canonical: "https://gocomfortusa.com"
+          canonical: pageCanonical,
         },
         other: {
           cyber: "9fa74b5554f3953be569783694238369",
@@ -52,10 +63,12 @@ export async function generateMetadata() {
       };
     }
     console.log("SEO settings used in metadata:", seoSettings);
+    const siteBase = (seoSettings.canonicalUrl || "https://gocomfortusa.com").replace(/\/+$/, "");
+    const pageCanonical = cleanPathname ? `${siteBase}${cleanPathname}` : siteBase;
     return {
       title: seoSettings.siteTitle,
       description: seoSettings.siteDescription,
-      metadataBase: new URL(seoSettings.canonicalUrl),
+      metadataBase: new URL(siteBase),
       icons: {
         icon: "/ass/logo-round.png",
         shortcut: "/ass/logo-round.png",
@@ -74,18 +87,20 @@ export async function generateMetadata() {
         images: [seoSettings.twitterImage],
       },
       alternates: {
-        canonical: seoSettings.canonicalUrl
+        canonical: pageCanonical,
       },
-        other: {
-          cyber: "9fa74b5554f3953be569783694238369",
-        },
+      other: {
+        cyber: "9fa74b5554f3953be569783694238369",
+      },
     };
   } catch (error) {
     console.error("Error fetching SEO settings for metadata:", error);
+    const siteBase = "https://gocomfortusa.com";
+    const pageCanonical = cleanPathname ? `${siteBase}${cleanPathname}` : siteBase;
     return {
       title: "GoComfortUSA - Professional Travel Assistance & Consultation",
       description: "GoComfortUSA provides personalized travel assistance including flight and hotel research, planning, and expert booking support for a hassle-free travel experience.",
-      metadataBase: new URL("https://gocomfortusa.com"),
+      metadataBase: new URL(siteBase),
       icons: {
         icon: "/ass/logo-round.png",
         shortcut: "/ass/logo-round.png",
@@ -104,11 +119,11 @@ export async function generateMetadata() {
         images: ["/ass/logo-round.png"],
       },
       alternates: {
-        canonical: "https://gocomfortusa.com"
+        canonical: pageCanonical,
       },
-        other: {
-          cyber: "9fa74b5554f3953be569783694238369",
-        },
+      other: {
+        cyber: "9fa74b5554f3953be569783694238369",
+      },
     };
   }
 }

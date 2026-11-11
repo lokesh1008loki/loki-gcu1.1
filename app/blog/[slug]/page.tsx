@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Calendar, ArrowLeft, Facebook, Twitter, Linkedin, Share2, Clock, Sparkles, ChevronRight, ShieldCheck } from "lucide-react"
 import { prisma } from "@/lib/prisma"
+import { STATIC_SLUG_CONTENT } from "@/lib/static-blogs"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
@@ -32,65 +33,6 @@ type BlogWithAuthor = Blog & {
   author: {
     name: string
   }
-}
-
-// Fallback articles for resilience
-const STATIC_SLUG_CONTENT: Record<string, Partial<BlogWithAuthor>> = {
-  "how-to-book-cheap-christmas-flights-in-2026-and-actually-get-home-for-less": {
-    title: "How to Book Cheap Christmas Flights in 2026 (and Actually Get Home for Less)",
-    slug: "how-to-book-cheap-christmas-flights-in-2026-and-actually-get-home-for-less",
-    image: "/ass/flight united.jpg",
-    createdAt: new Date("2026-11-05"),
-    author: { name: "GoComfort Flight Desk" },
-    excerpt: "Flying home for Christmas? Discover the exact calendar window to book, which days cost less, and how our flight research secures domestic US fares before airline algorithms spike.",
-    content: `
-      <h2>The Reality of Holiday Airfare Pricing</h2>
-      <p>Airlines know that December travel is non negotiable for most families. Yield management algorithms begin adjusting seat inventories as early as September, steadily removing cheaper fare buckets until only full-fare coach tickets remain.</p>
-      
-      <h2>1. The 54 Day Booking Rule</h2>
-      <p>Historical booking data confirms that domestic US holiday airfare reaches its optimal price window roughly 54 to 45 days before departure. Waiting until December almost guarantees paying double the standard fare.</p>
-
-      <h2>2. Fly on Off Peak Days</h2>
-      <p>Avoiding travel on Friday, December 18 and Sunday, December 27 can cut your ticket price by 30 to 40 percent. Departing early morning on Christmas Eve or returning on New Year's Day morning frequently opens up wholesale partner seats that stay hidden on consumer booking portals.</p>
-
-      <h2>3. Let Specialists Audit Route Options</h2>
-      <p>Instead of manually refreshing travel sites, GoComfortUSA evaluates direct airline partner inventory, mixed-carrier connections, and authorized route waivers so you secure true cost bookings with zero hidden markups.</p>
-    `,
-  },
-  "how-to-save-50-percent-on-domestic-flights": {
-    title: "How to Save 50% on Domestic Flights: Insider Airline Booking Strategies",
-    slug: "how-to-save-50-percent-on-domestic-flights",
-    image: "/ass/slider_1.jpg",
-    createdAt: new Date("2026-11-03"),
-    author: { name: "Aviation Research Team" },
-    excerpt: "Avoid hidden carrier fees, optimize multi-city routes, and learn how authorized partner channels unlock up to 30 to 50 percent lower airfares on major carriers.",
-    content: `
-      <h2>The Flaws in Standard Flight Search Engines</h2>
-      <p>Most flight comparison websites prioritize airlines that pay affiliate commissions. They frequently bundle restrictive fare classes with hidden baggage fees and separate seat selection charges.</p>
-      
-      <h2>Key Strategies for Maximum Savings:</h2>
-      <ul>
-        <li><strong>Split-Ticket Routing:</strong> Booking outbound and return journeys on separate partner carriers often saves hundreds compared to a traditional round-trip ticket.</li>
-        <li><strong>Nearby Regional Hubs:</strong> Evaluating secondary airports (such as Oakland instead of San Francisco, or Fort Lauderdale instead of Miami) unlocks lower municipal airport fees.</li>
-        <li><strong>Direct Wholesale Desk Reconciliations:</strong> Working with our concierge desk allows travelers to access negotiated corporate rates without subscription fees.</li>
-      </ul>
-    `,
-  },
-  "how-to-save-money-on-theme-park-tickets": {
-    title: "How to Save Money on Theme Park Tickets: Disneyland, Universal & Water Parks",
-    slug: "how-to-save-money-on-theme-park-tickets",
-    image: "/ass/disneyland-01.jpg",
-    createdAt: new Date("2026-10-28"),
-    author: { name: "Park Concierge" },
-    excerpt: "Everything you need to know about skipping long box office queues and getting legitimate promotional tickets for Disneyland Resort, Universal Studios, and water parks.",
-    content: `
-      <h2>Navigating Theme Park Ticket Tiers</h2>
-      <p>Theme park ticket prices fluctuate based on attendance calendar tiers, seasonal promotions, and multi-day ticket packages. Buying tickets at the gate is universally the most expensive method.</p>
-      
-      <h2>Authorized Partner Access:</h2>
-      <p>GoComfortUSA coordinates directly with authorized admission wholesalers. You receive official park barcodes and confirmation numbers that link directly into your official Disneyland or Universal mobile application, skipping box office queues completely.</p>
-    `,
-  },
 }
 
 export async function generateMetadata({
@@ -129,14 +71,41 @@ export async function generateMetadata({
     }
   }
 
+  const pageTitle = blog.metaTitle
+    ? blog.metaTitle.includes("GoComfort")
+      ? blog.metaTitle
+      : `${blog.metaTitle} | GoComfort USA`
+    : `${blog.title} | GoComfort USA`
+
+  const pageDescription = blog.metaDescription || blog.excerpt || undefined
+
+  const canonical = (blog.canonicalUrl?.trim() || `https://gocomfortusa.com/blog/${slug}`).replace(/\/+$/, "")
+
+  const keywords = blog.keywords
+    ? (Array.isArray(blog.keywords)
+        ? blog.keywords
+        : blog.keywords.split(",").map((k: string) => k.trim()).filter(Boolean))
+    : undefined
+
   return {
-    title: `${blog.metaTitle || blog.title} | GoComfort USA`,
-    description: blog.metaDescription || blog.excerpt || undefined,
+    title: pageTitle,
+    description: pageDescription,
+    keywords,
+    alternates: {
+      canonical,
+    },
     openGraph: {
       title: blog.metaTitle || blog.title,
-      description: blog.metaDescription || blog.excerpt || undefined,
+      description: pageDescription,
       images: blog.image ? [{ url: blog.image }] : undefined,
       type: "article",
+      publishedTime: blog.createdAt ? new Date(blog.createdAt).toISOString() : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: blog.metaTitle || blog.title,
+      description: pageDescription,
+      images: blog.image ? [blog.image] : undefined,
     },
   }
 }

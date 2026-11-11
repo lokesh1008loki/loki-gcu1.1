@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "Mastering Flight Optimization: Expert Travel Research Guide 2025 | GoComfortUSA",
   description: "Learn how to optimize your flight routes and travel planning in 2025. Discover professional research strategies and expert assistance for a seamless journey with GoComfortUSA.",
   keywords: "flight optimization, travel research, route planning, professional travel assistance, USA travel planning, expert booking guidance",
+  alternates: {
+    canonical: "https://gocomfortusa.com/blog/how-to-save-50-percent-on-domestic-flights",
+  },
   openGraph: {
     title: "Mastering Flight Optimization: Expert Travel Research Guide 2025",
     description: "Discover professional strategies to optimize your flight routes and travel planning in 2025. Expert assistance for a seamless journey.",

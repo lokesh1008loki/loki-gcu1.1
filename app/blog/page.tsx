@@ -12,11 +12,15 @@ export const metadata: Metadata = {
     "Expert travel research, airline booking strategies, theme park ticket discounts, and domestic living guides from GoComfortUSA specialists.",
   keywords:
     "travel blog, cheap flights, theme park tickets, disneyland discounts, utility bill relief, ikea delivery deals, GoComfortUSA",
+  alternates: {
+    canonical: "https://gocomfortusa.com/blog",
+  },
   openGraph: {
     title: "Travel and Living Blog | GoComfort USA",
     description:
       "Actionable travel hacks, airline booking strategies, and domestic living guides.",
     type: "website",
+    url: "https://gocomfortusa.com/blog",
   },
 }
 
@@ -87,6 +91,19 @@ const STATIC_FALLBACK_POSTS: BlogPostItem[] = [
     readingTime: "5 min read",
     createdAt: "Oct 15, 2026",
     authorName: "Living & Order Desk",
+  },
+  {
+    id: "post-6",
+    title: "Why Your Hotel Costs More at Checkout: Resort Fees, Taxes and the Total-Price Check",
+    slug: "why-your-hotel-costs-more-at-checkout-resort-fees-taxes-and-the-total-price-check",
+    excerpt:
+      "The nightly rate is not the price. Resort fees, destination fees and taxes are why the total jumps at checkout — what changed under the FTC's 2025 total-price rule, and the five-minute check that stops the surprise.",
+    image: "/ass/slider_2.jpg",
+    category: "flights",
+    categoryLabel: "Hotel & Stays",
+    readingTime: "6 min read",
+    createdAt: "Nov 10, 2026",
+    authorName: "GoComfort Editorial Desk",
   },
 ]
 
