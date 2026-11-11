@@ -49,8 +49,15 @@ export function ImageUpload({ onImageUploadAction, currentImage }: ImageUploadPr
         throw new Error(data.error || "Upload failed")
       }
 
-      // Ensure the image URL starts with a forward slash
-      const imageUrl = data.filename.startsWith('/') ? data.filename : `/${data.filename}`
+      // Support both full CDN URLs (e.g. Backblaze B2) and local relative paths
+      const rawUrl = data.url || data.filename
+      const imageUrl =
+        rawUrl.startsWith("http://") ||
+        rawUrl.startsWith("https://") ||
+        rawUrl.startsWith("/")
+          ? rawUrl
+          : `/${rawUrl}`
+      setPreview(imageUrl)
       onImageUploadAction(imageUrl)
       toast.success("Image uploaded successfully")
     } catch (error) {
