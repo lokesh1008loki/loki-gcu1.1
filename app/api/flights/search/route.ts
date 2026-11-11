@@ -5,22 +5,24 @@ export const runtime = "nodejs";
 export const maxDuration = 60; // Allow sufficient time for live Booking.com scrape
 
 const VPS_SCRAPER_URL = process.env.SCRAPER_API_URL || "http://187.127.191.92:5001";
+const DEFAULT_SCRAPER_KEY = "gcu_sec_7557d718c8998e4f54b841e248e0d117e9601a6aa53f3374047c92abc9c5a6d5";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    // Candidate URLs for the Python Scraper: checks configured env, VPS endpoint, and local dev
+    // Candidate URLs for the Python Scraper: checks configured env, VPS endpoint, and local dev if non-production
+    const isVercel = Boolean(process.env.VERCEL);
     const candidates = [
       process.env.SCRAPER_API_URL,
       VPS_SCRAPER_URL,
-      "http://127.0.0.1:5001",
-      "http://localhost:5001",
-      "http://127.0.0.1:5002",
-      "http://localhost:5002",
+      !isVercel ? "http://127.0.0.1:5001" : null,
+      !isVercel ? "http://localhost:5001" : null,
+      !isVercel ? "http://127.0.0.1:5002" : null,
+      !isVercel ? "http://localhost:5002" : null,
     ].filter(Boolean) as string[];
 
-    const apiKey = process.env.SCRAPER_API_KEY || "";
+    const apiKey = process.env.SCRAPER_API_KEY || DEFAULT_SCRAPER_KEY;
 
     const payload = JSON.stringify({
       from: body.from,
