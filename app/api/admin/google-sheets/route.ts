@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { verifyAdminAuth } from "@/lib/admin-auth"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
@@ -6,8 +7,23 @@ export const runtime = "nodejs"
 // Google Sheets API credentials
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
+// Neutralize formula injection (CWE-1236)
+function sanitizeSheetValue(val: unknown): unknown {
+  if (typeof val === "string") {
+    if (/^[=+\-@\t\r]/.test(val)) {
+      return `'${val}`
+    }
+  }
+  return val
+}
+
 export async function POST(request: Request) {
   try {
+    const adminAuth = await verifyAdminAuth()
+    if (!adminAuth.authorized) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+    }
+
     const { google } = await import("googleapis")
     const body = await request.json()
     const { formData, sheetId, sheetName } = body
@@ -26,8 +42,11 @@ export async function POST(request: Request) {
     // Create Google Sheets instance
     const sheets = google.sheets({ version: "v4", auth })
 
-    // Convert form data to array format for Google Sheets
-    const values = Object.entries(formData).map(([key, value]) => [key, value])
+    // Convert form data to array format for Google Sheets and sanitize formulas
+    const values = Object.entries(formData).map(([key, value]) => [
+      sanitizeSheetValue(key),
+      sanitizeSheetValue(value)
+    ])
 
     // Append data to the specified Google Sheet
     const response = await sheets.spreadsheets.values.append({

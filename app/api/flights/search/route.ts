@@ -4,8 +4,7 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 export const maxDuration = 60; // Allow sufficient time for live Booking.com scrape
 
-const VPS_SCRAPER_URL = "http://187.127.191.92:5001";
-const DEFAULT_SCRAPER_KEY = "gcu_sec_7557d718c8998e4f54b841e248e0d117e9601a6aa53f3374047c92abc9c5a6d5";
+const VPS_SCRAPER_URL = process.env.SCRAPER_API_URL || "http://187.127.191.92:5001";
 
 export async function POST(req: NextRequest) {
   try {
@@ -21,7 +20,7 @@ export async function POST(req: NextRequest) {
       "http://localhost:5002",
     ].filter(Boolean) as string[];
 
-    const apiKey = process.env.SCRAPER_API_KEY || DEFAULT_SCRAPER_KEY;
+    const apiKey = process.env.SCRAPER_API_KEY || "";
 
     const payload = JSON.stringify({
       from: body.from,

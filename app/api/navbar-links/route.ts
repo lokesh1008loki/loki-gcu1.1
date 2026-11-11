@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { verifyAdminAuth } from "@/lib/admin-auth"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
@@ -34,6 +35,11 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const body = await request.json()
     // @ts-ignore
     const newLink = await prisma.navbarLink?.create({
@@ -54,6 +60,11 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const body = await request.json()
     if (!body.id) return NextResponse.json({ error: "ID is required" }, { status: 400 })
 
@@ -78,6 +89,11 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const { searchParams } = new URL(request.url)
     const id = searchParams.get("id")
     if (!id) return NextResponse.json({ error: "ID is required" }, { status: 400 })

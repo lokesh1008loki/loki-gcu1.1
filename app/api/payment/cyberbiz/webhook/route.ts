@@ -40,6 +40,24 @@ export async function POST(request: Request) {
       payload.signature ||
       payload.sign
 
+    // In production or when secretKey is configured, verify HMAC signature
+    if (CYBERBIZ_CONFIG.secretKey) {
+      const isValid = verifyCyberbizSignature(rawBody, signature) || verifyCyberbizSignature(payload, signature)
+      if (!isValid) {
+        console.warn("Unauthorized CyberBiz webhook attempt: invalid signature")
+        return NextResponse.json(
+          { error: "Invalid webhook signature" },
+          { status: 401 }
+        )
+      }
+    } else if (process.env.NODE_ENV === "production") {
+      console.error("CyberBiz webhook rejected: CYBERBIZ_SECRET_KEY is not configured")
+      return NextResponse.json(
+        { error: "Webhook verification unavailable" },
+        { status: 500 }
+      )
+    }
+
     // Log details for debugging
     const { order_id, orderId, id, amount, status, currency } = payload
     const effectiveOrderId = order_id || orderId || id || "UNKNOWN"

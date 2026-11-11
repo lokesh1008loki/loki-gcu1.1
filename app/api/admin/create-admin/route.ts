@@ -1,12 +1,34 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
+import { verifyAdminAuth } from "@/lib/admin-auth"
 
-export async function POST() {
+export async function POST(request: Request) {
   try {
-    const email = "admin01@gocomfortusa.com"
-    const password = "Lokeshanand@786"
-    const name = "Admin User"
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated || auth.user?.role !== "superadmin") {
+      return NextResponse.json(
+        { error: "Forbidden: Only superadmins can create admin users." },
+        { status: 403 }
+      )
+    }
+
+    const body = await request.json().catch(() => ({}))
+    const { email, password, name = "Admin User" } = body
+
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: "Email and password are required." },
+        { status: 400 }
+      )
+    }
+
+    if (typeof password !== "string" || password.length < 8) {
+      return NextResponse.json(
+        { error: "Password must be at least 8 characters long." },
+        { status: 400 }
+      )
+    }
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -20,8 +42,8 @@ export async function POST() {
       )
     }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10)
+    // Hash password using 12 salt rounds
+    const hashedPassword = await bcrypt.hash(password, 12)
 
     // Create new admin user
     const newUser = await prisma.user.create({
@@ -29,7 +51,7 @@ export async function POST() {
         email,
         password: hashedPassword,
         name,
-        role: "superadmin"
+        role: "admin"
       }
     })
 

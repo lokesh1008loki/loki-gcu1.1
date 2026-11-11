@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "next-auth";
+import { verifyAdminAuth } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -35,6 +35,11 @@ function parseFlightDataWithLogs(raw: string | null | undefined): { dataObj: any
 
 export async function GET(req: NextRequest) {
   try {
+    const auth = await verifyAdminAuth();
+    if (!auth.authorized) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status");
     const search = searchParams.get("search");
@@ -102,7 +107,11 @@ export async function GET(req: NextRequest) {
  */
 export async function PATCH(req: NextRequest) {
   try {
-    const session = await getServerSession();
+    const auth = await verifyAdminAuth();
+    if (!auth.authorized) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await req.json();
     const { 
       id, 
@@ -131,7 +140,7 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "Flight inquiry not found" }, { status: 404 });
     }
 
-    const author = (session?.user as any)?.email || clientAuthor || "Admin";
+    const author = auth.user?.email || (auth.user as any)?.name || clientAuthor || "Admin";
     const changes: Array<{ field: string; from: any; to: any }> = [];
 
     const dataToUpdate: any = {};
@@ -218,7 +227,11 @@ export async function PATCH(req: NextRequest) {
  */
 export async function DELETE(req: NextRequest) {
   try {
-    const session = await getServerSession();
+    const auth = await verifyAdminAuth();
+    if (!auth.authorized) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await req.json().catch(() => ({}));
     const { searchParams } = new URL(req.url);
     const id = body.id || searchParams.get("id");
@@ -238,7 +251,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: "Flight inquiry not found" }, { status: 404 });
     }
 
-    const author = (session?.user as any)?.email || clientAuthor || "Admin";
+    const author = auth.user?.email || (auth.user as any)?.name || clientAuthor || "Admin";
     const { dataObj, logs } = parseFlightDataWithLogs(existing.flightData);
 
     const softDeleteLog: AuditLogEntry = {
@@ -282,7 +295,11 @@ export async function DELETE(req: NextRequest) {
  */
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession();
+    const auth = await verifyAdminAuth();
+    if (!auth.authorized) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await req.json();
     const { id, action, author: clientAuthor } = body;
 
@@ -303,7 +320,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Flight inquiry not found" }, { status: 404 });
     }
 
-    const author = (session?.user as any)?.email || clientAuthor || "Admin";
+    const author = auth.user?.email || (auth.user as any)?.name || clientAuthor || "Admin";
     const { dataObj, logs } = parseFlightDataWithLogs(existing.flightData);
 
     // Restore to previousStatus or default to "PENDING"

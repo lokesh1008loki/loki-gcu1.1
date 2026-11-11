@@ -126,6 +126,7 @@ export function BlogExplorer({ initialPosts }: BlogExplorerProps) {
                 src={featuredPost.image || "/ass/slider_1.jpg"}
                 alt={featuredPost.title}
                 fill
+                sizes="(max-width: 1024px) 100vw, 60vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
                 priority
               />
@@ -189,6 +190,7 @@ export function BlogExplorer({ initialPosts }: BlogExplorerProps) {
                       src={post.image || "/ass/slider_2.jpg"}
                       alt={post.title}
                       fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
                     />
                     <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-md bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-semibold uppercase tracking-wider">

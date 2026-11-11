@@ -12,9 +12,9 @@ export async function DELETE(
   try {
     const auth = await verifyAdminAuth(request)
     
-    if (!auth.authenticated || auth.user?.role !== "admin") {
+    if (!auth.authenticated || !auth.user || !["admin", "superadmin"].includes(auth.user.role || "")) {
       return NextResponse.json(
-        { error: "Unauthorized. Only admins can delete users." },
+        { error: "Unauthorized. Admin privileges required." },
         { status: 403 }
       )
     }
@@ -43,10 +43,18 @@ export async function DELETE(
       )
     }
 
-    // Prevent deleting another admin or self
-    if (userToDelete.role === "admin" && userToDelete.id === auth.user.id) {
+    // Prevent deleting self
+    if (userToDelete.id === auth.user.id) {
       return NextResponse.json(
-        { error: "Cannot delete your own admin account" },
+        { error: "Cannot delete your own account" },
+        { status: 403 }
+      )
+    }
+
+    // Only superadmins can delete superadmins
+    if (userToDelete.role === "superadmin" && auth.user.role !== "superadmin") {
+      return NextResponse.json(
+        { error: "Forbidden: Cannot delete a superadmin account" },
         { status: 403 }
       )
     }

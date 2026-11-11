@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { verifyAdminAuth } from "@/lib/admin-auth"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const today = new Date().toISOString().split('T')[0]
 
     const todayVisitors = await prisma.visitorCount.findUnique({

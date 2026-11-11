@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
@@ -7,8 +8,34 @@ export const runtime = "nodejs"
 // Google Sheets API credentials
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
+// Neutralize formula injection (CWE-1236)
+function sanitizeSheetValue(val: unknown): unknown {
+  if (typeof val === "string") {
+    if (/^[=+\-@\t\r]/.test(val)) {
+      return `'${val}`
+    }
+  }
+  return val
+}
+
 export async function POST(request: Request) {
   try {
+    const clientIp = getClientIp(request)
+    const rateCheck = checkRateLimit(`${clientIp}:form-submission`, 15, 60_000)
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: "Too many submissions. Rate limit is 15 requests per minute. Please try again later." },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(rateCheck.retryAfterSeconds),
+            "X-RateLimit-Limit": "15",
+            "X-RateLimit-Remaining": "0",
+          },
+        }
+      )
+    }
+
     const { google } = await import("googleapis")
     const body = await request.json()
     const { formId, formData } = body
@@ -27,7 +54,7 @@ export async function POST(request: Request) {
     }
 
     // Get form configuration from database
-    const formConfig = await prisma.formConfig.findUnique({
+    const formConfig = await (prisma as any).formConfig?.findUnique({
       where: { id: formId },
     })
 
@@ -45,12 +72,12 @@ export async function POST(request: Request) {
     // Create Google Sheets instance
     const sheets = google.sheets({ version: "v4", auth })
 
-    // Prepare data for Google Sheets
+    // Prepare data for Google Sheets with formula injection neutralization
     // First row will be headers if the sheet is empty
-    const headers = Object.keys(formData)
+    const headers = Object.keys(formData).map((key) => sanitizeSheetValue(key))
 
     // Second row will be the actual data
-    const values = Object.values(formData)
+    const values = Object.values(formData).map((val) => sanitizeSheetValue(val))
 
     // Check if sheet exists and has headers
     const sheetInfo = await sheets.spreadsheets.values.get({
@@ -84,7 +111,7 @@ export async function POST(request: Request) {
     }
 
     // Store submission in database for backup
-    await prisma.formSubmission.create({
+    await (prisma as any).formSubmission?.create({
       data: {
         formConfigId: formId,
         data: formData,

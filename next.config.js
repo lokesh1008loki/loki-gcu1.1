@@ -2,6 +2,24 @@
 const nextConfig = {
   serverExternalPackages: ['googleapis', 'jsonwebtoken', 'bcryptjs', 'bcrypt', '@prisma/client'],
   images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.backblazeb2.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'f005.backblazeb2.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 's3.us-east-005.backblazeb2.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'gocomfortusa.com',
+      },
+    ],
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
@@ -39,6 +57,18 @@ const nextConfig = {
           {
             key: 'X-XSS-Protection',
             value: '1; mode=block',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=(), browsing-topics=()',
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
           },
         ],
       },

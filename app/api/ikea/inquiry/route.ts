@@ -1,11 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
   try {
+    const clientIp = getClientIp(req);
+    const rateCheck = checkRateLimit(`${clientIp}:ikea-inquiry`, 15, 60_000);
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: "Too many IKEA inquiries submitted. Rate limit is 15 requests per minute. Please try again later." },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(rateCheck.retryAfterSeconds),
+            "X-RateLimit-Limit": "15",
+            "X-RateLimit-Remaining": "0",
+          },
+        }
+      );
+    }
+
     const body = await req.json();
 
     const {
