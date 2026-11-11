@@ -56,6 +56,11 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const body = await request.json()
     
     if (!body.phoneNumber && !body.email) {

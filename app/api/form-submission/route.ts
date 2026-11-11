@@ -7,6 +7,16 @@ export const runtime = "nodejs"
 // Google Sheets API credentials
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
+// Neutralize formula injection (CWE-1236)
+function sanitizeSheetValue(val: unknown): unknown {
+  if (typeof val === "string") {
+    if (/^[=+\-@\t\r]/.test(val)) {
+      return `'${val}`
+    }
+  }
+  return val
+}
+
 export async function POST(request: Request) {
   try {
     const { google } = await import("googleapis")
@@ -27,7 +37,7 @@ export async function POST(request: Request) {
     }
 
     // Get form configuration from database
-    const formConfig = await prisma.formConfig.findUnique({
+    const formConfig = await (prisma as any).formConfig?.findUnique({
       where: { id: formId },
     })
 
@@ -45,12 +55,12 @@ export async function POST(request: Request) {
     // Create Google Sheets instance
     const sheets = google.sheets({ version: "v4", auth })
 
-    // Prepare data for Google Sheets
+    // Prepare data for Google Sheets with formula injection neutralization
     // First row will be headers if the sheet is empty
-    const headers = Object.keys(formData)
+    const headers = Object.keys(formData).map((key) => sanitizeSheetValue(key))
 
     // Second row will be the actual data
-    const values = Object.values(formData)
+    const values = Object.values(formData).map((val) => sanitizeSheetValue(val))
 
     // Check if sheet exists and has headers
     const sheetInfo = await sheets.spreadsheets.values.get({
@@ -84,7 +94,7 @@ export async function POST(request: Request) {
     }
 
     // Store submission in database for backup
-    await prisma.formSubmission.create({
+    await (prisma as any).formSubmission?.create({
       data: {
         formConfigId: formId,
         data: formData,

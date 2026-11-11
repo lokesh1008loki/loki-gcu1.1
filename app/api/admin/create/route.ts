@@ -1,10 +1,26 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
+import { verifyAdminAuth } from "@/lib/admin-auth"
 
 export async function POST(request: Request) {
   try {
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated || auth.user?.role !== "superadmin") {
+      return NextResponse.json(
+        { error: "Forbidden: Superadmin privileges required" },
+        { status: 403 }
+      )
+    }
+
     const { email, password, name } = await request.json()
+
+    if (!email || !password || typeof password !== "string" || password.length < 8) {
+      return NextResponse.json(
+        { error: "Valid email and a password of at least 8 characters are required" },
+        { status: 400 }
+      )
+    }
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({

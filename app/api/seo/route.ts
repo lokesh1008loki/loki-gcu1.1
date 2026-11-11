@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { verifyAdminAuth } from "@/lib/admin-auth"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
@@ -39,7 +40,7 @@ export async function GET(request: Request) {
       }
     }
 
-    if (!settings || settings.active === false) {
+    if (!settings || (settings as any)?.active === false) {
       return NextResponse.json(staticDefaults, {
         headers: {
           "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
@@ -67,6 +68,11 @@ export async function GET(request: Request) {
 
 export async function PUT(request: Request) {
   try {
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const body = await request.json()
     const {
       siteTitle,

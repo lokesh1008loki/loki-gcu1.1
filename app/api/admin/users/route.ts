@@ -1,12 +1,25 @@
 import { NextResponse } from "next/server"
 import { hash } from "bcryptjs"
 import { prisma } from "@/lib/prisma"
+import { verifyAdminAuth } from "@/lib/admin-auth"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
 
 export async function POST(req: Request) {
   try {
+    const auth = await verifyAdminAuth()
+    if (!auth.authorized) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    if (auth.user?.role !== "superadmin") {
+      return NextResponse.json(
+        { error: "Forbidden: Only superadmins can create admin users" },
+        { status: 403 }
+      )
+    }
+
     const body = await req.json()
     const { name, email, password, role } = body
 
@@ -68,6 +81,11 @@ export async function POST(req: Request) {
 
 export async function GET() {
   try {
+    const auth = await verifyAdminAuth()
+    if (!auth.authorized) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const users = await prisma.user.findMany({
       select: {
         id: true,

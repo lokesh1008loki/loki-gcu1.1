@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { verifyAdminAuth } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -7,6 +8,11 @@ export const runtime = "nodejs";
 // GET all hotel inquiries for Admin dashboard
 export async function GET(req: NextRequest) {
   try {
+    const auth = await verifyAdminAuth();
+    if (!auth.authorized) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const inquiries = await prisma.hotelInquiry.findMany({
       orderBy: { createdAt: "desc" },
     });
@@ -28,6 +34,11 @@ export async function GET(req: NextRequest) {
 // PATCH update status or notes for an inquiry
 export async function PATCH(req: NextRequest) {
   try {
+    const auth = await verifyAdminAuth();
+    if (!auth.authorized) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await req.json();
     const { id, status, adminNotes } = body;
 

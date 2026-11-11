@@ -26,19 +26,32 @@ export function PopupNotification() {
     return null;
   }
 
+  const escapeHtml = (str: string) => {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  };
+
   // Function to find and replace promo codes with copy buttons
   const processContent = (content: string) => {
+    // Escape user/database content to prevent XSS (CWE-79)
+    const sanitized = escapeHtml(content || "");
+
     // Regular expression to match 4-8 capital letters followed by numbers
     const promoCodeRegex = /([A-Z]{4,8}\d+)/g;
     
-    // Replace each match with a copy button
-    return content.replace(promoCodeRegex, (match) => {
+    // Replace each match with a copy button (data-code handled by event listener)
+    return sanitized.replace(promoCodeRegex, (match) => {
       return `<span class="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded">
         ${match}
         <button 
-          onclick="copyPromoCode('${match}')"
+          type="button"
           class="copy-btn inline-flex items-center justify-center h-6 w-6 rounded-full hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
           data-code="${match}"
+          aria-label="Copy promo code"
         >
           <svg class="copy-icon h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/>

@@ -14,7 +14,6 @@ import { toast } from "sonner"
 import { ImageUpload } from "@/components/admin/image-upload"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import TestSession from "./test-session"
 
 interface Blog {
   id: string
@@ -233,7 +232,6 @@ export default function BlogManagement() {
 
   return (
     <div className="space-y-6">
-      <TestSession />
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Blog Management</h1>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
