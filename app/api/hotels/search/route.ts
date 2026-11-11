@@ -345,9 +345,15 @@ export async function GET(req: NextRequest) {
     const key = normalizeDestinationKey(destination);
     const baseList = DESTINATION_CATALOGS[key] || DESTINATION_CATALOGS.miami;
 
-    // Calculate dates & dynamic baseline rates
-    const d1 = checkin ? new Date(checkin) : new Date(Date.now() + 86400000 * 7);
-    const d2 = checkout ? new Date(checkout) : new Date(d1.getTime() + 86400000 * 4);
+    // Calculate dates & dynamic baseline rates with safe validation
+    let d1 = checkin ? new Date(checkin) : new Date(Date.now() + 86400000 * 7);
+    if (isNaN(d1.getTime())) {
+      d1 = new Date(Date.now() + 86400000 * 7);
+    }
+    let d2 = checkout ? new Date(checkout) : new Date(d1.getTime() + 86400000 * 4);
+    if (isNaN(d2.getTime()) || d2.getTime() <= d1.getTime()) {
+      d2 = new Date(d1.getTime() + 86400000 * 4);
+    }
     const nights = Math.max(1, Math.round((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24)));
 
     // Generate hotels with 30% discount calculated

@@ -190,11 +190,13 @@ export async function GET(req: NextRequest) {
         };
       });
 
+    const effectiveProducts = products.length > 0 ? products : buildFallbackResponse(query).products;
+
     const responsePayload = {
       status: "success",
       query,
-      totalFound: products.length,
-      products,
+      totalFound: effectiveProducts.length,
+      products: effectiveProducts,
       cached: false,
     };
 
