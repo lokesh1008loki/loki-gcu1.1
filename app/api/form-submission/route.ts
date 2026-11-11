@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
@@ -19,6 +20,22 @@ function sanitizeSheetValue(val: unknown): unknown {
 
 export async function POST(request: Request) {
   try {
+    const clientIp = getClientIp(request)
+    const rateCheck = checkRateLimit(`${clientIp}:form-submission`, 15, 60_000)
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: "Too many submissions. Rate limit is 15 requests per minute. Please try again later." },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(rateCheck.retryAfterSeconds),
+            "X-RateLimit-Limit": "15",
+            "X-RateLimit-Remaining": "0",
+          },
+        }
+      )
+    }
+
     const { google } = await import("googleapis")
     const body = await request.json()
     const { formId, formData } = body

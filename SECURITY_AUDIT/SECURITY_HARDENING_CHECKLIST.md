@@ -27,6 +27,12 @@
   - `Referrer-Policy: strict-origin-when-cross-origin`
   - `Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=()`
   - `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload`
+- [x] **Rate Limiting Applied (15 req/min per IP):** Enforced 15 requests/minute sliding-window rate limit on all public inquiry endpoints (`/api/flights/inquiry`, `/api/hotels/inquiry`, `/api/ikea/inquiry`, `/api/form-submission`) in both `middleware.ts` and individual route handlers.
+- [x] **Managed Challenge & IP Restrictions on `/admin/*`:**
+  - Automated vulnerability scanner detection and blocking (`sqlmap`, `nikto`, `acunetix`, `masscan`, etc.).
+  - Cloudflare edge threat score verification (`cf-threat-score` > 25 blocked).
+  - Configurable IP whitelisting via `ADMIN_ALLOWED_IPS` / `ALLOWED_ADMIN_IPS` environment variable.
+  - Brute-force rate limiting on `/admin/login` (10 attempts per 5 minutes per IP).
 - [x] **Production Debug Stripping:** Removed `<TestSession />` component and disabled console logs in production builds via `next.config.js`.
 
 ---
@@ -66,3 +72,4 @@
   - Enforce TLS 1.3 only; disable TLS 1.0 and 1.1.
 - [ ] **CORS Policy:**
   - Keep Next.js API routes restricted to same-origin requests unless explicit cross-origin webhooks are designated.
+

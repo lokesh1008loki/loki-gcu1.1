@@ -75,6 +75,8 @@ A rigorous, end-to-end Vulnerability Assessment and Penetration Testing (VAPT) r
     - *Fix:* Added `Referrer-Policy`, `Permissions-Policy`, and `Strict-Transport-Security`.
 12. **VULN-012 (CWE-798 - Low 4.1):** Hardcoded fallback scraper API key in `app/api/flights/search/route.ts`.
     - *Fix:* Removed hardcoded secret string and loaded strictly from environment variables.
+13. **VULN-013 (CWE-770 - Rate Limiting & Admin Perimeter Challenge):** Missing request throttling on public inquiry forms and open administrative perimeter.
+    - *Fix:* Enforced 15 req/min rate limit per IP on `/api/flights/inquiry`, `/api/hotels/inquiry`, `/api/ikea/inquiry`, and `/api/form-submission` in `middleware.ts` and route handlers. Enabled Cloudflare threat score verification, automated scanner blocking, and configurable IP restrictions (`ADMIN_ALLOWED_IPS`) on `/admin/*`.
 
 ---
 
@@ -92,3 +94,4 @@ As of November 2026, all identified critical, high, medium, and low security vul
 
 *Report Prepared By:*  
 **Principal Cybersecurity Engineer & Lead VAPT Specialist**
+

@@ -65,3 +65,4 @@ The objective was to identify security vulnerabilities, evaluate exposure agains
 2. **Automated CI/CD Security Gates:** Incorporate automated static code analysis (SAST) using ESLint security plugins and dependency vulnerability audits (`npm audit`) into GitHub Actions.
 3. **Database Privilege Segregation:** Ensure the CockroachDB connection string uses a least-privilege database user restricted from schema drops in production.
 4. **WAF & Rate Limiting:** Enforce Cloudflare / reverse-proxy rate limiting (e.g. 50 requests/min on public form submission routes) to protect against resource exhaustion and spam.
+

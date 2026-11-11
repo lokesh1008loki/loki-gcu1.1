@@ -99,3 +99,4 @@ flowchart TD
 2. **Next.js Server $\rightarrow$ NextAuth Guard:** Cryptographic boundary. Validates HMAC-signed session cookies and encrypted JWTs against `process.env.NEXTAUTH_SECRET`.
 3. **Admin Guard $\rightarrow$ Data Persistence (Prisma/CockroachDB):** Privileged boundary. All queries use parameterized SQL generation through Prisma Client. No raw user string interpolation permitted.
 4. **Server $\rightarrow$ Third-Party Cloud APIs:** Protected outbound zone. Service account keys and B2 keys are isolated strictly within runtime server memory and never dispatched to the browser.
+

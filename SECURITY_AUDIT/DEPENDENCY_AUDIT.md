@@ -57,3 +57,4 @@ An automated dependency vulnerability scan identified **25 known vulnerabilities
 1. **Planned Upgrade Track:** Schedule an upgrade of `next` from `14.1.0` to `14.2.15` in a separate staging branch.
 2. **`npm audit fix` Application:** Run targeted non-breaking patch updates on `cross-spawn` and `micromatch`.
 3. **Automated Dependabot / Renovate:** Enable GitHub Dependabot security alerts with automated PR creation for patch-level vulnerability fixes.
+
