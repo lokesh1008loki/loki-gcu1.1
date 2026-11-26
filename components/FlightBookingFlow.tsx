@@ -27,7 +27,8 @@ import {
   Share2,
   HelpCircle,
   Backpack,
-  Briefcase
+  Briefcase,
+  Send
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -101,6 +102,28 @@ const POPULAR_HUBS: Airport[] = [
   { code: "LAS", city: "Las Vegas", state: "NV", country: "United States", name: "Harry Reid Intl" },
   { code: "MCO", city: "Orlando", state: "FL", country: "United States", name: "Orlando Intl" },
 ]
+
+const SISTER_AIRPORTS: Record<string, { code: string; name: string }[]> = {
+  HOU: [{ code: "IAH", name: "Bush Intercontinental (IAH)" }],
+  IAH: [{ code: "HOU", name: "William P. Hobby (HOU)" }],
+  FLL: [{ code: "MIA", name: "Miami Intl (MIA)" }],
+  MIA: [{ code: "FLL", name: "Fort Lauderdale (FLL)" }],
+  JFK: [{ code: "EWR", name: "Newark (EWR)" }, { code: "LGA", name: "LaGuardia (LGA)" }],
+  EWR: [{ code: "JFK", name: "JFK Intl (JFK)" }, { code: "LGA", name: "LaGuardia (LGA)" }],
+  LGA: [{ code: "JFK", name: "JFK Intl (JFK)" }, { code: "EWR", name: "Newark (EWR)" }],
+  SFO: [{ code: "OAK", name: "Oakland (OAK)" }, { code: "SJC", name: "San Jose (SJC)" }],
+  OAK: [{ code: "SFO", name: "San Francisco (SFO)" }],
+  SJC: [{ code: "SFO", name: "San Francisco (SFO)" }],
+  ORD: [{ code: "MDW", name: "Chicago Midway (MDW)" }],
+  MDW: [{ code: "ORD", name: "Chicago O'Hare (ORD)" }],
+  DFW: [{ code: "DAL", name: "Dallas Love Field (DAL)" }],
+  DAL: [{ code: "DFW", name: "Dallas/Fort Worth (DFW)" }],
+  LAX: [{ code: "BUR", name: "Burbank (BUR)" }, { code: "LGB", name: "Long Beach (LGB)" }, { code: "SNA", name: "John Wayne (SNA)" }],
+  BUR: [{ code: "LAX", name: "Los Angeles (LAX)" }],
+  DCA: [{ code: "IAD", name: "Washington Dulles (IAD)" }, { code: "BWI", name: "Baltimore (BWI)" }],
+  IAD: [{ code: "DCA", name: "Reagan National (DCA)" }],
+  BWI: [{ code: "DCA", name: "Reagan National (DCA)" }],
+}
 
 interface AirportAutocompleteProps {
   id: string
@@ -887,11 +910,19 @@ export default function FlightBookingFlow() {
   }
 
   // --- Search Handler ---
-  const handleSearch = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault()
+  const handleSearch = async (
+    e?: React.FormEvent,
+    overrides?: { origin?: string; destination?: string; directOnly?: boolean }
+  ) => {
+    if (e && typeof (e as any).preventDefault === "function") (e as any).preventDefault()
 
-    const cleanOrigin = origin.toUpperCase().trim()
-    const cleanDest = destination.toUpperCase().trim()
+    const cleanOrigin = (overrides?.origin ?? origin).toUpperCase().trim()
+    const cleanDest = (overrides?.destination ?? destination).toUpperCase().trim()
+    const effectiveDirectOnly = overrides?.directOnly !== undefined ? overrides.directOnly : directOnly
+
+    if (overrides?.origin) setOrigin(overrides.origin)
+    if (overrides?.destination) setDestination(overrides.destination)
+    if (overrides?.directOnly !== undefined) setDirectOnly(overrides.directOnly)
 
     if (!cleanOrigin) {
       toast.error("Please enter a departure airport or city code.")
@@ -946,7 +977,7 @@ export default function FlightBookingFlow() {
           adults,
           children,
           children_ages: childAges,
-          direct_only: directOnly,
+          direct_only: effectiveDirectOnly,
           force_refresh: true,
         }),
       })
@@ -1543,21 +1574,117 @@ export default function FlightBookingFlow() {
 
       {/* Search Error State */}
       {searchError && !isLoading && (
-        <Card className="border-red-200 bg-red-50/80 dark:bg-red-950/20 dark:border-red-900 p-6">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 shrink-0" />
-            <div className="space-y-2">
-              <h4 className="font-bold text-red-900 dark:text-red-300">Flight Search Notice</h4>
-              <p className="text-sm text-red-700 dark:text-red-400">{searchError}</p>
-              <div className="pt-2 flex flex-wrap gap-2">
+        <Card className="border-amber-200 dark:border-amber-900/50 bg-gradient-to-br from-amber-50/90 via-white to-orange-50/50 dark:from-amber-950/20 dark:via-slate-900 dark:to-orange-950/10 p-6 shadow-sm">
+          <div className="flex items-start gap-4">
+            <div className="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 shrink-0">
+              <AlertCircle className="h-6 w-6" />
+            </div>
+            <div className="space-y-3 flex-1">
+              <div>
+                <h4 className="font-bold text-lg text-slate-900 dark:text-slate-100">Flight Search Notice</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">{searchError}</p>
+              </div>
+
+              {/* Sister airport suggestions and smart actions */}
+              <div className="pt-1 flex flex-wrap gap-2 items-center">
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={() => handleSearch()}
-                  className="bg-white dark:bg-slate-900 border-red-200 text-red-800 hover:bg-red-100 dark:hover:bg-red-900/30 text-xs"
+                  className="bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs shadow-xs"
                 >
                   <RotateCcw className="h-3.5 w-3.5 mr-1" />
                   Try Again
+                </Button>
+
+                {directOnly && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleSearch(undefined, { directOnly: false })}
+                    className="bg-white dark:bg-slate-900 border-blue-200 dark:border-blue-900 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 text-xs shadow-xs"
+                  >
+                    <ArrowLeftRight className="h-3.5 w-3.5 mr-1" />
+                    Include 1-Stop Connecting Flights
+                  </Button>
+                )}
+
+                {/* Destination sister airport button */}
+                {SISTER_AIRPORTS[destination.toUpperCase()]?.map((sister) => (
+                  <Button
+                    key={sister.code}
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleSearch(undefined, { destination: sister.code })}
+                    className="bg-white dark:bg-slate-900 border-emerald-200 dark:border-emerald-900 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs shadow-xs"
+                  >
+                    <Plane className="h-3.5 w-3.5 mr-1" />
+                    Search {sister.name}
+                  </Button>
+                ))}
+
+                {/* Origin sister airport button */}
+                {SISTER_AIRPORTS[origin.toUpperCase()]?.map((sister) => (
+                  <Button
+                    key={sister.code}
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleSearch(undefined, { origin: sister.code })}
+                    className="bg-white dark:bg-slate-900 border-emerald-200 dark:border-emerald-900 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs shadow-xs"
+                  >
+                    <Plane className="h-3.5 w-3.5 mr-1" />
+                    Depart from {sister.name}
+                  </Button>
+                ))}
+              </div>
+
+              {/* VIP Concierge assistance callout */}
+              <div className="mt-4 pt-3 border-t border-amber-200/60 dark:border-amber-900/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-amber-500/5 -mx-2 px-3 py-2 rounded-lg">
+                <div className="text-xs text-slate-700 dark:text-slate-300">
+                  <span className="font-semibold text-amber-800 dark:text-amber-300">Need this specific route?</span> Our offline concierge desk accesses unpublished consolidator inventory with 30% savings.
+                </div>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    const customFlight: Flight = {
+                      index: 1,
+                      airline: "Custom Offline Booking Request",
+                      departure_airport: origin.toUpperCase(),
+                      arrival_airport: destination.toUpperCase(),
+                      departure_date: departDate,
+                      arrival_date: tripType === "ROUNDTRIP" ? returnDate : departDate,
+                      departure_time: "Flexible",
+                      arrival_time: "Flexible",
+                      duration: "Non-stop / 1-stop",
+                      stops: directOnly ? "Direct preferred" : "Any",
+                      price: "Request Quote",
+                      pricing: {
+                        base_scraped_fare: 0,
+                        regular_market_price_per_person: 0,
+                        discount_percent: 30,
+                        final_price_per_person: 0,
+                        total_final_price: 0,
+                        total_passengers: adults + children,
+                        quotable: true,
+                        formatted: {
+                          base_scraped: "Wholesale",
+                          regular_per_person: "Market Rate",
+                          final_per_person: "30% Off",
+                          total_regular: "Market Rate",
+                          total_discount: "-30%",
+                          total_final: "30% Off Guaranteed",
+                        },
+                      },
+                    }
+                    setSelectedFlight(customFlight)
+                    setTimeout(() => {
+                      document.getElementById("passenger-details-section")?.scrollIntoView({ behavior: "smooth" })
+                    }, 100)
+                  }}
+                  className="bg-amber-600 hover:bg-amber-700 text-white text-xs shrink-0 font-medium shadow-xs"
+                >
+                  <Send className="h-3.5 w-3.5 mr-1.5" />
+                  Request Offline 30% Off Quote
                 </Button>
               </div>
             </div>
