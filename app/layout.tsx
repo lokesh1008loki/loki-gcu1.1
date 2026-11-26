@@ -10,6 +10,7 @@ import { ClientComponents } from "@/components/client-components"
 import { PerformanceOptimizer } from "@/components/performance-optimizer"
 import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
+import { JsonLd, ORGANIZATION_JSON_LD } from "@/components/json-ld"
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -17,25 +18,27 @@ export const revalidate = 0;
 export async function generateMetadata() {
   let cleanPathname = "";
   try {
-    const headerList = headers();
+    const headerList = await headers();
     const rawPathname = headerList.get("x-pathname") || "";
     cleanPathname = rawPathname === "/" ? "" : rawPathname.replace(/\/+$/, "");
   } catch (e) {
     // headers() might not be accessible during build-time prerendering
   }
 
+  const siteBase = "https://gocomfortusa.com";
+  const pageCanonical = cleanPathname ? `${siteBase}${cleanPathname}` : siteBase;
+  const defaultTitle = "GoComfortUSA | US Travel, Hotel & IKEA Order Assistance";
+  const defaultDescription =
+    "US travel consultation for domestic flights, true total-price hotel checks, Disneyland ticket help, and IKEA ordering with delivery by IKEA. Up to 30% off.";
+
   try {
     const seoSettings = await prisma.seoSettings.findFirst({
       orderBy: { updatedAt: 'desc' }
     });
-    console.log("SeoSettings record:", seoSettings, "active type:", typeof seoSettings?.active);
     if (!seoSettings || seoSettings.active !== true) {
-      console.log("Falling back to static metadata because SEO is inactive or missing");
-      const siteBase = "https://gocomfortusa.com";
-      const pageCanonical = cleanPathname ? `${siteBase}${cleanPathname}` : siteBase;
       return {
-        title: "GoComfortUSA - Professional Travel Assistance & Consultation | Flights, Hotels & More",
-        description: "Personalized travel research and assistance for flights, hotels, and lifestyle services. Get expert booking guidance and route optimization tailored to your needs.",
+        title: defaultTitle,
+        description: defaultDescription,
         metadataBase: new URL(siteBase),
         icons: {
           icon: "/ass/logo-round.png",
@@ -43,15 +46,16 @@ export async function generateMetadata() {
           apple: "/ass/logo-round.png",
         },
         openGraph: {
-          title: "GoComfortUSA - Professional Travel Assistance & Planning",
-          description: "Get personalized flight and hotel options, optimized routes, and expert booking guidance tailored to your trip.",
-          images: [{ url: "/ass/logo-round.png" }],
+          title: defaultTitle,
+          description: defaultDescription,
+          url: pageCanonical,
+          images: [{ url: "/ass/logo-round.png", alt: "GoComfortUSA" }],
           type: "website",
         },
         twitter: {
           card: "summary_large_image",
-          title: "GoComfortUSA - Travel Assistance & Consultation",
-          description: "Expert travel research and assistance for your next trip. Flights, hotels, and route optimization made easy.",
+          title: defaultTitle,
+          description: defaultDescription,
           images: ["/ass/logo-round.png"],
         },
         alternates: {
@@ -62,32 +66,32 @@ export async function generateMetadata() {
         },
       };
     }
-    console.log("SEO settings used in metadata:", seoSettings);
-    const siteBase = (seoSettings.canonicalUrl || "https://gocomfortusa.com").replace(/\/+$/, "");
-    const pageCanonical = cleanPathname ? `${siteBase}${cleanPathname}` : siteBase;
+    const dbSiteBase = (seoSettings.canonicalUrl || siteBase).replace(/\/+$/, "");
+    const dbPageCanonical = cleanPathname ? `${dbSiteBase}${cleanPathname}` : dbSiteBase;
     return {
-      title: seoSettings.siteTitle,
-      description: seoSettings.siteDescription,
-      metadataBase: new URL(siteBase),
+      title: seoSettings.siteTitle || defaultTitle,
+      description: seoSettings.siteDescription || defaultDescription,
+      metadataBase: new URL(dbSiteBase),
       icons: {
         icon: "/ass/logo-round.png",
         shortcut: "/ass/logo-round.png",
         apple: "/ass/logo-round.png",
       },
       openGraph: {
-        title: seoSettings.ogTitle,
-        description: seoSettings.ogDescription,
-        images: [{ url: seoSettings.ogImage }],
+        title: seoSettings.ogTitle || defaultTitle,
+        description: seoSettings.ogDescription || defaultDescription,
+        url: dbPageCanonical,
+        images: [{ url: seoSettings.ogImage || "/ass/logo-round.png", alt: "GoComfortUSA" }],
         type: "website",
       },
       twitter: {
         card: "summary_large_image",
-        title: seoSettings.twitterTitle,
-        description: seoSettings.twitterDescription,
-        images: [seoSettings.twitterImage],
+        title: seoSettings.twitterTitle || defaultTitle,
+        description: seoSettings.twitterDescription || defaultDescription,
+        images: [seoSettings.twitterImage || "/ass/logo-round.png"],
       },
       alternates: {
-        canonical: pageCanonical,
+        canonical: dbPageCanonical,
       },
       other: {
         cyber: "9fa74b5554f3953be569783694238369",
@@ -95,11 +99,9 @@ export async function generateMetadata() {
     };
   } catch (error) {
     console.error("Error fetching SEO settings for metadata:", error);
-    const siteBase = "https://gocomfortusa.com";
-    const pageCanonical = cleanPathname ? `${siteBase}${cleanPathname}` : siteBase;
     return {
-      title: "GoComfortUSA - Professional Travel Assistance & Consultation",
-      description: "GoComfortUSA provides personalized travel assistance including flight and hotel research, planning, and expert booking support for a hassle-free travel experience.",
+      title: defaultTitle,
+      description: defaultDescription,
       metadataBase: new URL(siteBase),
       icons: {
         icon: "/ass/logo-round.png",
@@ -107,15 +109,16 @@ export async function generateMetadata() {
         apple: "/ass/logo-round.png",
       },
       openGraph: {
-        title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
-        description: "Your one-stop solution for tickets and bill payments",
-        images: [{ url: "/ass/logo-round.png" }],
+        title: defaultTitle,
+        description: defaultDescription,
+        url: pageCanonical,
+        images: [{ url: "/ass/logo-round.png", alt: "GoComfortUSA" }],
         type: "website",
       },
       twitter: {
         card: "summary_large_image",
-        title: "GocomfortUSA - Best Deals on Tickets and Bill Payments",
-        description: "Your one-stop solution for tickets and bill payments",
+        title: defaultTitle,
+        description: defaultDescription,
         images: ["/ass/logo-round.png"],
       },
       alternates: {
@@ -154,6 +157,7 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="cyber" content="9fa74b5554f3953be569783694238369" />
+        {!isAdminPage && <JsonLd data={ORGANIZATION_JSON_LD} />}
         {!isAdminPage && (
           <>
             <Script

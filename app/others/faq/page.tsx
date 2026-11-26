@@ -1,4 +1,3 @@
-import { Metadata } from "next"
 import {
   Accordion,
   AccordionContent,
@@ -6,17 +5,21 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { buildPageMetadata } from "@/lib/seo-metadata"
+import {
+  JsonLd,
+  SITE_URL,
+  buildBreadcrumbJsonLd,
+  buildFaqPageJsonLd,
+} from "@/components/json-ld"
 
-export const metadata: Metadata = {
-  title: "Frequently Asked Questions – GoComfortUSA",
-  description: "Find answers to common questions about GoComfortUSA's professional travel assistance, hotel research, and lifestyle planning services.",
+export const metadata = buildPageMetadata({
+  title: "Travel & Lifestyle Consultation FAQ | GoComfortUSA",
+  description:
+    "Common questions and answers about GoComfortUSA travel consultation, domestic flight research, hotel stays, and US lifestyle assistance services.",
+  path: "/others/faq",
   keywords: "FAQ, frequently asked questions, GoComfortUSA, travel assistance, hotel research, planning services",
-  openGraph: {
-    title: "Frequently Asked Questions – GoComfortUSA",
-    description: "Find answers to common questions about GoComfortUSA's professional travel assistance services.",
-    type: "website",
-  },
-}
+})
 
 const faqData = [
   {
@@ -46,8 +49,17 @@ const faqData = [
 ]
 
 export default function FAQPage() {
+  const faqSchema = buildFaqPageJsonLd(faqData)
+  const breadcrumbSchema = buildBreadcrumbJsonLd([
+    { name: "Home", url: SITE_URL },
+    { name: "FAQ", url: `${SITE_URL}/others/faq` },
+  ])
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
+    <>
+      <JsonLd data={faqSchema} />
+      <JsonLd data={breadcrumbSchema} />
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
       <div className="container mx-auto px-4">
         {/* Hero Section */}
         <div className="text-center mb-12">
@@ -122,5 +134,6 @@ export default function FAQPage() {
         </div>
       </div>
     </div>
+    </>
   )
-} 
+}

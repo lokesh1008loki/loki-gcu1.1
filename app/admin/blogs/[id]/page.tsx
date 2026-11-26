@@ -18,6 +18,7 @@ interface Blog {
   content: string
   excerpt: string
   image: string
+  imageAlt?: string
   published: boolean
   metaTitle?: string
   metaDescription?: string
@@ -137,6 +138,17 @@ export default function EditBlogPage({ params }: { params?: { id: string } | Pro
           <ImageUpload
             onImageUploadAction={(url) => setBlog({ ...blog, image: url })}
             currentImage={blog.image}
+            altText={blog.imageAlt}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="imageAlt">Image Alt Text</Label>
+          <Input
+            id="imageAlt"
+            value={blog.imageAlt || ""}
+            onChange={(e) => setBlog({ ...blog, imageAlt: e.target.value })}
+            placeholder="Describe the featured image for accessibility and SEO"
           />
         </div>
 

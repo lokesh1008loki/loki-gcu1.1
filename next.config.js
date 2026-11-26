@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  serverExternalPackages: ['googleapis', 'jsonwebtoken', 'bcryptjs', 'bcrypt', '@prisma/client'],
+  serverExternalPackages: ['googleapis', 'jsonwebtoken', 'bcryptjs', 'bcrypt', '@prisma/client', 'sharp'],
   images: {
     remotePatterns: [
       {

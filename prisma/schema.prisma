@@ -31,6 +31,7 @@ model Blog {
   content         String
   excerpt         String?
   image           String?
+  imageAlt        String?
   metaTitle       String?
   metaDescription String?
   keywords        String?
@@ -242,4 +243,13 @@ model HotelInquiry {
   adminNotes       String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+}
+
+model UploadedMedia {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fileName    String   @unique
+  contentType String
+  size        Int
+  data        Bytes
+  createdAt   DateTime @default(now())
 }

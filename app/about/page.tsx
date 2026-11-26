@@ -1,16 +1,49 @@
 import { prisma } from "@/lib/prisma"
 import Image from "next/image"
-import { Card, CardContent } from "@/components/ui/card"
-import { Plane, Hotel, Train, Ticket, ShoppingBag, Home, Shield, Users, Clock, Star, Target, Eye, Search, Percent, Handshake } from "lucide-react"
+import { Plane, ShoppingBag, Shield, Users, Clock, Star, Target, Eye } from "lucide-react"
 import { AnimatedCounter } from "@/components/animated-counter"
 import HowWeWork from "@/components/how-we-work"
+import { buildPageMetadata } from "@/lib/seo-metadata"
+import {
+  JsonLd,
+  SITE_URL,
+  buildBreadcrumbJsonLd,
+  buildFaqPageJsonLd,
+} from "@/components/json-ld"
+import {
+  ABOUT_FAQS,
+  CANONICAL_BUSINESS_DESCRIPTION,
+} from "@/lib/service-faqs"
+import { ServiceFaqSection } from "@/components/service-faq-section"
+
+export const metadata = buildPageMetadata({
+  title: "About GoComfortUSA | US Travel Consultation",
+  description:
+    "Learn how GoComfortUSA helps US customers compare domestic flights, true total-price hotels, Disneyland tickets, and IKEA orders with delivery by IKEA.",
+  path: "/about",
+  keywords: "About GoComfortUSA, US travel consultation, flight research, hotel comparison, IKEA ordering assistance",
+})
 
 export default async function AboutPage() {
-  const settings = await prisma.siteSettings.findFirst()
-  const consultationLink = (settings as any)?.consultationLink || "/tickets/water-park"
+  let consultationLink = "/tickets/water-park"
+  try {
+    const settings = await prisma.siteSettings.findFirst()
+    consultationLink = (settings as any)?.consultationLink || "/tickets/water-park"
+  } catch (e) {
+    console.warn("Notice: siteSettings lookup unavailable on /about:", e)
+  }
+
+  const faqSchema = buildFaqPageJsonLd(ABOUT_FAQS)
+  const breadcrumbSchema = buildBreadcrumbJsonLd([
+    { name: "Home", url: SITE_URL },
+    { name: "About GoComfortUSA", url: `${SITE_URL}/about` },
+  ])
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <>
+      <JsonLd data={faqSchema} />
+      <JsonLd data={breadcrumbSchema} />
+      <div className="container mx-auto px-4 py-12">
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden bg-white dark:bg-slate-950">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.05),transparent_50%)] z-0"></div>
@@ -21,9 +54,8 @@ export default async function AboutPage() {
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight mb-6">
             About <span className="text-primary italic">GoComfortUSA</span>
           </h1>
-          <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Your professional partner in travel planning and premium consultation. 
-            We simplify the complex to ensure your journey is optimized for comfort and value.
+          <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-4xl mx-auto leading-relaxed">
+            {CANONICAL_BUSINESS_DESCRIPTION}
           </p>
         </div>
       </section>
@@ -309,6 +341,12 @@ export default async function AboutPage() {
           </div>
         </div>
       </section>
+
+      <ServiceFaqSection
+        title="Frequently Asked Questions About GoComfortUSA"
+        faqs={ABOUT_FAQS}
+      />
     </div>
+    </>
   )
-} 
+}

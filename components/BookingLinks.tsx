@@ -7,7 +7,7 @@ import { motion } from "framer-motion"
 const bookingLinks = [
   {
     title: "IKEA Booking",
-    description: "Get up to 40% off on IKEA orders",
+    description: "Get up to 30% off on IKEA orders",
     image: "/ass/ikea.jpg",
     link: "/others/ikea",
     color: "from-blue-500 to-blue-700"

@@ -1,26 +1,48 @@
-import { Metadata } from "next"
 import Link from "next/link"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Hotel, Ticket, Home, ArrowRight, Plane, ChevronRight } from "lucide-react"
+import { Hotel, Ticket, Home, ArrowRight } from "lucide-react"
+import { buildPageMetadata } from "@/lib/seo-metadata"
+import {
+  JsonLd,
+  SITE_URL,
+  ORGANIZATION_REF,
+  buildBreadcrumbJsonLd,
+} from "@/components/json-ld"
 
-export const metadata: Metadata = {
-  title: "Mastering Flight Optimization: Expert Travel Research Guide 2025 | GoComfortUSA",
-  description: "Learn how to optimize your flight routes and travel planning in 2025. Discover professional research strategies and expert assistance for a seamless journey with GoComfortUSA.",
-  keywords: "flight optimization, travel research, route planning, professional travel assistance, USA travel planning, expert booking guidance",
-  alternates: {
-    canonical: "https://gocomfortusa.com/blog/how-to-save-50-percent-on-domestic-flights",
-  },
-  openGraph: {
-    title: "Mastering Flight Optimization: Expert Travel Research Guide 2025",
-    description: "Discover professional strategies to optimize your flight routes and travel planning in 2025. Expert assistance for a seamless journey.",
-    type: "article",
-  },
-}
+export const metadata = buildPageMetadata({
+  title: "Domestic Flight Optimization Guide | GoComfortUSA",
+  description:
+    "Learn practical strategies to compare US domestic flight routes, schedules, and total trip costs with GoComfortUSA research and booking guidance.",
+  path: "/blog/how-to-save-50-percent-on-domestic-flights",
+  type: "article",
+  keywords:
+    "flight optimization, travel research, route planning, domestic US flights, GoComfortUSA",
+})
 
 export default function FlightOptimizationPage() {
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "Mastering Flight Optimization: Expert Research Guide",
+    datePublished: "2025-01-15T00:00:00.000Z",
+    author: ORGANIZATION_REF,
+    publisher: ORGANIZATION_REF,
+    mainEntityOfPage: `${SITE_URL}/blog/how-to-save-50-percent-on-domestic-flights`,
+  }
+  const breadcrumbSchema = buildBreadcrumbJsonLd([
+    { name: "Home", url: SITE_URL },
+    { name: "Blog", url: `${SITE_URL}/blog` },
+    {
+      name: "Domestic Flight Optimization Guide",
+      url: `${SITE_URL}/blog/how-to-save-50-percent-on-domestic-flights`,
+    },
+  ])
+
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12">
+    <>
+      <JsonLd data={articleSchema} />
+      <JsonLd data={breadcrumbSchema} />
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12">
       <div className="container mx-auto px-4">
         {/* Hero Section */}
         <div className="text-center mb-16">
@@ -154,6 +176,6 @@ export default function FlightOptimizationPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }
- 

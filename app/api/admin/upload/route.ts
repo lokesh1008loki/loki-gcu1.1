@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
 import crypto from "crypto"
-import sharp from "sharp"
-import { uploadImageToB2 } from "@/lib/b2"
+import { verifyAdminAuth } from "@/lib/admin-auth"
+import { isB2Configured, uploadImageToB2 } from "@/lib/b2"
+import { prisma } from "@/lib/prisma"
 
 export const dynamic = "force-dynamic"
+export const runtime = "nodejs"
 export const maxDuration = 60
 
 // 3 MB strict size limit
@@ -38,9 +38,6 @@ interface ImageSignature {
   ext: string
 }
 
-/**
- * Validates genuine binary magic bytes for image formats.
- */
 function verifyMagicBytes(buffer: Buffer): ImageSignature | null {
   if (buffer.length < 12) return null
 
@@ -98,11 +95,49 @@ function verifyMagicBytes(buffer: Buffer): ImageSignature | null {
   return null
 }
 
+async function sanitizeImageBuffer(
+  rawBuffer: Buffer,
+  sig: ImageSignature
+): Promise<Buffer> {
+  if (sig.format === "gif") {
+    return rawBuffer
+  }
+
+  let sharpMod: any
+  try {
+    const imported = await import("sharp")
+    sharpMod = imported.default || imported
+  } catch (loadErr) {
+    console.warn("sharp unavailable at runtime, using magic-byte verified buffer:", loadErr)
+    return rawBuffer
+  }
+
+  const image = sharpMod(rawBuffer, { failOnError: true })
+  const metadata = await image.metadata()
+  if (!metadata.width || !metadata.height) {
+    throw new Error("CORRUPT_IMAGE")
+  }
+
+  if (sig.format === "jpeg") {
+    return image.jpeg({ quality: 85, mozjpeg: true }).toBuffer()
+  }
+  if (sig.format === "png") {
+    return image.png({ compressionLevel: 8 }).toBuffer()
+  }
+  if (sig.format === "webp") {
+    return image.webp({ quality: 85 }).toBuffer()
+  }
+  if (sig.format === "avif") {
+    return image.avif({ quality: 80 }).toBuffer()
+  }
+  return rawBuffer
+}
+
 export async function POST(request: Request) {
   try {
-    // 1. Authentication check
-    const session = await getServerSession(authOptions)
-    if (!session) {
+    // 1. Authentication check (supports both getServerSession and JWT getToken)
+    const auth = await verifyAdminAuth(request)
+    if (!auth.authenticated) {
       return NextResponse.json(
         { error: "Unauthorized access: Please log in to upload assets." },
         { status: 401 }
@@ -117,7 +152,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No image file provided" }, { status: 400 })
     }
 
-    // 3. File size check (header level)
+    // 3. File size check
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
         { error: "File size exceeds the 3MB maximum allowed limit." },
@@ -125,7 +160,7 @@ export async function POST(request: Request) {
       )
     }
 
-    // 4. Filename security checks (block double extensions, path traversal, null bytes)
+    // 4. Filename security checks
     const originalName = file.name || ""
     if (
       originalName.includes("\0") ||
@@ -142,7 +177,10 @@ export async function POST(request: Request) {
 
     if (DANGEROUS_EXT_REGEX.test(originalName)) {
       return NextResponse.json(
-        { error: "Forbidden file extension pattern detected. Executable or script files are strictly blocked." },
+        {
+          error:
+            "Forbidden file extension pattern detected. Executable or script files are strictly blocked.",
+        },
         { status: 400 }
       )
     }
@@ -166,7 +204,10 @@ export async function POST(request: Request) {
     const detectedSignature = verifyMagicBytes(rawBuffer)
     if (!detectedSignature) {
       return NextResponse.json(
-        { error: "Invalid file type. Only genuine JPG, PNG, WebP, GIF, and AVIF image formats are allowed." },
+        {
+          error:
+            "Invalid file type. Only genuine JPG, PNG, WebP, GIF, and AVIF image formats are allowed.",
+        },
         { status: 400 }
       )
     }
@@ -182,31 +223,18 @@ export async function POST(request: Request) {
       }
     }
 
-    // 8. Re-encode and sanitize using sharp (strips dangerous metadata/chunks)
+    // 8. Re-encode and sanitize image
     let cleanBuffer: Buffer
     try {
-      const image = sharp(rawBuffer, { failOnError: true })
-      const metadata = await image.metadata()
-
-      if (!metadata.width || !metadata.height) {
-        return NextResponse.json({ error: "Corrupted image dimensions." }, { status: 400 })
-      }
-
-      // Re-encode based on format to sanitize payload completely
-      if (detectedSignature.format === "jpeg") {
-        cleanBuffer = await image.jpeg({ quality: 85, mozjpeg: true }).toBuffer()
-      } else if (detectedSignature.format === "png") {
-        cleanBuffer = await image.png({ compressionLevel: 8 }).toBuffer()
-      } else if (detectedSignature.format === "webp") {
-        cleanBuffer = await image.webp({ quality: 85 }).toBuffer()
-      } else if (detectedSignature.format === "avif") {
-        cleanBuffer = await image.avif({ quality: 80 }).toBuffer()
-      } else {
-        // GIF animation preservation
-        cleanBuffer = rawBuffer
-      }
-    } catch (sharpError) {
+      cleanBuffer = await sanitizeImageBuffer(rawBuffer, detectedSignature)
+    } catch (sharpError: any) {
       console.error("Image processing error:", sharpError)
+      if (sharpError?.message === "CORRUPT_IMAGE") {
+        return NextResponse.json(
+          { error: "Corrupted image dimensions." },
+          { status: 400 }
+        )
+      }
       return NextResponse.json(
         { error: "Image file failed integrity verification." },
         { status: 400 }
@@ -215,22 +243,47 @@ export async function POST(request: Request) {
 
     // 9. Generate guaranteed safe unique filename
     const uniqueId = `${Date.now()}-${crypto.randomBytes(8).toString("hex")}`
-    const safeStorageName = `blog/${uniqueId}.${detectedSignature.ext}`
+    const baseFileName = `${uniqueId}.${detectedSignature.ext}`
+    const b2StorageName = `blog/${baseFileName}`
 
-    // 10. Upload to Backblaze B2
-    const b2Result = await uploadImageToB2(
-      cleanBuffer,
-      safeStorageName,
-      detectedSignature.mime
-    )
+    // 10. Upload to Backblaze B2 when configured; fall back to DB-backed /media/[filename] if B2 env vars are absent on Vercel
+    let publicUrl = ""
+    let storage: "b2" | "database" = "b2"
+
+    if (isB2Configured()) {
+      try {
+        const b2Result = await uploadImageToB2(
+          cleanBuffer,
+          b2StorageName,
+          detectedSignature.mime
+        )
+        publicUrl = b2Result.url
+      } catch (b2Error) {
+        console.error("Backblaze B2 upload failed, falling back to database media storage:", b2Error)
+      }
+    }
+
+    if (!publicUrl) {
+      storage = "database"
+      await (prisma as any).uploadedMedia.create({
+        data: {
+          fileName: baseFileName,
+          contentType: detectedSignature.mime,
+          size: cleanBuffer.length,
+          data: cleanBuffer,
+        },
+      })
+      publicUrl = `/media/${baseFileName}`
+    }
 
     // 11. Respond with public URL and strict security headers
     const response = NextResponse.json({
       success: true,
-      url: b2Result.url,
-      filename: b2Result.url, // Provided for backwards compatibility with existing UI
-      size: b2Result.size,
-      contentType: b2Result.contentType,
+      url: publicUrl,
+      filename: publicUrl,
+      size: cleanBuffer.length,
+      contentType: detectedSignature.mime,
+      storage,
     })
 
     response.headers.set("X-Content-Type-Options", "nosniff")
@@ -240,7 +293,10 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Upload error:", error)
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error during upload" },
+      {
+        error:
+          error instanceof Error ? error.message : "Internal server error during upload",
+      },
       { status: 500 }
     )
   }

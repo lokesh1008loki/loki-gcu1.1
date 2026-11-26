@@ -102,7 +102,7 @@ export default function CarRentalPage() {
           <div className="lg:col-span-2 space-y-8">
             <div id="booking-section">
               <div>
-                <h1 className="text-3xl font-bold mb-2">Car Rental</h1>
+                <h2 className="text-3xl font-bold mb-2">Car Rental</h2>
                 <p className="text-muted-foreground">Experience seamless car rentals with GoComfort USA — providing expert research and optimized vehicle options to suit every traveler.</p>
               </div>
 

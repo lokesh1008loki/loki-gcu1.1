@@ -13,6 +13,10 @@ interface B2AuthData {
 // In-memory token cache (valid for 20 hours, B2 tokens typically expire in 24 hours)
 let cachedAuth: B2AuthData | null = null
 
+export function isB2Configured(): boolean {
+  return Boolean(process.env.B2_KEY_ID && process.env.B2_APPLICATION_KEY)
+}
+
 function getB2Credentials() {
   const keyId = process.env.B2_KEY_ID
   const applicationKey = process.env.B2_APPLICATION_KEY
@@ -117,12 +121,17 @@ export async function uploadImageToB2(
   // 2. Compute SHA1 hash of the payload
   const sha1 = crypto.createHash("sha1").update(buffer).digest("hex")
 
-  // 3. Upload binary file
+  // 3. Upload binary file (preserve "/" directory separators for B2)
+  const encodedFileName = fileName
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/")
+
   const uploadResponse = await fetch(uploadUrl, {
     method: "POST",
     headers: {
       Authorization: uploadToken,
-      "X-Bz-File-Name": encodeURIComponent(fileName),
+      "X-Bz-File-Name": encodedFileName,
       "Content-Type": contentType,
       "Content-Length": String(buffer.length),
       "X-Bz-Content-Sha1": sha1,

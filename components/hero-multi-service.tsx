@@ -167,7 +167,7 @@ export function HeroMultiService() {
               Living Expense &amp; Rental Relief
             </span>
             <span className="text-[11px] font-mono text-emerald-600 font-bold bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
-              Up to 35% Off
+              Up to 30% Off
             </span>
           </div>
 
@@ -202,7 +202,7 @@ export function HeroMultiService() {
               IKEA Furniture &amp; Home Delivery
             </span>
             <span className="text-[11px] font-mono text-emerald-600 font-bold bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
-              Up to 40% Off
+              Up to 30% Off
             </span>
           </div>
 

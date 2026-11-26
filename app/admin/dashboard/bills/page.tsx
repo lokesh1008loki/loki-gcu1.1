@@ -22,7 +22,7 @@ interface BillService {
 
 export default function BillsManagementPage() {
   const [services, setServices] = useState<BillService[]>([
-    { id: "1", name: "House & Apartment Rent", category: "Rent Assistance", discount: "Up to 35% Off", status: "Active", sheetTarget: "Google Sheets Webhook" },
+    { id: "1", name: "House & Apartment Rent", category: "Rent Assistance", discount: "Up to 30% Off", status: "Active", sheetTarget: "Google Sheets Webhook" },
     { id: "2", name: "Electric & Energy Bills", category: "Utility Payment", discount: "Up to 30% Off", status: "Active", sheetTarget: "Google Sheets Webhook" },
     { id: "3", name: "Gas & Heating Utility", category: "Utility Payment", discount: "Up to 30% Off", status: "Active", sheetTarget: "Google Sheets Webhook" },
     { id: "4", name: "Water & Municipal Bills", category: "Utility Payment", discount: "Up to 25% Off", status: "Active", sheetTarget: "Google Sheets Webhook" },

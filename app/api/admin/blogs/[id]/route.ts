@@ -69,7 +69,8 @@ export async function PUT(
       title, 
       content, 
       excerpt, 
-      image, 
+      image,
+      imageAlt,
       published,
       metaTitle,
       metaDescription,
@@ -115,6 +116,7 @@ export async function PUT(
     if (content !== undefined) updateData.content = content
     if (excerpt !== undefined) updateData.excerpt = excerpt
     if (image !== undefined) updateData.image = image
+    if (imageAlt !== undefined) updateData.imageAlt = imageAlt
     if (published !== undefined) updateData.published = published
     if (metaTitle !== undefined) updateData.metaTitle = metaTitle
     if (metaDescription !== undefined) updateData.metaDescription = metaDescription
@@ -122,7 +124,7 @@ export async function PUT(
     if (seoContent !== undefined) updateData.seoContent = seoContent
     if (canonicalUrl !== undefined) updateData.canonicalUrl = canonicalUrl
 
-    const updatedBlog = await prisma.blog.update({
+    const updatedBlog = await (prisma as any).blog.update({
       where: { id },
       data: updateData
     })
@@ -130,6 +132,7 @@ export async function PUT(
     try {
       revalidatePath("/blog")
       revalidatePath("/blog/[slug]", "page")
+      revalidatePath("/sitemap.xml")
       if (existingBlog.slug) {
         revalidatePath(`/blog/${existingBlog.slug}`)
       }
@@ -188,6 +191,7 @@ export async function DELETE(
     try {
       revalidatePath("/blog")
       revalidatePath("/blog/[slug]", "page")
+      revalidatePath("/sitemap.xml")
       revalidatePath("/admin/blogs")
       revalidatePath("/admin/dashboard/blog")
     } catch (e) {

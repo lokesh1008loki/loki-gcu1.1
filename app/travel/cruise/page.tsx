@@ -113,7 +113,7 @@ export default function CruiseBookingPage() {
           <div className="lg:col-span-2 space-y-8">
             <div id="booking-section">
               <div>
-                <h1 className="text-3xl font-bold mb-2">Cruise Booking</h1>
+                <h2 className="text-3xl font-bold mb-2">Cruise Booking</h2>
                 <p className="text-muted-foreground">Book your dream cruise with GoComfort USA — offering comprehensive research and a wide selection of cruise lines.</p>
               </div>
 

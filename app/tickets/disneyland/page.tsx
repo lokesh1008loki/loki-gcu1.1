@@ -10,7 +10,8 @@ import { CheckCircle, AlertCircle, Castle } from "lucide-react"
 import { Toaster } from "@/components/ui/sonner"
 import Link from "next/link"
 import Image from "next/image"
-import { Metadata } from "next"
+import { DISNEYLAND_FAQS } from "@/lib/service-faqs"
+import { ServiceFaqSection } from "@/components/service-faq-section"
 
 const parks = [
   {
@@ -32,19 +33,14 @@ const parks = [
 
 const addOns = [
   {
-    id: "geniePlus",
-    name: "Genie+ Service",
-    description: "Access to Lightning Lane entrances for select attractions"
+    id: "lightningLane",
+    name: "Lightning Lane (Multi Pass / Single Pass)",
+    description: "Optional Lightning Lane Multi Pass or Single Pass access for faster entry on select attractions"
   },
   {
     id: "parking",
     name: "Parking Pass",
     description: "Convenient parking for your visit"
-  },
-  {
-    id: "dining",
-    name: "Dining Plan",
-    description: "Pre-paid meal vouchers for select restaurants"
   },
   {
     id: "specialEvent",
@@ -142,16 +138,16 @@ export default function DisneylandBookingPage() {
             priority
           />
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4">
-            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Experience Disneyland with GoComfort USA</h1>
-            <p className="text-2xl text-white/95 mb-8 max-w-2xl drop-shadow-md">
-              Professional research, expert assistance, and quick support for your perfect trip!
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4 drop-shadow-lg">Experience Disneyland with GoComfort USA</h1>
+            <p className="text-base sm:text-lg text-white/95 mb-6 max-w-3xl drop-shadow-md leading-relaxed">
+              GoComfortUSA is a US travel consultation service. For Disneyland (Anaheim, California) tickets, GoComfortUSA provides booking assistance through an authorized supplier — we are not Disney and do not sell tickets directly. Both a valid ticket and a theme park reservation are required for park entry. The service advertises savings of up to 30% off and serves the USA only.
             </p>
             <Button 
               size="lg" 
               className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-6 shadow-lg"
               onClick={() => document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Book Your Adventure
+              Request Ticket Assistance
             </Button>
           </div>
         </div>
@@ -207,7 +203,7 @@ export default function DisneylandBookingPage() {
                       min={new Date().toISOString().split('T')[0]}
                     />
                     <p className="text-sm text-muted-foreground">
-                      Note: A Disney account and park reservation are required for entry
+                      Important: A theme park reservation is required in addition to a valid ticket for entry to Disneyland Park or Disney California Adventure Park, along with a Disney account.
                     </p>
                   </div>
 
@@ -433,27 +429,27 @@ export default function DisneylandBookingPage() {
 
             <Card>
               <CardContent className="p-6">
-                <h2 className="text-xl font-bold mb-4">Why Book With Us?</h2>
+                <h2 className="text-xl font-bold mb-4">How Ticket Assistance Works</h2>
                 <div className="space-y-4">
                   <div className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2" />
+                    <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" />
                     <div>
-                      <h3 className="font-bold">Expert Research Assistance</h3>
-                      <p className="text-sm text-muted-foreground">We find the most optimized options for you</p>
+                      <h3 className="font-bold">Authorized Supplier Assistance</h3>
+                      <p className="text-sm text-muted-foreground">GoComfortUSA provides Disneyland ticket booking assistance through an authorized supplier for US customers.</p>
                     </div>
                   </div>
                   <div className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2" />
+                    <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" />
+                    <div>
+                      <h3 className="font-bold">Park Reservation &amp; Lightning Lane Guidance</h3>
+                      <p className="text-sm text-muted-foreground">A theme park reservation is required in addition to a valid ticket for entry; we also guide you on Lightning Lane Multi Pass and Single Pass options.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2 shrink-0" />
                     <div>
                       <h3 className="font-bold">24/7 Support</h3>
-                      <p className="text-sm text-muted-foreground">Instant support via WhatsApp/Telegram</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2" />
-                    <div>
-                      <h3 className="font-bold">Flexible Bookings</h3>
-                      <p className="text-sm text-muted-foreground">Free cancellation on most tickets</p>
+                      <p className="text-sm text-muted-foreground">Direct support via WhatsApp or Telegram</p>
                     </div>
                   </div>
                 </div>
@@ -476,6 +472,11 @@ export default function DisneylandBookingPage() {
             </Card>
           </div>
         </div>
+
+        <ServiceFaqSection
+          title="Disneyland Ticket Assistance FAQ"
+          faqs={DISNEYLAND_FAQS}
+        />
       </div>
     </>
   )

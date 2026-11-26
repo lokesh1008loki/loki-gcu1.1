@@ -22,6 +22,7 @@ interface Blog {
   excerpt: string | null
   content: string
   image: string | null
+  imageAlt: string | null
   published: boolean
   createdAt: string
   metaTitle: string | null
@@ -47,6 +48,7 @@ export default function BlogManagement() {
     content: "",
     excerpt: "",
     image: "",
+    imageAlt: "",
     published: false
   })
 
@@ -94,6 +96,14 @@ export default function BlogManagement() {
 
   const handleEdit = (blog: Blog) => {
     setEditingBlog(blog)
+    setFormData({
+      title: blog.title || "",
+      content: blog.content || "",
+      excerpt: blog.excerpt || "",
+      image: blog.image || "",
+      imageAlt: blog.imageAlt || "",
+      published: blog.published || false,
+    })
     setDialogOpen(true)
   }
 
@@ -172,6 +182,7 @@ export default function BlogManagement() {
       content: formData.get("content") as string,
       excerpt: formData.get("excerpt") as string,
       image: formData.get("image") as string,
+      imageAlt: formData.get("imageAlt") as string,
       published: formData.get("published") === "on",
       metaTitle: formData.get("metaTitle") as string,
       metaDescription: formData.get("metaDescription") as string,
@@ -215,6 +226,7 @@ export default function BlogManagement() {
       }
       setDialogOpen(false)
       setEditingBlog(null)
+      setFormData({ title: "", content: "", excerpt: "", image: "", imageAlt: "", published: false })
       fetchBlogs()
     } catch (error) {
       console.error("Error saving blog:", error)
@@ -234,9 +246,23 @@ export default function BlogManagement() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Blog Management</h1>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <Dialog
+          open={dialogOpen}
+          onOpenChange={(open) => {
+            setDialogOpen(open)
+            if (!open) {
+              setEditingBlog(null)
+              setFormData({ title: "", content: "", excerpt: "", image: "", imageAlt: "", published: false })
+            }
+          }}
+        >
           <DialogTrigger asChild>
-            <Button onClick={() => setEditingBlog(null)}>
+            <Button
+              onClick={() => {
+                setEditingBlog(null)
+                setFormData({ title: "", content: "", excerpt: "", image: "", imageAlt: "", published: false })
+              }}
+            >
               <Plus className="h-4 w-4 mr-2" />
               Add Blog Post
             </Button>
@@ -270,6 +296,17 @@ export default function BlogManagement() {
                 <ImageUpload
                   onImageUploadAction={handleImageUpload}
                   currentImage={formData.image || editingBlog?.image || ""}
+                  altText={formData.imageAlt || editingBlog?.imageAlt || ""}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="imageAlt">Image Alt Text</Label>
+                <Input
+                  id="imageAlt"
+                  name="imageAlt"
+                  defaultValue={editingBlog?.imageAlt || ""}
+                  onChange={(e) => setFormData(prev => ({ ...prev, imageAlt: e.target.value }))}
+                  placeholder="Describe the featured image for accessibility and SEO"
                 />
               </div>
               <div className="space-y-2">

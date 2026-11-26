@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
+import { ImageUpload } from "@/components/admin/image-upload"
 
 export default function NewBlogPage() {
   const router = useRouter()
@@ -16,6 +17,7 @@ export default function NewBlogPage() {
     content: "",
     excerpt: "",
     image: "",
+    imageAlt: "",
     published: false
   })
 
@@ -86,12 +88,21 @@ export default function NewBlogPage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="image">Featured Image URL</Label>
+          <Label>Featured Image</Label>
+          <ImageUpload
+            onImageUploadAction={(url) => setFormData({ ...formData, image: url })}
+            currentImage={formData.image}
+            altText={formData.imageAlt}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="imageAlt">Image Alt Text</Label>
           <Input
-            id="image"
-            type="url"
-            value={formData.image}
-            onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+            id="imageAlt"
+            value={formData.imageAlt}
+            onChange={(e) => setFormData({ ...formData, imageAlt: e.target.value })}
+            placeholder="Describe the featured image for accessibility and SEO"
           />
         </div>
 

@@ -30,9 +30,53 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { buildPageMetadata } from "@/lib/seo-metadata"
+import { JsonLd, buildFaqPageJsonLd } from "@/components/json-ld"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
+
+export const metadata = buildPageMetadata({
+  title: "GoComfortUSA | US Travel, Hotel & IKEA Order Assistance",
+  description:
+    "US travel consultation for domestic flights, true total-price hotel checks, Disneyland ticket help, and IKEA ordering with delivery by IKEA. Up to 30% off.",
+  path: "/",
+  keywords:
+    "GoComfortUSA, US travel consultation, domestic flight research, hotel total price comparison, IKEA ordering assistance, Disneyland ticket help",
+})
+
+const HOME_FAQS = [
+  {
+    question: "What exact services does GoComfortUSA provide?",
+    answer:
+      "GoComfortUSA is a US travel consultation and lifestyle assistance service. We help customers across the United States compare domestic flights, compare US hotels by their true total price, request Disneyland ticket booking assistance through an authorized supplier, coordinate rent and utility bill assistance, and order IKEA products with delivery by IKEA.",
+  },
+  {
+    question: "Do you sell airline tickets or hotel rooms directly?",
+    answer:
+      "No. GoComfortUSA is a travel research and planning consultation company. We analyze schedules, prices, and comfort levels across carriers. You complete your reservation directly with the official provider so you retain complete control over your ticket.",
+  },
+  {
+    question: "How does the rent and utility bill assistance program work?",
+    answer:
+      "You submit your residential lease invoice or utility bill statement (electric, gas, or water). Our team applies available partnership credits and relief allocations, allowing you to settle the obligation with savings of up to 30 percent.",
+  },
+  {
+    question: "How do I request Disneyland and theme park ticket assistance?",
+    answer:
+      "Select your destination park (such as Disneyland Resort, Universal Studios, or CityPass), choose your visit dates, and our team provides booking assistance through authorized suppliers.",
+  },
+  {
+    question: "How quickly do I receive my travel or quotation report?",
+    answer:
+      "Most reports and quotation summaries are delivered between 1 and 24 hours after submission, sent directly to your email and WhatsApp.",
+  },
+  {
+    question: "What payment methods do you accept for consultation?",
+    answer:
+      "We accept all major bank cards, debit cards, and secure electronic payments processed through 256 bit SSL encrypted gateway partners with zero hidden fees.",
+  },
+]
 
 export default async function Home() {
   let consultationPrice = "29"
@@ -284,7 +328,7 @@ export default async function Home() {
                 </div>
                 <div>
                   <span className="text-[11px] font-mono font-bold text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded">
-                    Up to 35% discount
+                    Up to 30% discount
                   </span>
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white mt-2">
                     Rent &amp; Utility Bills
@@ -324,7 +368,7 @@ export default async function Home() {
                 </div>
                 <div>
                   <span className="text-[11px] font-mono font-bold text-amber-700 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded">
-                    Up to 40% discount
+                    Up to 30% discount
                   </span>
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white mt-2">
                     IKEA Orders &amp; Living
@@ -461,6 +505,7 @@ export default async function Home() {
       </section>
 
       {/* 8. FAQ Section with Interactive Radix Accordion */}
+      <JsonLd data={buildFaqPageJsonLd(HOME_FAQS)} />
       <section className="py-16 md:py-24 bg-slate-50 dark:bg-[#1F1F1F] border-t border-slate-200 dark:border-neutral-800">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="text-center mb-12 space-y-3">
@@ -474,42 +519,17 @@ export default async function Home() {
 
           <div className="space-y-3">
             <Accordion type="single" collapsible defaultValue="item-0" className="space-y-3">
-              {[
-                {
-                  q: "What exact services does GoComfortUSA provide?",
-                  a: "GoComfortUSA is a lifestyle and travel assistance concierge. We provide four primary services: flight and hotel route optimization, verified theme park tickets (Disneyland, Universal Studios, SeaWorld), apartment rent and utility bill assistance, and discounted IKEA furniture order fulfillment."
-                },
-                {
-                  q: "Do you sell airline tickets or hotel rooms directly?",
-                  a: "No. GoComfortUSA is a travel research and planning consultation company. We analyze schedules, prices, and comfort levels across carriers. You complete your reservation directly with the official provider so you retain complete control over your ticket."
-                },
-                {
-                  q: "How does the rent and utility bill assistance program work?",
-                  a: "You submit your residential lease invoice or utility bill statement (electric, gas, or water). Our team applies available partnership credits and relief allocations, allowing you to settle the obligation with savings of up to 35 percent."
-                },
-                {
-                  q: "How do I purchase discounted theme park tickets?",
-                  a: "Select your destination park (such as Disneyland Resort, Universal Studios, or CityPass), choose your visit dates, and our team provides authorized partner admissions with express access guidance."
-                },
-                {
-                  q: "How quickly do I receive my travel or quotation report?",
-                  a: "Most reports and quotation summaries are delivered between 1 and 24 hours after submission, sent directly to your email and WhatsApp."
-                },
-                {
-                  q: "What payment methods do you accept for consultation?",
-                  a: "We accept all major bank cards, debit cards, and secure electronic payments processed through 256 bit SSL encrypted gateway partners with zero hidden fees."
-                }
-              ].map((faq, i) => (
+              {HOME_FAQS.map((faq, i) => (
                 <AccordionItem 
                   key={i} 
                   value={`item-${i}`}
                   className="rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 px-5 shadow-xs"
                 >
                   <AccordionTrigger className="text-base font-semibold text-slate-900 dark:text-white py-4 hover:no-underline text-left">
-                    {faq.q}
+                    {faq.question}
                   </AccordionTrigger>
                   <AccordionContent className="text-sm text-slate-600 dark:text-neutral-400 leading-relaxed pb-4 [text-wrap:pretty]">
-                    {faq.a}
+                    {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
               ))}

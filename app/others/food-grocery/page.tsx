@@ -209,7 +209,7 @@ export default function FoodGroceryLandingPage() {
       </Script>
       {/* Promotional Top Bar */}
       <div className="bg-emerald-700 text-white py-2 px-4 text-center text-xs sm:text-sm font-semibold tracking-wide shadow-sm">
-        ✨ Save Up To <span className="text-yellow-300 font-bold">35% OFF</span> On Your Final Price. We Shop, You Relax!
+        ✨ Save Up To <span className="text-yellow-300 font-bold">30% OFF</span> On Your Final Price. We Shop, You Relax!
       </div>
 
       {/* Hero Section */}
@@ -242,7 +242,7 @@ export default function FoodGroceryLandingPage() {
               <div className="bg-gradient-to-br from-emerald-50 to-yellow-50/50 border border-emerald-100 rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row gap-4 items-center">
                 <div className="bg-yellow-300 text-emerald-950 font-black rounded-full h-16 w-16 flex flex-col items-center justify-center text-center shrink-0 shadow-md transform rotate-[-3deg]">
                   <span className="text-xs font-semibold leading-none">SAVE UP TO</span>
-                  <span className="text-xl leading-none">35%</span>
+                  <span className="text-xl leading-none">30%</span>
                   <span className="text-[10px] font-bold leading-none">OFF</span>
                 </div>
                 <div className="text-center sm:text-left space-y-1">
@@ -697,7 +697,7 @@ export default function FoodGroceryLandingPage() {
         
         <div className="space-y-6">
           <div className="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
-            <h3 className="font-extrabold text-base sm:text-lg text-slate-900 mb-2">How do you save up to 35% on grocery bills?</h3>
+            <h3 className="font-extrabold text-base sm:text-lg text-slate-900 mb-2">How do you save up to 30% on grocery bills?</h3>
             <p className="text-sm text-slate-500 leading-relaxed">
               We cross-check inventory, weekly flyers, and member-only bulk promotions across major outlets like Walmart, Target, and Costco to procure items at their lowest dynamic price point.
             </p>

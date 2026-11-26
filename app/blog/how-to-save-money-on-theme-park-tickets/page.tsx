@@ -46,7 +46,7 @@ const blogs = [
       <p>If you're traveling with a group of 10 or more people, you might qualify for specialized group research and coordination. Contact the park's professional group services department to inquire about tailored rates and experience packages.</p>
       
       <h2>10. Use Experience Bundles</h2>
-      <p>If you're visiting a city with multiple attractions, consider using experience bundles like CityPASS. These professional bundles can provide up to 50% more value by coordinating admission to multiple high-quality attractions, including theme parks.</p>
+      <p>If you're visiting a city with multiple attractions, consider using experience bundles like CityPASS. These bundles can provide up to 30% in savings by coordinating admission to multiple high-quality attractions, including theme parks.</p>
       
       <h2>Additional Expert Tips</h2>
       <ul>

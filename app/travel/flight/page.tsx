@@ -12,6 +12,8 @@ import Image from "next/image"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import FlightBookingFlow from "@/components/FlightBookingFlow"
+import { FLIGHT_FAQS } from "@/lib/service-faqs"
+import { ServiceFaqSection } from "@/components/service-faq-section"
 
 export default function FlightBookingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -89,16 +91,16 @@ export default function FlightBookingPage() {
             priority
           />
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4">
-            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Expert Flight Research with GoComfort USA</h1>
-            <p className="text-2xl text-white/95 mb-8 max-w-2xl drop-shadow-md">
-              Optimize your air travel with our professional research services and expert itinerary planning.
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4 drop-shadow-lg">Expert Flight Research with GoComfort USA</h1>
+            <p className="text-base sm:text-lg text-white/95 mb-6 max-w-3xl drop-shadow-md leading-relaxed">
+              GoComfortUSA is a US travel consultation service that helps customers across the United States find and compare domestic flights, advertising savings of up to 30% off. GoComfortUSA is a research service — it is not an airline; customers book flights directly with the official providers.
             </p>
             <Button 
               size="lg" 
               className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-6 shadow-lg"
               onClick={() => document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Book Your Flight
+              Search Domestic Flights
             </Button>
           </div>
         </div>
@@ -118,7 +120,7 @@ export default function FlightBookingPage() {
                 </div>
                 <h2 className="text-3xl font-extrabold tracking-tight mb-2">Flight Booking & Research</h2>
                 <p className="text-muted-foreground text-sm max-w-2xl">
-                  Search live airline fares with our guaranteed 30% savings applied, or submit a custom route request to our dedicated travel specialists.
+                  Search live domestic airline fares with up to 30% savings estimates shown, or submit a custom route request to our travel specialists.
                 </p>
               </div>
 
@@ -343,8 +345,8 @@ export default function FlightBookingPage() {
                   <div className="flex items-start">
                     <CheckCircle className="h-5 w-5 text-primary mt-0.5 mr-2" />
                     <div>
-                      <h3 className="font-bold">Flexible Bookings</h3>
-                      <p className="text-sm text-muted-foreground">Free cancellation on most tickets</p>
+                      <h3 className="font-bold">Direct Airline Booking</h3>
+                      <p className="text-sm text-muted-foreground">Book directly with the official airline under carrier fare terms</p>
                     </div>
                   </div>
                   <div className="flex items-start">
@@ -374,6 +376,11 @@ export default function FlightBookingPage() {
             </Card>
           </div>
         </div>
+
+        <ServiceFaqSection
+          title="US Flight Research FAQ"
+          faqs={FLIGHT_FAQS}
+        />
       </div>
     </>
   )

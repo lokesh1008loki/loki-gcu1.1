@@ -60,13 +60,13 @@ export const STATIC_SLUG_CONTENT: Record<string, any> = {
     }
   },
   "how-to-save-50-percent-on-domestic-flights": {
-    "title": "How to Save 50% on Domestic Flights: Insider Airline Booking Strategies",
+    "title": "How to Save Up to 30% on Domestic Flights: Airline Booking Strategies",
     "slug": "how-to-save-50-percent-on-domestic-flights",
-    "metaTitle": "How to Save 50% on Domestic Flights | GoComfortUSA",
-    "metaDescription": "Avoid hidden carrier fees, optimize multi-city routes, and learn how authorized partner channels unlock lower airfares on major carriers.",
+    "metaTitle": "How to Save Up to 30% on Domestic Flights | GoComfortUSA",
+    "metaDescription": "Avoid hidden carrier fees, optimize multi-city routes, and learn how flight research helps you save up to 30% on domestic US airfares.",
     "keywords": "domestic flights discount, cheap airline tickets, split ticket booking, flight savings",
     "canonicalUrl": "https://gocomfortusa.com/blog/how-to-save-50-percent-on-domestic-flights",
-    "excerpt": "Avoid hidden carrier fees, optimize multi-city routes, and learn how authorized partner channels unlock up to 30 to 50 percent lower airfares on major carriers.",
+    "excerpt": "Avoid hidden carrier fees, optimize multi-city routes, and learn how flight research helps unlock up to 30 percent lower airfares on domestic US flights.",
     "author": {
       "name": "GoComfort Editorial Desk"
     },

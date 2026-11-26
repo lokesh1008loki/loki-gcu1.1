@@ -114,7 +114,7 @@ export default function TrainBookingPage() {
           <div className="lg:col-span-2 space-y-8">
             <div id="booking-section">
               <div>
-                <h1 className="text-3xl font-bold mb-2">Train Booking</h1>
+                <h2 className="text-3xl font-bold mb-2">Train Booking</h2>
                 <p className="text-muted-foreground">Book your perfect journey with GoComfort USA — offering professional coordination and a wide selection of train routes worldwide.</p>
               </div>
 

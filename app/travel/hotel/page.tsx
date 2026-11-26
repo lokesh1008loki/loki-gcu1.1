@@ -41,6 +41,8 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { HOTEL_FAQS } from "@/lib/service-faqs";
+import { ServiceFaqSection } from "@/components/service-faq-section";
 
 interface HotelResult {
   id: string;
@@ -244,20 +246,20 @@ export default function HotelBookingPage() {
             <div className="flex items-center gap-4 text-xs text-slate-300">
               <div className="flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>Best Rate Guarantee</span>
+                <span>True Total-Price Comparison</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span>Verified Accommodations</span>
+                <span>Book Directly With Official Providers</span>
               </div>
             </div>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black tracking-tight mb-4">
-            Luxury Stays &amp; Hotels at <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">30% Less</span>
+            Luxury Stays &amp; Hotels at <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Up to 30% Less</span>
           </h1>
-          <p className="text-base sm:text-lg text-slate-300 max-w-2xl">
-            Live real-time rates from top Booking.com resorts, boutique hotels, and beachfront retreats with our exclusive GoComfortUSA member discount.
+          <p className="text-base sm:text-lg text-slate-200 max-w-3xl leading-relaxed">
+            GoComfortUSA is a US travel consultation service that helps customers across the United States compare US hotels by their true total price, including taxes and resort fees. GoComfortUSA is a research service — it is not a hotel; customers book directly with the official providers. The service advertises savings of up to 30% off and serves the USA only.
           </p>
 
           {/* Quick Destination Chips */}
@@ -545,6 +547,11 @@ export default function HotelBookingPage() {
             ))}
           </div>
         )}
+
+        <ServiceFaqSection
+          title="US Hotel Total-Price Research FAQ"
+          faqs={HOTEL_FAQS}
+        />
       </main>
 
       {/* Booking / Quote Modal */}

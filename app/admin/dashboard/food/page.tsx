@@ -23,7 +23,7 @@ interface GroceryItem {
 export default function FoodGroceryManagementPage() {
   const [items, setItems] = useState<GroceryItem[]>([
     { id: "1", name: "Instacart Grocery Orders", provider: "Instacart", discount: "Up to 30% Off", status: "Active", webhook: "Google Sheets Live Webhook" },
-    { id: "2", name: "DoorDash Food Delivery", provider: "DoorDash", discount: "Up to 35% Off", status: "Active", webhook: "Google Sheets Live Webhook" },
+    { id: "2", name: "DoorDash Food Delivery", provider: "DoorDash", discount: "Up to 30% Off", status: "Active", webhook: "Google Sheets Live Webhook" },
     { id: "3", name: "UberEats Delivery", provider: "UberEats", discount: "Up to 30% Off", status: "Active", webhook: "Google Sheets Live Webhook" },
     { id: "4", name: "Local Supermarket Orders", provider: "Local Stores", discount: "Custom Quotes", status: "Active", webhook: "Google Sheets Live Webhook" },
   ])
@@ -128,7 +128,7 @@ export default function FoodGroceryManagementPage() {
             <CardTitle className="text-sm font-medium">Delivery Discounts</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-emerald-600">Up to 35%</div>
+            <div className="text-2xl font-bold text-emerald-600">Up to 30%</div>
             <p className="text-xs text-muted-foreground mt-1">Applied via concierge order processing</p>
           </CardContent>
         </Card>

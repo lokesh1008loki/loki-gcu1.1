@@ -427,7 +427,7 @@ export default function MultiServiceLandingPage() {
 
       {/* Top Promotional Bar */}
       <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-blue-600 text-white py-3 px-4 text-center text-xs sm:text-sm font-extrabold tracking-wide shadow-md relative z-20 whitespace-normal break-words leading-tight">
-        ✨ Get <span className="text-yellow-350 font-black">35% OFF</span> on all services – Lower Than Market Price Guarantee!
+        ✨ Get <span className="text-yellow-350 font-black">Up to 30% OFF</span> on all services – Lower Than Market Price Guarantee!
       </div>
 
       {/* Decorative Blur Elements */}
@@ -442,7 +442,7 @@ export default function MultiServiceLandingPage() {
         <section className="text-center space-y-4 max-w-2xl mx-auto">
           <div className="inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-bold bg-yellow-100 dark:bg-yellow-950/30 text-yellow-800 dark:text-yellow-455 border border-yellow-200 dark:border-yellow-900 shadow-md animate-pulse max-w-full flex-wrap text-center">
             <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-yellow-600 dark:text-yellow-400 shrink-0 animate-spin" style={{ animationDuration: "3s" }} />
-            <span>35% OFF All Services &bull; Lower Than Market Price Guarantee</span>
+            <span>Up to 30% OFF All Services &bull; Lower Than Market Price Guarantee</span>
           </div>
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
             What do you need <span className="bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">today?</span>

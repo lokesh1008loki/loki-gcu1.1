@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { Loader2, Image as ImageIcon } from "lucide-react"
@@ -8,31 +8,38 @@ import { Loader2, Image as ImageIcon } from "lucide-react"
 interface ImageUploadProps {
   onImageUploadAction: (url: string) => void
   currentImage?: string
+  altText?: string
 }
 
-export function ImageUpload({ onImageUploadAction, currentImage }: ImageUploadProps) {
+export function ImageUpload({
+  onImageUploadAction,
+  currentImage,
+  altText,
+}: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false)
   const [preview, setPreview] = useState<string | null>(currentImage || null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    setPreview(currentImage || null)
+  }, [currentImage])
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
-    // Check file size (3MB)
     if (file.size > 3 * 1024 * 1024) {
       toast.error("Image must be less than 3MB")
       return
     }
 
-    // Create preview
+    const previousPreview = preview
     const reader = new FileReader()
     reader.onloadend = () => {
       setPreview(reader.result as string)
     }
     reader.readAsDataURL(file)
 
-    // Upload file
     setIsUploading(true)
     const formData = new FormData()
     formData.append("file", file)
@@ -40,41 +47,52 @@ export function ImageUpload({ onImageUploadAction, currentImage }: ImageUploadPr
     try {
       const response = await fetch("/api/admin/upload", {
         method: "POST",
+        credentials: "include",
         body: formData,
       })
 
-      const data = await response.json()
+      const data = await response.json().catch(() => ({}))
 
       if (!response.ok) {
-        throw new Error(data.error || "Upload failed")
+        throw new Error(data.error || `Upload failed (HTTP ${response.status})`)
       }
 
-      // Support both full CDN URLs (e.g. Backblaze B2) and local relative paths
       const rawUrl = data.url || data.filename
+      if (!rawUrl || typeof rawUrl !== "string") {
+        throw new Error("Upload succeeded but no image URL was returned")
+      }
+
       const imageUrl =
         rawUrl.startsWith("http://") ||
         rawUrl.startsWith("https://") ||
         rawUrl.startsWith("/")
           ? rawUrl
           : `/${rawUrl}`
+
       setPreview(imageUrl)
       onImageUploadAction(imageUrl)
       toast.success("Image uploaded successfully")
     } catch (error) {
       console.error("Upload error:", error)
-      toast.error("Failed to upload image")
+      setPreview(previousPreview)
+      toast.error(
+        error instanceof Error ? error.message : "Failed to upload image"
+      )
     } finally {
       setIsUploading(false)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""
+      }
     }
   }
 
   return (
     <div className="space-y-4">
       {preview && (
-        <div className="relative aspect-video w-full overflow-hidden rounded-lg">
+        <div className="relative aspect-video w-full overflow-hidden rounded-lg border">
           <img
             src={preview}
-            alt="Preview"
+            alt={altText || "Featured image preview"}
             className="h-full w-full object-cover"
           />
         </div>
@@ -83,7 +101,7 @@ export function ImageUpload({ onImageUploadAction, currentImage }: ImageUploadPr
         type="file"
         ref={fileInputRef}
         onChange={handleFileChange}
-        accept="image/*"
+        accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
         className="hidden"
       />
       <Button
@@ -106,4 +124,4 @@ export function ImageUpload({ onImageUploadAction, currentImage }: ImageUploadPr
       </Button>
     </div>
   )
-} 
+}

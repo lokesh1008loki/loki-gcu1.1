@@ -90,6 +90,7 @@ export async function POST(request: Request) {
       content, 
       excerpt, 
       image,
+      imageAlt,
       metaTitle,
       metaDescription,
       keywords,
@@ -126,13 +127,14 @@ export async function POST(request: Request) {
       counter++
     }
 
-    const blog = await prisma.blog.create({
+    const blog = await (prisma as any).blog.create({
       data: {
         title,
         slug,
         content,
         excerpt: excerpt || null,
         image: image || null,
+        imageAlt: imageAlt || null,
         metaTitle: metaTitle || null,
         metaDescription: metaDescription || null,
         keywords: keywords || null,
@@ -145,6 +147,7 @@ export async function POST(request: Request) {
 
     try {
       revalidatePath("/blog")
+      revalidatePath("/sitemap.xml")
       revalidatePath("/admin/blogs")
       revalidatePath("/admin/dashboard/blog")
     } catch (e) {
@@ -196,6 +199,7 @@ export async function DELETE(request: Request) {
     try {
       revalidatePath("/blog")
       revalidatePath("/blog/[slug]", "page")
+      revalidatePath("/sitemap.xml")
       revalidatePath("/admin/blogs")
       revalidatePath("/admin/dashboard/blog")
     } catch (e) {
