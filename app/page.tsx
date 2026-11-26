@@ -528,7 +528,7 @@ export default async function Home() {
                   <AccordionTrigger className="text-base font-semibold text-slate-900 dark:text-white py-4 hover:no-underline text-left">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-sm text-slate-600 dark:text-neutral-400 leading-relaxed pb-4 [text-wrap:pretty]">
+                  <AccordionContent forceMount className="text-sm text-slate-600 dark:text-neutral-400 leading-relaxed pb-4 [text-wrap:pretty]">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>

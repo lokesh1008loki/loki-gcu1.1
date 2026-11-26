@@ -110,7 +110,7 @@ export default function FAQPage() {
                           {faq.question}
                         </h2>
                       </AccordionTrigger>
-                      <AccordionContent className="px-6 pb-4">
+                      <AccordionContent forceMount className="px-6 pb-4">
                         <p className="text-gray-700 leading-relaxed">
                           {faq.answer}
                         </p>

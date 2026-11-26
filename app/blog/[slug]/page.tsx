@@ -66,6 +66,16 @@ export async function generateMetadata({
     }
   }
 
+  if (!blog.published) {
+    const auth = await verifyAdminAuth()
+    if (!auth.authenticated) {
+      return {
+        title: "Blog Post Not Found | GoComfort USA",
+        description: "The requested blog post could not be found.",
+      }
+    }
+  }
+
   const pageTitle = blog.metaTitle
     ? blog.metaTitle.includes("GoComfort")
       ? blog.metaTitle
@@ -144,37 +154,39 @@ export default async function BlogPostPage({
       where: { slug },
       include: { author: true },
     })
-
-    if (blog && !blog.published) {
-      const auth = await verifyAdminAuth()
-      if (!auth.authenticated) {
-        notFound()
-      }
-    }
-
-    if (blog) {
-      relatedPosts = await (prisma as any).blog.findMany({
-        where: {
-          id: { not: blog.id },
-          published: true,
-        },
-        take: 3,
-        orderBy: {
-          createdAt: "desc",
-        },
-        include: {
-          author: {
-            select: { name: true },
-          },
-        },
-      })
-    }
   } catch (error) {
     console.warn("Notice: Database error during blog post lookup:", error)
   }
 
   if (!blog) {
     notFound()
+  }
+
+  if (!blog.published) {
+    const auth = await verifyAdminAuth()
+    if (!auth.authenticated) {
+      notFound()
+    }
+  }
+
+  try {
+    relatedPosts = await (prisma as any).blog.findMany({
+      where: {
+        id: { not: blog.id },
+        published: true,
+      },
+      take: 3,
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        author: {
+          select: { name: true },
+        },
+      },
+    })
+  } catch (error) {
+    console.warn("Notice: Database error during related posts lookup:", error)
   }
 
   const formattedDate = new Date(blog.createdAt).toLocaleDateString("en-US", {
