@@ -457,6 +457,11 @@ export default function HotelBookingPage() {
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                     unoptimized
+                    onError={(e) => {
+                      const target = e.currentTarget as HTMLImageElement;
+                      target.srcset = "";
+                      target.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80";
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
 
@@ -579,6 +584,11 @@ export default function HotelBookingPage() {
                       fill
                       className="object-cover"
                       unoptimized
+                      onError={(e) => {
+                        const target = e.currentTarget as HTMLImageElement;
+                        target.srcset = "";
+                        target.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80";
+                      }}
                     />
                   </div>
                   <div className="flex-1 min-w-0">

@@ -30,33 +30,33 @@ const CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
 const DESTINATION_CATALOGS: Record<string, Omit<HotelResult, "retailPrice" | "quotePrice" | "savings">[]> = {
   miami: [
     {
-      id: "eb-hotel-miami",
-      name: "EB Hotel Miami Airport",
-      location: "Miami Springs, Miami (2.5 mi from Airport)",
-      description: "Upscale luxury hotel featuring spacious designer rooms, 24/7 fitness center, heated outdoor swimming pool, and fine dining at Miranda Cuisine & Bar.",
-      score: 9.1,
-      ratingLabel: "Wonderful",
-      reviewCount: 1557,
-      stars: 4,
-      imageUrl: "https://cf.bstatic.com/xdata/images/hotel/square600/16166198.webp?k=5343ef99b415ca4da480510d32e27d13ad8fbd7605822449974d15bea83b09dd&o=",
-      amenities: ["Free WiFi", "Outdoor Pool", "Airport Shuttle", "Fitness Center", "Restaurant", "Cocktail Bar"],
+      id: "eden-roc-resort-miami",
+      name: "Eden Roc Resort Miami Beach",
+      location: "Oceanfront, Millionaire's Row, Miami Beach",
+      description: "Iconic Morris Lapidus oceanfront masterpiece featuring 3 cascading beachfront pools, Esencia wellness spa, Nobu dining, and panoramic Atlantic views.",
+      score: 8.9,
+      ratingLabel: "Fabulous",
+      reviewCount: 3890,
+      stars: 5,
+      imageUrl: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
+      amenities: ["Oceanfront Pools", "Nobu Dining", "Private Beach Cabanas", "Luxury Spa", "Free WiFi", "Cocktail Lounge"],
       discountPercent: 30,
-      bookingUrl: "https://www.booking.com/hotel/us/eb-miami.html",
+      bookingUrl: "https://www.booking.com/hotel/us/eden-roc-resort.html",
       currency: "USD",
     },
     {
-      id: "fortune-house-hotel-miami",
-      name: "Fortune House Hotel Suites",
-      location: "Brickell Financial District, Miami",
-      description: "Apartment-style luxury suites in downtown Miami featuring private balconies, fully equipped kitchens, heated pool, sauna, and direct skyline views.",
-      score: 8.6,
+      id: "fontainebleau-miami-beach",
+      name: "Fontainebleau Miami Beach",
+      location: "Collins Avenue Oceanfront, Miami Beach",
+      description: "Legendary luxury playground situated on 22 oceanfront acres with 8 pools, LIV nightclub, 12 world-class restaurants, and Lapis Spa.",
+      score: 8.7,
       ratingLabel: "Fabulous",
-      reviewCount: 2480,
-      stars: 4,
-      imageUrl: "https://cf.bstatic.com/xdata/images/hotel/square600/311843902.webp?k=dc13a7d1e705e5a33cf6d56f4881d683852a862dd1dcea815ca04dbba676b659&o=",
-      amenities: ["Kitchen in suite", "Balcony", "Skyline Pool", "Hot Tub", "Free WiFi", "Pet Friendly"],
+      reviewCount: 6120,
+      stars: 5,
+      imageUrl: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+      amenities: ["Direct Beach Access", "8 Lagoon Pools", "LIV Nightclub", "Lapis Spa", "Valet Parking", "Fine Dining"],
       discountPercent: 30,
-      bookingUrl: "https://www.booking.com/hotel/us/fortune-house.html",
+      bookingUrl: "https://www.booking.com/hotel/us/fontainebleau-miami-beach.html",
       currency: "USD",
     },
     {
@@ -68,7 +68,7 @@ const DESTINATION_CATALOGS: Record<string, Omit<HotelResult, "retailPrice" | "qu
       ratingLabel: "Exceptional",
       reviewCount: 890,
       stars: 5,
-      imageUrl: "https://cf.bstatic.com/xdata/images/hotel/square600/434486140.webp?k=675aa4c5cf6cdb5c0f0ac68e27c156f4e1f7c5e2ef5b1e6e9a7e0892c55e8c1b&o=",
+      imageUrl: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80",
       amenities: ["Rooftop Pool", "Spa & Wellness", "Valet Parking", "Pet Friendly", "Fine Dining", "Free High-Speed WiFi"],
       discountPercent: 30,
       bookingUrl: "https://www.booking.com/hotel/us/loews-coral-gables-coral-gables.html",
@@ -83,7 +83,7 @@ const DESTINATION_CATALOGS: Record<string, Omit<HotelResult, "retailPrice" | "qu
       ratingLabel: "Superb",
       reviewCount: 1120,
       stars: 5,
-      imageUrl: "https://cf.bstatic.com/xdata/images/hotel/square600/735186508.webp?k=b3d0d30d7c33195165cb16b1e6e9a7e0892c55e8c1b5343ef99b415ca4da4805&o=",
+      imageUrl: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
       amenities: ["Biscayne Bay View", "Rooftop Pool", "Bellini Restaurant", "Private Cabanas", "Free Bikes", "Luxury Spa"],
       discountPercent: 30,
       bookingUrl: "https://www.booking.com/hotel/us/mr-c-coconut-grove.html",
@@ -105,18 +105,18 @@ const DESTINATION_CATALOGS: Record<string, Omit<HotelResult, "retailPrice" | "qu
       currency: "USD",
     },
     {
-      id: "holiday-inn-express-miami-airport",
-      name: "Holiday Inn Express & Suites Miami Intl Airport",
-      location: "Miami Airport Corridor, Miami",
-      description: "Top-rated convenient airport stay with complimentary hot express breakfast buffet, outdoor swimming pool, and round-the-clock complimentary airport shuttle.",
-      score: 8.5,
-      ratingLabel: "Very Good",
-      reviewCount: 3100,
-      stars: 3,
-      imageUrl: "https://cf.bstatic.com/xdata/images/hotel/square600/904215806.webp?k=50ae0edf0ff5808b6a0f623f528e3301faa497a9e4740a2c1435237711638c09&o=",
-      amenities: ["Free Hot Breakfast", "Free Airport Shuttle", "Swimming Pool", "24/7 Gym", "Free WiFi", "Business Center"],
+      id: "fortune-house-hotel-miami",
+      name: "Fortune House Hotel Suites",
+      location: "Brickell Financial District, Miami",
+      description: "Apartment-style luxury suites in downtown Miami featuring private balconies, fully equipped kitchens, heated pool, sauna, and direct skyline views.",
+      score: 8.6,
+      ratingLabel: "Fabulous",
+      reviewCount: 2480,
+      stars: 4,
+      imageUrl: "https://cf.bstatic.com/xdata/images/hotel/square600/311843902.webp?k=dc13a7d1e705e5a33cf6d56f4881d683852a862dd1dcea815ca04dbba676b659&o=",
+      amenities: ["Kitchen in suite", "Balcony", "Skyline Pool", "Hot Tub", "Free WiFi", "Pet Friendly"],
       discountPercent: 30,
-      bookingUrl: "https://www.booking.com/hotel/us/holiday-inn-express-suites-miami-intl-airport-36th-st-by-ihg.html",
+      bookingUrl: "https://www.booking.com/hotel/us/fortune-house.html",
       currency: "USD",
     },
   ],
@@ -209,7 +209,7 @@ const DESTINATION_CATALOGS: Record<string, Omit<HotelResult, "retailPrice" | "qu
       ratingLabel: "Superb",
       reviewCount: 3420,
       stars: 5,
-      imageUrl: "https://cf.bstatic.com/xdata/images/hotel/square600/434486140.webp?k=675aa4c5cf6cdb5c0f0ac68e27c156f4e1f7c5e2ef5b1e6e9a7e0892c55e8c1b&o=",
+      imageUrl: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
       amenities: ["Central Park Views", "The Palm Court", "Guerlain Spa", "Butler Service", "24/7 Concierge", "Free WiFi"],
       discountPercent: 30,
       bookingUrl: "https://www.booking.com/hotel/us/the-plaza.html",
@@ -241,7 +241,7 @@ const DESTINATION_CATALOGS: Record<string, Omit<HotelResult, "retailPrice" | "qu
       ratingLabel: "Exceptional",
       reviewCount: 1450,
       stars: 5,
-      imageUrl: "https://cf.bstatic.com/xdata/images/hotel/square600/735186508.webp?k=b3d0d30d7c33195165cb16b1e6e9a7e0892c55e8c1b5343ef99b415ca4da4805&o=",
+      imageUrl: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80",
       amenities: ["Tropical Pool", "Underwater Music", "Private Bungalows", "Polo Lounge", "Luxury Spa", "Pet Friendly"],
       discountPercent: 30,
       bookingUrl: "https://www.booking.com/hotel/us/the-beverly-hills-hotel.html",
@@ -308,16 +308,63 @@ function normalizeDestinationKey(dest: string): string {
   return "miami"; // Default fallback destination
 }
 
-function calculateNightlyPrice(basePrice: number, checkin?: string, checkout?: string): number {
-  if (!checkin || !checkout) return basePrice;
-  try {
-    const d1 = new Date(checkin).getTime();
-    const d2 = new Date(checkout).getTime();
-    const nights = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
-    return basePrice * nights;
-  } catch {
-    return basePrice;
+function calculateDynamicHotelPricing(
+  baseNightly: number,
+  checkIn: Date,
+  checkOut: Date,
+  rooms: number,
+  hotelId: string
+): { retailPrice: number; quotePrice: number; savings: number; nightlyRate: number } {
+  const oneDay = 1000 * 60 * 60 * 24;
+  const nights = Math.max(1, Math.round((checkOut.getTime() - checkIn.getTime()) / oneDay));
+  const leadDays = Math.max(0, Math.round((checkIn.getTime() - Date.now()) / oneDay));
+
+  let totalRetail = 0;
+  for (let i = 0; i < nights; i++) {
+    const nightDate = new Date(checkIn.getTime() + i * oneDay);
+    const month = nightDate.getMonth(); // 0 = Jan, 11 = Dec
+    const day = nightDate.getDate();
+    const dayOfWeek = nightDate.getDay(); // 0 = Sun, 5 = Fri, 6 = Sat
+
+    // 1. Seasonality & Holidays
+    let seasonMultiplier = 1.0;
+    if ((month === 11 && day >= 16) || (month === 0 && day <= 5)) {
+      seasonMultiplier = 1.75; // Peak Winter/Holiday surge (Dec 16 - Jan 5)
+    } else if (month === 11 && day >= 8) {
+      seasonMultiplier = 1.35; // December holiday ramp-up
+    } else if (month >= 1 && month <= 3) {
+      seasonMultiplier = 1.25; // Peak Spring travel
+    } else if (month >= 5 && month <= 7) {
+      seasonMultiplier = 0.88; // Off-peak summer
+    } else {
+      seasonMultiplier = 1.05;
+    }
+
+    // 2. Day-of-week demand (Friday & Saturday nights are +25% higher)
+    const weekendMultiplier = (dayOfWeek === 5 || dayOfWeek === 6) ? 1.25 : 1.0;
+
+    // 3. Lead time urgency
+    let leadMultiplier = 1.0;
+    if (leadDays < 3) leadMultiplier = 1.22;
+    else if (leadDays < 7) leadMultiplier = 1.12;
+    else if (leadDays > 45) leadMultiplier = 0.93;
+
+    // 4. Deterministic micro-variance based on hotel + specific date
+    let charSum = 0;
+    for (let c = 0; c < hotelId.length; c++) charSum += hotelId.charCodeAt(c);
+    const seed = (charSum + nightDate.getDate() * 19 + (month + 1) * 31) % 17;
+    const microVariance = 0.94 + (seed / 100); // 0.94 - 1.10
+
+    const nightly = baseNightly * seasonMultiplier * weekendMultiplier * leadMultiplier * microVariance;
+    totalRetail += nightly;
   }
+
+  const retailPrice = Number((totalRetail * rooms).toFixed(2));
+  const quotePrice = Number((retailPrice * 0.70).toFixed(2)); // 30% OFF Member Discount
+  const savings = Number((retailPrice - quotePrice).toFixed(2));
+  const nightlyRate = Number((retailPrice / (nights * rooms)).toFixed(2));
+
+  return { retailPrice, quotePrice, savings, nightlyRate };
 }
 
 export async function GET(req: NextRequest) {
@@ -356,19 +403,17 @@ export async function GET(req: NextRequest) {
     }
     const nights = Math.max(1, Math.round((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24)));
 
-    // Generate hotels with 30% discount calculated
-    const baselineFares = [189, 249, 329, 219, 169, 149, 279, 399];
+    // Generate hotels with live date-sensitive dynamic pricing and 30% discount calculated
+    const baselineFares = [239, 289, 349, 219, 179, 159, 299, 419];
     const hotels: HotelResult[] = baseList.map((item, idx) => {
       const baseNightly = baselineFares[idx % baselineFares.length];
-      const retailPrice = Number((baseNightly * nights * rooms).toFixed(2));
-      const quotePrice = Number((retailPrice * 0.70).toFixed(2)); // 30% OFF
-      const savings = Number((retailPrice - quotePrice).toFixed(2));
+      const pricing = calculateDynamicHotelPricing(baseNightly, d1, d2, rooms, item.id);
 
       return {
         ...item,
-        retailPrice,
-        quotePrice,
-        savings,
+        retailPrice: pricing.retailPrice,
+        quotePrice: pricing.quotePrice,
+        savings: pricing.savings,
         discountPercent: 30,
       };
     });
