@@ -65,6 +65,7 @@ interface HotelResult {
 
 const POPULAR_DESTINATIONS = [
   { name: "Chicago", label: "Chicago, IL (Downtown / Loop)" },
+  { name: "San Francisco", label: "San Francisco, CA (Union Sq / Nob Hill)" },
   { name: "Miami Beach", label: "Miami Beach, FL" },
   { name: "Orlando", label: "Orlando, FL (Disney World)" },
   { name: "Las Vegas", label: "Las Vegas, NV (The Strip)" },
@@ -76,6 +77,7 @@ const POPULAR_DESTINATIONS = [
 export default function HotelBookingPage() {
   // Search inputs
   const [destination, setDestination] = useState("Miami Beach");
+  const [activeDestination, setActiveDestination] = useState("Miami Beach");
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const [adults, setAdults] = useState("2");
@@ -151,7 +153,8 @@ export default function HotelBookingPage() {
 
       if (data.success && Array.isArray(data.hotels)) {
         setHotels(data.hotels);
-        if (overrideDest) setDestination(overrideDest);
+        setActiveDestination(targetDest);
+        setDestination(targetDest);
       } else {
         toast.error(data.error || "No hotels found. Please try another destination.");
       }
@@ -401,11 +404,16 @@ export default function HotelBookingPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-border">
           <div>
             <h2 className="text-xl sm:text-2xl font-black text-foreground">
-              Hotels in {destination}
+              Hotels in {activeDestination}
             </h2>
             <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
               Showing {hotels.length} verified Booking.com properties for {numberOfNights} night{numberOfNights > 1 ? "s" : ""}, {adults} guest{parseInt(adults, 10) > 1 ? "s" : ""}
             </p>
+            {destination.trim().toLowerCase() !== activeDestination.trim().toLowerCase() && destination.trim() && (
+              <div className="mt-2 inline-flex items-center gap-2 px-3 py-1 rounded-md bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-xs text-blue-700 dark:text-blue-300 animate-in fade-in">
+                <span>Click the blue <strong>Search</strong> button above to load hotels in <strong>{destination}</strong></span>
+              </div>
+            )}
           </div>
 
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs font-bold text-emerald-700 dark:text-emerald-300">
