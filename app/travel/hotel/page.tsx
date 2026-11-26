@@ -64,6 +64,7 @@ interface HotelResult {
 }
 
 const POPULAR_DESTINATIONS = [
+  { name: "Chicago", label: "Chicago, IL (Downtown / Loop)" },
   { name: "Miami Beach", label: "Miami Beach, FL" },
   { name: "Orlando", label: "Orlando, FL (Disney World)" },
   { name: "Las Vegas", label: "Las Vegas, NV (The Strip)" },
