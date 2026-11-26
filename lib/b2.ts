@@ -96,67 +96,76 @@ export async function uploadImageToB2(
   fileName: string,
   contentType: string
 ): Promise<B2UploadResult> {
-  const auth = await getB2Auth()
-
-  // 1. Obtain single-use upload URL for the target bucket
-  const getUrlResponse = await fetch(`${auth.apiUrl}/b2api/v2/b2_get_upload_url`, {
-    method: "POST",
-    headers: {
-      Authorization: auth.authorizationToken,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ bucketId: auth.bucketId }),
-    cache: "no-store",
-  })
-
-  if (!getUrlResponse.ok) {
-    const errorText = await getUrlResponse.text()
-    // Invalidate cached auth if token expired
-    cachedAuth = null
-    throw new Error(`B2 get_upload_url error (${getUrlResponse.status}): ${errorText}`)
-  }
-
-  const { uploadUrl, authorizationToken: uploadToken } = await getUrlResponse.json()
-
-  // 2. Compute SHA1 hash of the payload
   const sha1 = crypto.createHash("sha1").update(buffer).digest("hex")
-
-  // 3. Upload binary file (preserve "/" directory separators for B2)
   const encodedFileName = fileName
     .split("/")
     .map((segment) => encodeURIComponent(segment))
     .join("/")
 
-  const uploadResponse = await fetch(uploadUrl, {
-    method: "POST",
-    headers: {
-      Authorization: uploadToken,
-      "X-Bz-File-Name": encodedFileName,
-      "Content-Type": contentType,
-      "Content-Length": String(buffer.length),
-      "X-Bz-Content-Sha1": sha1,
-    },
-    body: buffer,
-    cache: "no-store",
-  })
+  let lastError: Error | null = null
 
-  if (!uploadResponse.ok) {
+  // Backblaze B2 recommends requesting a fresh upload URL and retrying on transient 5xx/503 pod busy responses
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const auth = await getB2Auth()
+
+    // 1. Obtain single-use upload URL for the target bucket
+    const getUrlResponse = await fetch(`${auth.apiUrl}/b2api/v2/b2_get_upload_url`, {
+      method: "POST",
+      headers: {
+        Authorization: auth.authorizationToken,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ bucketId: auth.bucketId }),
+      cache: "no-store",
+    })
+
+    if (!getUrlResponse.ok) {
+      const errorText = await getUrlResponse.text()
+      cachedAuth = null
+      lastError = new Error(`B2 get_upload_url error (${getUrlResponse.status}): ${errorText}`)
+      continue
+    }
+
+    const { uploadUrl, authorizationToken: uploadToken } = await getUrlResponse.json()
+
+    // 2. Upload binary file (preserve "/" directory separators for B2)
+    const uploadResponse = await fetch(uploadUrl, {
+      method: "POST",
+      headers: {
+        Authorization: uploadToken,
+        "X-Bz-File-Name": encodedFileName,
+        "Content-Type": contentType,
+        "Content-Length": String(buffer.length),
+        "X-Bz-Content-Sha1": sha1,
+      },
+      body: buffer,
+      cache: "no-store",
+    })
+
+    if (uploadResponse.ok) {
+      const uploadResult = await uploadResponse.json()
+      const publicUrl = `${auth.downloadUrl}/file/${auth.bucketName}/${fileName}`
+
+      return {
+        success: true,
+        url: publicUrl,
+        fileId: uploadResult.fileId,
+        fileName: uploadResult.fileName,
+        size: buffer.length,
+        contentType,
+      }
+    }
+
     const errorText = await uploadResponse.text()
-    throw new Error(`B2 upload failed (${uploadResponse.status}): ${errorText}`)
+    lastError = new Error(`B2 upload failed (${uploadResponse.status}): ${errorText}`)
+    if (uploadResponse.status === 401) {
+      cachedAuth = null
+    }
+    if (![401, 408, 429, 500, 502, 503, 504].includes(uploadResponse.status)) {
+      break
+    }
   }
 
-  const uploadResult = await uploadResponse.json()
-
-  // 4. Construct the public CDN / direct URL
-  const publicUrl = `${auth.downloadUrl}/file/${auth.bucketName}/${fileName}`
-
-  return {
-    success: true,
-    url: publicUrl,
-    fileId: uploadResult.fileId,
-    fileName: uploadResult.fileName,
-    size: buffer.length,
-    contentType,
-  }
+  throw lastError || new Error("B2 upload failed after retries")
 }
 

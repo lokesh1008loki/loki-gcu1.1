@@ -89,7 +89,7 @@ export const DISNEYLAND_FAQS: ServiceFaqItem[] = [
   {
     question: "Are Lightning Lane options available for Disneyland?",
     answer:
-      "Yes. Disney replaced Genie+ with Lightning Lane (Multi Pass and Single Pass). You can note Lightning Lane interest in your ticket request form and our team will include guidance for your visit date.",
+      "Yes. Disneyland offers Lightning Lane Multi Pass and Lightning Lane Single Pass for faster entry on select attractions. You can note Lightning Lane interest in your ticket request form and our team will include guidance for your visit date.",
   },
   {
     question: "Which Disneyland parks can I request booking assistance for?",
